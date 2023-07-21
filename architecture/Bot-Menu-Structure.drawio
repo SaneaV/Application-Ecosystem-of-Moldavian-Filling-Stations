@@ -1,0 +1,91 @@
+<mxfile host="app.diagrams.net" modified="2023-07-21T13:53:43.046Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" etag="my8fdmwcqFo1rTcc-ckK" version="21.6.2" type="device">
+  <diagram name="Страница 1" id="5fkHK7FLF1vfb_biwUNI">
+    <mxGraphModel dx="1050" dy="573" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="sF_3mBfCFNr6Typty_mi-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dgRW9AStRSNGtxggHci5-1" target="dgRW9AStRSNGtxggHci5-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dgRW9AStRSNGtxggHci5-1" value="/start" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="379" y="10" width="70" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="dgRW9AStRSNGtxggHci5-2" target="sF_3mBfCFNr6Typty_mi-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dgRW9AStRSNGtxggHci5-2" value="Welcome message and few instructions how to use bot" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="354" y="90" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dgRW9AStRSNGtxggHci5-56" value="&lt;b&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;After menu items are executed go back to the main menu.&lt;/font&gt;&lt;/b&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="30" y="550" width="370" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="dgRW9AStRSNGtxggHci5-58" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;On any error display descriptive message.&lt;/b&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="30" y="620" width="370" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="sF_3mBfCFNr6Typty_mi-4" target="sF_3mBfCFNr6Typty_mi-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="sF_3mBfCFNr6Typty_mi-4" target="sF_3mBfCFNr6Typty_mi-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="sF_3mBfCFNr6Typty_mi-4" target="sF_3mBfCFNr6Typty_mi-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-18" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="sF_3mBfCFNr6Typty_mi-4" target="sF_3mBfCFNr6Typty_mi-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="sF_3mBfCFNr6Typty_mi-4" target="sF_3mBfCFNr6Typty_mi-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-4" value="MAIN MENU:&lt;br&gt;1. All fuel stations&lt;br&gt;2. Nearest fuel station&lt;br&gt;3.Best fuel price" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-6" value="Input your coordinates" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="180" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-7" value="Input your search radius" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="650" y="250" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-11" value="Coordinates and radius aren&#39;t specified" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="480" y="180" width="160" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-12" value="1. Display list of available fuel stations in radius (fuel station name, prices*, last data update and coordinates)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="290" width="150" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-13" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;No more than 10 results are available in 1 and 3 menu items. Display request to decrease search radius in case there are more than 10 fuel stations.&lt;/b&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="690" width="370" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-14" value="2. Display nearest fuel station in radius (fuel station name, prices*, last data update and coordinates)&amp;nbsp;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="203" y="290" width="150" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-15" value="Display best &amp;lt;fuel&amp;gt; price in radius (fuel station name, &amp;lt;fuel&amp;gt; price, last data update and coordinates)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="379" y="370" width="150" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="sF_3mBfCFNr6Typty_mi-16" target="sF_3mBfCFNr6Typty_mi-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-16" value="FUEL TYPE MENU&lt;br&gt;1. Petrol&lt;br&gt;2. Diesel&lt;br&gt;3.Gas" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="394" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="sF_3mBfCFNr6Typty_mi-21" target="sF_3mBfCFNr6Typty_mi-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-21" value="User sent number (double) or geolacation" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="340" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-22" value="Update search radius/coordinates in database for specific user" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="430" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-25" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;prices* - price for petrol 95, diesel and gas&lt;/b&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="760" width="370" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-26" value="&lt;span style=&quot;font-size: 14px;&quot;&gt;&lt;b&gt;In case there is no fuel station in radius display message to increase search radius&lt;/b&gt;&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="830" width="370" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="sF_3mBfCFNr6Typty_mi-28" value="Coordinates and radius are specified" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="170" y="230" width="160" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
