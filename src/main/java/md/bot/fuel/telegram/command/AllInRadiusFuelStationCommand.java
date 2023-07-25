@@ -3,14 +3,15 @@ package md.bot.fuel.telegram.command;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import md.bot.fuel.domain.UserData;
 import md.bot.fuel.facade.FuelStationFacade;
 import md.bot.fuel.facade.UserDataFacade;
 import md.bot.fuel.facade.dto.FuelStationDto;
+import md.bot.fuel.facade.dto.UserDataDto;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static java.util.Collections.singletonList;
@@ -29,16 +30,17 @@ public class AllInRadiusFuelStationCommand implements Command {
 
     @Override
     public List<? super PartialBotApiMethod<?>> execute(Update update) {
-        final long userId = update.getMessage().getFrom().getId();
-        final long chatId = update.getMessage().getChatId();
-        final UserData userData = userDataFacade.getUserData(userId);
+        final Message message = update.getMessage();
+        final long userId = message.getFrom().getId();
+        final long chatId = message.getChatId();
+        final UserDataDto userData = userDataFacade.getUserData(userId);
         final List<FuelStationDto> allFuelStations = fuelStationFacade.getAllFuelStations(userData.getLatitude(),
                 userData.getLongitude(), userData.getRadius(), FUEL_STATIONS_LIMIT);
 
         final List<? super PartialBotApiMethod<?>> messages = new ArrayList<>();
         allFuelStations.forEach(fuelStation -> {
-            final String message = toMessage(fuelStation);
-            final SendMessage fuelStationMessage = sendMessage(chatId, message);
+            final String messageText = toMessage(fuelStation);
+            final SendMessage fuelStationMessage = sendMessage(chatId, messageText);
             final SendLocation fuelStationLocation = sendLocation(chatId, fuelStation.getLatitude(),
                     fuelStation.getLongitude());
             messages.add(fuelStationMessage);

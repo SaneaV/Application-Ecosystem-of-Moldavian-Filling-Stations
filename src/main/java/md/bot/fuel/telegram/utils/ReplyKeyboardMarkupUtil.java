@@ -13,12 +13,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
-import static lombok.AccessLevel.NONE;
+import static lombok.AccessLevel.PRIVATE;
 import static md.bot.fuel.telegram.command.BestFuelInRadiusCommand.DIESEL;
 import static md.bot.fuel.telegram.command.BestFuelInRadiusCommand.GAS;
 import static md.bot.fuel.telegram.command.BestFuelInRadiusCommand.PETROL;
 
-@NoArgsConstructor(access = NONE)
+@NoArgsConstructor(access = PRIVATE)
 public class ReplyKeyboardMarkupUtil {
 
     private static final List<String> MAIN_MENU_ITEMS = new ArrayList<>();

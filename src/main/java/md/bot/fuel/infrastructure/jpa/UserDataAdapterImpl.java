@@ -33,7 +33,7 @@ public class UserDataAdapterImpl implements UserDataAdapter {
     }
 
     private UserDataJpa getOrCreateUser(long userId) {
-        return isNull(userDataRepository.findById(userId)) ? userDataRepository.save(mapper.toJpa(userId)) :
-                userDataRepository.findById(userId);
+        final UserDataJpa userDataJpa = userDataRepository.findById(userId);
+        return isNull(userDataJpa) ? userDataRepository.save(mapper.toJpa(userId)) : userDataJpa;
     }
 }

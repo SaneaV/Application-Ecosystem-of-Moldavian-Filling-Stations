@@ -5,13 +5,12 @@ import org.locationtech.proj4j.CRSFactory;
 import org.locationtech.proj4j.CoordinateReferenceSystem;
 import org.locationtech.proj4j.CoordinateTransform;
 import org.locationtech.proj4j.CoordinateTransformFactory;
-import org.locationtech.proj4j.Proj4jException;
 import org.locationtech.proj4j.ProjCoordinate;
 import org.locationtech.proj4j.util.Pair;
 
-import static lombok.AccessLevel.NONE;
+import static lombok.AccessLevel.PRIVATE;
 
-@NoArgsConstructor(access = NONE)
+@NoArgsConstructor(access = PRIVATE)
 public class CoordinatesConverter {
 
     private static final String WGS84_EPSG = "epsg:3857";
@@ -32,12 +31,8 @@ public class CoordinatesConverter {
     }
 
     public static Pair<Double, Double> convertWGS84ToUTM(double x, double y) {
-        try {
-            final ProjCoordinate result = new ProjCoordinate();
-            coordinateTransform.transform(new ProjCoordinate(x, y), result);
-            return new Pair<>(result.x, result.y);
-        } catch (Proj4jException e) {
-            throw new RuntimeException();
-        }
+        final ProjCoordinate result = new ProjCoordinate();
+        coordinateTransform.transform(new ProjCoordinate(x, y), result);
+        return new Pair<>(result.x, result.y);
     }
 }

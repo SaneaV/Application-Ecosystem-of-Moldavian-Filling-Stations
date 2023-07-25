@@ -19,8 +19,7 @@ public class StartCommand implements Command {
     private static final String COMMAND = "/start";
     private static final String MESSAGE = "Welcome!\n" +
             "To start working with bot, you can select any element from the menu.\n\n" +
-            "If you want to change the search radius, just send it to me (in kilometres, e.g. 0.5 (500 metres), 1 (1000 metres)" +
-            ").\n\n" +
+            "If you want to change the search radius, just send it to me (in kilometres, e.g. 0.5 (500 metres), 1 (1000 metres)).\n\n" +
             "If you want to change your coordinates, just send your location.";
 
     private final UserDataFacade userDataFacade;

@@ -5,9 +5,9 @@ import md.bot.fuel.facade.dto.FuelStationDto;
 import md.bot.fuel.infrastructure.exception.EntityNotFoundException;
 import org.springframework.data.util.Pair;
 
-import static lombok.AccessLevel.NONE;
+import static lombok.AccessLevel.PRIVATE;
 
-@NoArgsConstructor(access = NONE)
+@NoArgsConstructor(access = PRIVATE)
 public class MessageConverter {
 
     private static final double ZERO_PRICE = 0.0D;

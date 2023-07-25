@@ -3,10 +3,10 @@ package md.bot.fuel.telegram.command;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import md.bot.fuel.domain.UserData;
 import md.bot.fuel.facade.FuelStationFacade;
 import md.bot.fuel.facade.UserDataFacade;
 import md.bot.fuel.facade.dto.FuelStationDto;
+import md.bot.fuel.facade.dto.UserDataDto;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
@@ -37,7 +37,7 @@ public class BestFuelInRadiusCommand implements Command {
         final long userId = message.getFrom().getId();
         final long chatId = message.getChatId();
         final String fuelType = message.getText();
-        final UserData userData = userDataFacade.getUserData(userId);
+        final UserDataDto userData = userDataFacade.getUserData(userId);
         final List<FuelStationDto> bestPriceFuelStations = fuelStationFacade.getBestFuelPrice(userData.getLatitude(),
                 userData.getLongitude(), userData.getRadius(), fuelType, FUEL_STATIONS_LIMIT);
 

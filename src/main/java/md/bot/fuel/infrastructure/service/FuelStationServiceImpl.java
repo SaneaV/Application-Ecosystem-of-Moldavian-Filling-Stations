@@ -23,6 +23,7 @@ public class FuelStationServiceImpl implements FuelStationService {
     private static final String ERROR_NO_FUEL_STATION_NEAR_YOU = "We can't find any fuel station near you. Try to extend search radius.";
     private static final String ERROR_FOUND_MORE_THAN_LIMIT = "We found more than %s fuel stations near you. Try to decrease search radius.";
     private static final String ERROR_NO_FUEL_IN_STOCK = "Fuel station near you do not have %s in stock. Try to extend search radius.";
+    private static final String ERROR_INVALID_FUEL_TYPE = "Invalid fuel type.";
 
     private static final String PETROL = "Petrol";
     private static final String DIESEL = "Diesel";
@@ -38,7 +39,7 @@ public class FuelStationServiceImpl implements FuelStationService {
                 .filter(s -> isWithinRadius(userLatitude, userLongitude, s.getLatitude(), s.getLongitude(), radius) &&
                         ((!isNull(s.getPetrol()) && s.getPetrol() > ZERO_PRICE_PRIMITIVE) ||
                                 (!isNull(s.getGas()) && s.getGas() > ZERO_PRICE_PRIMITIVE) ||
-                                (!isNull(s.getGas()) && s.getDiesel() > ZERO_PRICE_PRIMITIVE)))
+                                (!isNull(s.getDiesel()) && s.getDiesel() > ZERO_PRICE_PRIMITIVE)))
                 .collect(toList());
 
         checkLimit(fuelStations.size(), limit);
@@ -51,6 +52,9 @@ public class FuelStationServiceImpl implements FuelStationService {
     @Override
     public FuelStation getNearestFuelStation(double userLatitude, double userLongitude, double radius) {
         return anreApi.getFuelStationsInfo().stream()
+                .filter(s -> (!isNull(s.getPetrol()) && s.getPetrol() > ZERO_PRICE_PRIMITIVE) ||
+                        (!isNull(s.getGas()) && s.getGas() > ZERO_PRICE_PRIMITIVE) ||
+                        (!isNull(s.getDiesel()) && s.getDiesel() > ZERO_PRICE_PRIMITIVE))
                 .min(comparing(s -> calculateMeters(userLatitude, userLongitude, s.getLatitude(), s.getLongitude())))
                 .orElseThrow(() -> new EntityNotFoundException(ERROR_NO_FUEL_STATION_NEAR_YOU));
     }
@@ -92,7 +96,7 @@ public class FuelStationServiceImpl implements FuelStationService {
                 return FuelStation::getGas;
             }
         }
-        throw new RuntimeException();
+        throw new EntityNotFoundException(ERROR_INVALID_FUEL_TYPE);
     }
 
     private void checkLimit(int numberOfFuelStation, int limit) {

@@ -6,6 +6,7 @@ import md.bot.fuel.facade.UserDataFacade;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import static java.util.Collections.emptyList;
@@ -23,13 +24,14 @@ public class UpdateRadiusCommand implements Command {
 
     @Override
     public List<? super PartialBotApiMethod<?>> execute(Update update) {
-        final Long userId = update.getMessage().getFrom().getId();
-        final String newRadius = update.getMessage().getText();
+        final Message message = update.getMessage();
+        final Long userId = message.getFrom().getId();
+        final String newRadius = message.getText();
 
         userDataFacade.updateRadius(userId, Double.parseDouble(newRadius));
 
-        final SendMessage message = sendMessage(update, MESSAGE, getMainMenuKeyboard());
-        return singletonList(message);
+        final SendMessage sendMessage = sendMessage(update, MESSAGE, getMainMenuKeyboard());
+        return singletonList(sendMessage);
     }
 
     @Override

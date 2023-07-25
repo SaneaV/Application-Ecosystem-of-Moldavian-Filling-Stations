@@ -6,6 +6,8 @@
 - [Functionality](#functionality)
 - [Project Architecture](#project-architecture)
 - [Installation](#installation)
+- [Environment Variables](#environment-variables)
+- [Test](#test)
 - [QA](#qa)
 - [Tools](#tools)
 - [Useful Resources](#useful-resources)
@@ -46,13 +48,13 @@ Program way:
 1. Open ngrok.exe and write the command:
 
 ```bash
-ngrok http 5000
+ngrok http 8080
 ```
 
 Docker way:
 1. Run docker image:
  
-`docker run -it -e NGROK_AUTHTOKEN=xyz ngrok/ngrok:latest http host.docker.internal:80`
+`docker run -it -e NGROK_AUTHTOKEN=xyz ngrok/ngrok:latest http host.docker.internal:8080`
 
 (*command specific for Windows and MacOS*)
 
@@ -81,12 +83,31 @@ If everything is correct, you will see the message:
 ```bash
 ./mvnw spring-boot:run "-DBOT_TOKEN=[YOUR_TELEGRAM_BOT_TOKEN]" "-DWEB_HOOK_PATH=[URL_FROM_FROM_OPTION_2]"
 ```
+
 7. Go to the bot and send a message `/start` message.
+
+## Environment Variables
+
+| **Environment Variable** | **Optional** |  **Possible Values**   | **Default Value** | **Description**                                                                |
+|:------------------------:|:------------:|:----------------------:|:-----------------:|--------------------------------------------------------------------------------|
+|        BOT_TOKEN         |      No      | \<Telegram bot token\> |     \<Empty\>     | Telegram bot token (you can take it from [Bot Father](https://t.me/BotFather)) |
+|      WEB_HOOK_PATH       |      No      |   HTTPS WebHook path   |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                      |
+|     APP_STARTUP_FAST     |     Yes      |       true/false       |       true        | On true value ANRE API will be called at the start of spring application       |
+
+
+# Test
+
+How to run project tests:
+1. The standard way of launching via IntelliJ Idea.
+2. Using maven:
+    - If you have Maven installed: `.\mvnw clean test`
+    - If you don't have Maven installed: `mvn clean test`
 
 ## QA
 
 1. (<b>Q</b>) Why is the distance calculation in EPSG:4326? 
-  - This would be faster in an environment where the bot is used by less than 700 people<sup>1</sup> per 15 minutes<sup>2</sup>.
+  - This would be faster in an environment where the bot is used by less than 700 people<sup>1</sup> per 15 
+    minutes<sup>2</sup> to calculate distance in EPSG:3857.
 
 (<b>A</b>) If the task involves web maps and interactive display of data on a plane, EPSG:3857 may be a more appropriate 
 coordinate system. However, if more accurate distance measurement or working with geodetic data is required, 
@@ -115,6 +136,9 @@ to go to the nearest one.
 7. [Mapstruct](https://mvnrepository.com/artifact/org.mapstruct/mapstruct)
 8. [Ehcache](https://mvnrepository.com/artifact/org.ehcache/ehcache)
 9. [JSR107 API and SPI](https://mvnrepository.com/artifact/javax.cache/cache-api)
+10. [Mockito Inline](https://mvnrepository.com/artifact/org.mockito/mockito-inline)
+11. [JUnit](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api)
+12. [WireMock](https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock)
 
 ## Useful Resources
 1. [Epsg.io](https://epsg.io/transform)
@@ -124,12 +148,13 @@ to go to the nearest one.
 
 ## Plans
 1. &#9989; Release initial bot version - v1.0.0
-2. &#9723; Create unit and slice tests for basic functionality - v1.0.1
+2. &#9989; Create unit and slice tests for basic functionality - v1.0.1
 3. &#9723; Create REST API - v1.1.0
 4. &#9723; Create unit and slice tests for REST API - v1.1.1
-5. &#9723; Configure Postgresql for project - v1.2.0
+5. &#9723; Configure PostgreSQL for project - v1.2.0
 6. &#9723; Add Maven Failsafe and Surefire plugins and separate tests goals (it and test) - v1.2.1
 7. &#9723; Add Jacoco Maven plugin - v1.2.2
 8. &#9723; Add Dependency Check maven plugin - v1.2.3
 9. &#9723; Add Dockerfile and Docker-compose to build project in container - v1.3.0
 10. &#9723; Add Spring Security for REST API - v1.4.0
+11. &#9723; Add custom JWT token library - v1.5.0

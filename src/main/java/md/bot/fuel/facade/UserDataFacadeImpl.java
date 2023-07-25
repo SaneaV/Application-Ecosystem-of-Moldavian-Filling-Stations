@@ -2,6 +2,8 @@ package md.bot.fuel.facade;
 
 import lombok.RequiredArgsConstructor;
 import md.bot.fuel.domain.UserData;
+import md.bot.fuel.facade.dto.UserDataDto;
+import md.bot.fuel.facade.dto.UserDataDtoMapper;
 import md.bot.fuel.infrastructure.exception.EntityNotFoundException;
 import md.bot.fuel.infrastructure.service.UserDataService;
 import org.springframework.stereotype.Component;
@@ -20,13 +22,14 @@ public class UserDataFacadeImpl implements UserDataFacade {
     private static final double KILOMETERS_TO_METERS = 1000;
 
     private final UserDataService userDataService;
+    private final UserDataDtoMapper userDataDtoMapper;
 
     @Override
-    public UserData getUserData(long userId) {
+    public UserDataDto getUserData(long userId) {
         final UserData userData = userDataService.getUserData(userId);
 
         if (!isNull(userData)) {
-            if (userData.getLatitude() == ZERO_DOUBLE_VALUE && userData.getLongitude() == ZERO_DOUBLE_VALUE) {
+            if (userData.getLatitude() == ZERO_DOUBLE_VALUE || userData.getLongitude() == ZERO_DOUBLE_VALUE) {
                 throw new EntityNotFoundException(ERROR_SPECIFY_COORDINATES);
             }
             if (userData.getRadius() == ZERO_DOUBLE_VALUE) {
@@ -36,7 +39,7 @@ public class UserDataFacadeImpl implements UserDataFacade {
             throw new EntityNotFoundException(ERROR_USER_NOT_FOUND);
         }
 
-        return userData;
+        return userDataDtoMapper.toDto(userData);
     }
 
     @Override

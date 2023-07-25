@@ -1,10 +1,10 @@
 package md.bot.fuel.facade;
 
-import md.bot.fuel.domain.UserData;
+import md.bot.fuel.facade.dto.UserDataDto;
 
 public interface UserDataFacade {
 
-    UserData getUserData(long userId);
+    UserDataDto getUserData(long userId);
 
     void addNewUser(long userId);
 

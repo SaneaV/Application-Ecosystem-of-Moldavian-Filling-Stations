@@ -5,9 +5,9 @@ import lombok.NoArgsConstructor;
 import static java.lang.Math.acos;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static lombok.AccessLevel.NONE;
+import static lombok.AccessLevel.PRIVATE;
 
-@NoArgsConstructor(access = NONE)
+@NoArgsConstructor(access = PRIVATE)
 public class DistanceCalculator {
 
     private static final double radiansToDecimalDegrees = 180.0D / 3.141592653589793D;

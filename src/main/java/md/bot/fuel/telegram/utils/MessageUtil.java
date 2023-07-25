@@ -6,9 +6,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 
-import static lombok.AccessLevel.NONE;
+import static lombok.AccessLevel.PRIVATE;
 
-@NoArgsConstructor(access = NONE)
+@NoArgsConstructor(access = PRIVATE)
 public class MessageUtil {
 
     public static SendMessage sendMessage(Long chatId, String text, ReplyKeyboard replyKeyboard) {
