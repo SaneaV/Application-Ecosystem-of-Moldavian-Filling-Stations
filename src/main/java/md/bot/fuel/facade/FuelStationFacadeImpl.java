@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import md.bot.fuel.domain.FuelStation;
 import md.bot.fuel.facade.dto.FuelStationDto;
 import md.bot.fuel.facade.dto.FuelStationDtoMapper;
-import md.bot.fuel.infrastructure.exception.InvalidRequestException;
+import md.bot.fuel.infrastructure.exception.instance.InvalidRequestException;
 import md.bot.fuel.infrastructure.service.FuelStationService;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +16,7 @@ import static java.util.stream.Collectors.toList;
 public class FuelStationFacadeImpl implements FuelStationFacade {
 
     private static final String ERROR_MESSAGE = "The limit should be greater than 0";
+    private static final String ERROR_REASON_CODE = "INVALID_LIMIT";
 
     private final FuelStationService fuelStationService;
     private final FuelStationDtoMapper fuelStationDtoMapper;
@@ -50,7 +51,7 @@ public class FuelStationFacadeImpl implements FuelStationFacade {
 
     private void checkLimit(int limit) {
         if (limit <= 0) {
-            throw new InvalidRequestException(ERROR_MESSAGE);
+            throw new InvalidRequestException(ERROR_MESSAGE, ERROR_REASON_CODE);
         }
     }
 }

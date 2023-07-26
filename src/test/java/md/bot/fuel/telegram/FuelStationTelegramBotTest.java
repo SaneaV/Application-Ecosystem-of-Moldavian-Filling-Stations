@@ -1,6 +1,6 @@
 package md.bot.fuel.telegram;
 
-import md.bot.fuel.infrastructure.exception.ExecutionException;
+import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
 import md.bot.fuel.telegram.command.DispatcherCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

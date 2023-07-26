@@ -3,7 +3,7 @@ package md.bot.fuel.facade;
 import md.bot.fuel.domain.UserData;
 import md.bot.fuel.facade.dto.UserDataDto;
 import md.bot.fuel.facade.dto.UserDataDtoMapper;
-import md.bot.fuel.infrastructure.exception.EntityNotFoundException;
+import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
 import md.bot.fuel.infrastructure.service.UserDataService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

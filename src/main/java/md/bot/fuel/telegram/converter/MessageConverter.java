@@ -2,7 +2,7 @@ package md.bot.fuel.telegram.converter;
 
 import lombok.NoArgsConstructor;
 import md.bot.fuel.facade.dto.FuelStationDto;
-import md.bot.fuel.infrastructure.exception.EntityNotFoundException;
+import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
 import org.springframework.data.util.Pair;
 
 import static lombok.AccessLevel.PRIVATE;
@@ -25,6 +25,7 @@ public class MessageConverter {
     private static final String DIESEL = "Diesel";
     private static final String GAS = "Gas";
     private static final String ERROR_NO_FUEL_TYPE_EXIST = "Can't find specified fuel type";
+    private static final String ERROR_NOT_FOUND_REASON_CODE = "NOT_FOUND";
 
     public static String toMessage(FuelStationDto fuelStation) {
         final Pair<String, Double> petrolPrice = getPrice(fuelStation.getPetrol());
@@ -59,6 +60,6 @@ public class MessageConverter {
                 return getPrice(fuelStation.getGas());
             }
         }
-        throw new EntityNotFoundException(ERROR_NO_FUEL_TYPE_EXIST);
+        throw new EntityNotFoundException(ERROR_NO_FUEL_TYPE_EXIST, ERROR_NOT_FOUND_REASON_CODE);
     }
 }

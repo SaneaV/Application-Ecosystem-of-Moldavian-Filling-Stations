@@ -5,7 +5,7 @@ import java.util.List;
 import md.bot.fuel.domain.FuelStation;
 import md.bot.fuel.facade.dto.FuelStationDto;
 import md.bot.fuel.facade.dto.FuelStationDtoMapper;
-import md.bot.fuel.infrastructure.exception.InvalidRequestException;
+import md.bot.fuel.infrastructure.exception.instance.InvalidRequestException;
 import md.bot.fuel.infrastructure.service.FuelStationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

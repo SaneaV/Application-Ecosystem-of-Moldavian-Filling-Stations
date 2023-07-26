@@ -18,12 +18,15 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 public class BotController {
 
     private static final String CHAT_ID_ATTRIBUTE = "chatId";
+    private static final String CLIENT_ATTRIBUTE = "CLIENT";
+    private static final String CLIENT_PARAM = "TELEGRAM";
 
     private final FuelStationTelegramBot fuelStationTelegramBot;
 
     @PostMapping(value = "/")
     public ResponseEntity<BotApiMethod<?>> onUpdateReceived(@RequestBody Update update, WebRequest webRequest) {
         webRequest.setAttribute(CHAT_ID_ATTRIBUTE, update.getMessage().getChat().getId(), SCOPE_REQUEST);
+        webRequest.setAttribute(CLIENT_ATTRIBUTE, CLIENT_PARAM, SCOPE_REQUEST);
 
         final BotApiMethod<?> botApiMethod = fuelStationTelegramBot.onWebhookUpdateReceived(update);
         return ok().body(botApiMethod);

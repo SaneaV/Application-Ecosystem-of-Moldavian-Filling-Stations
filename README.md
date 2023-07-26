@@ -3,8 +3,11 @@
 <b>This bot is made for educational purposes only and is not used for commercial purposes.</b>
 
 - [API](#api)
-- [Functionality](#functionality)
+- [Telegram Functionality](#telegram-functionality)
+- [REST Functionality](#rest-functionality)
 - [Project Architecture](#project-architecture)
+  - [Package Architecture](#package-architecture)
+  - [Exception Architecture](#exception-architecture)
 - [Installation](#installation)
 - [Environment Variables](#environment-variables)
 - [Test](#test)
@@ -16,7 +19,7 @@
 # API
 To identify best fuel price and fuel station location was used: [ANRE-API](https://api.iharta.md/anre/public/)
 
-## Functionality
+## Telegram functionality
 
 User is able to specify a certain search radius and coordinates to execute the following functions:
 1. Display all fuel stations (coordinates on map + all available fuel prices).
@@ -27,10 +30,160 @@ User is able to specify a certain search radius and coordinates to execute the f
   <img src="architecture/Bot-Menu-Structure.png"  alt="Bot-Menu-Structure.png"/>
 </p>
 
+# REST Functionality
+
+1. Get all fuel stations in radius:
+
+`http://localhost:8080/fuel-station`
+
+| **Request param** | **Optional** |  **Possible Values**  | **Default Value** | **Description**                              |
+|:-----------------:|:------------:|:---------------------:|:-----------------:|----------------------------------------------|
+|     latitude      |  Partially   | <EPSG:4326 Latitude>  |        0.0        | Latitude (x) coordinate in EPSG:4326 format  |
+|     longitude     |  Partially   | <EPSG:4326 Longitude> |        0.0        | Longitude (y) coordinate in EPSG:4326 format |
+|      radius       |      No      | \<Radius in meters\>  |         0         | Radius of search in meters                   |
+|  limit_in_radius  |  Partially   |    \<Integer > 0\>    |         0         | Number of fuel stations allowed in result    |
+
+Result example: 
+```json
+[
+    {
+        "name": "FUEL STATION NAME",
+        "petrol": 25.1,
+        "diesel": 21.05,
+        "gas": null,
+        "latitude": 46.24415116079208,
+        "longitude": 28.76462449820587
+    }
+]
+```
+
+2. Get all fuel stations in radius in page format:
+
+`http://localhost:8080/page/fuel-station`
+
+| **Request param** | **Optional** |  **Possible Values**  | **Default Value** | **Description**                              |
+|:-----------------:|:------------:|:---------------------:|:-----------------:|----------------------------------------------|
+|     latitude      |  Partially   | <EPSG:4326 Latitude>  |        0.0        | Latitude (x) coordinate in EPSG:4326 format  |
+|     longitude     |  Partially   | <EPSG:4326 Longitude> |        0.0        | Longitude (y) coordinate in EPSG:4326 format |
+|      radius       |      No      | \<Double value > 0\>  |         0         | Radius of search in meters                   |
+|  limit_in_radius  |  Partially   |    \<Integer > 0\>    |         0         | Number of fuel stations allowed in result    |
+|       limit       |  Partially   |    \<Integer > 0\>    |         0         | Number of items on the page                  |
+|      offset       |  Partially   |    \<Integer > 0\>    |         0         | Number of skipped items from the beginning   |
+
+Result example:
+```json
+{
+    "totalResults": 5,
+    "items": [
+        {
+            "name": "FUEL STATION NAME",
+            "petrol": 25.1,
+            "diesel": 21.05,
+            "gas": null,
+            "latitude": 46.24415116079208,
+            "longitude": 28.76462449820587
+        }
+    ]
+}
+```
+
+3. Get nearest fuel station in radius:
+
+`http://localhost:8080/fuel-station/nearest`
+
+| **Request param** | **Optional** |  **Possible Values**  | **Default Value** | **Description**                              |
+|:-----------------:|:------------:|:---------------------:|:-----------------:|----------------------------------------------|
+|     latitude      |  Partially   | <EPSG:4326 Latitude>  |        0.0        | Latitude (x) coordinate in EPSG:4326 format  |
+|     longitude     |  Partially   | <EPSG:4326 Longitude> |        0.0        | Longitude (y) coordinate in EPSG:4326 format |
+|      radius       |      No      | \<Double value > 0\>  |         0         | Radius of search in meters                   |
+
+Result example:
+```json
+{
+    "name": "FUEL STATION NAME",
+    "petrol": 25.14,
+    "diesel": 21.09,
+    "gas": null,
+    "latitude": 46.326925437643354,
+    "longitude": 28.982692581584732
+}
+```
+
+4. Get fuel stations with the best specified fuel type:
+
+`http://localhost:8080/fuel-station/<fuel-type>`
+
+```text
+<fuel-type> should be replaced with any of the next values (case insensitive): petrol, diesel, gas
+```
+
+| **Request param** | **Optional** |  **Possible Values**  | **Default Value** | **Description**                              |
+|:-----------------:|:------------:|:---------------------:|:-----------------:|----------------------------------------------|
+|     latitude      |  Partially   | <EPSG:4326 Latitude>  |        0.0        | Latitude (x) coordinate in EPSG:4326 format  |
+|     longitude     |  Partially   | <EPSG:4326 Longitude> |        0.0        | Longitude (y) coordinate in EPSG:4326 format |
+|      radius       |      No      | \<Double value > 0\>  |         0         | Radius of search in meters                   |
+|  limit_in_radius  |  Partially   |    \<Integer > 0\>    |         0         | Number of fuel stations allowed in result    |
+
+Result example:
+```json
+[
+    {
+        "name": "FUEL STATION NAME",
+        "petrol": 25.1,
+        "diesel": 21.05,
+        "gas": 13.45,
+        "latitude": 46.34746746138542,
+        "longitude": 28.947447953963454
+    }
+]
+```
+
+5. Get fuel stations with the best specified fuel type in page format:
+
+`http://localhost:8080/page/fuel-station/<fuel-type>`
+
+```text
+<fuel-type> should be replaced with any of the next values (case insensitive): petrol, diesel, gas
+```
+
+| **Request param** | **Optional** |  **Possible Values**  | **Default Value** | **Description**                              |
+|:-----------------:|:------------:|:---------------------:|:-----------------:|----------------------------------------------|
+|     latitude      |  Partially   | <EPSG:4326 Latitude>  |        0.0        | Latitude (x) coordinate in EPSG:4326 format  |
+|     longitude     |  Partially   | <EPSG:4326 Longitude> |        0.0        | Longitude (y) coordinate in EPSG:4326 format |
+|      radius       |      No      | \<Double value > 0\>  |         0         | Radius of search in meters                   |
+|  limit_in_radius  |  Partially   |    \<Integer > 0\>    |         0         | Number of fuel stations allowed in result    |
+|       limit       |  Partially   |    \<Integer > 0\>    |         0         | Number of items on the page                  |
+|      offset       |  Partially   |    \<Integer > 0\>    |         0         | Number of skipped items from the beginning   |
+
+Result example:
+```json
+{
+    "totalResults": 1,
+    "items": [
+        {
+            "name": "FUEL STATION NAME",
+            "petrol": 25.1,
+            "diesel": 21.05,
+            "gas": 13.45,
+            "latitude": 46.34746746138542,
+            "longitude": 28.947447953963454
+        }
+    ]
+}
+```
+
 ## Project Architecture
+
+### Package Architecture
 
 <p align="center">
   <img src="architecture/Bot-Java-Project-Structure.png"  alt="Bot-Java-Project-Structure.png"/>
+</p>
+
+### Exception Architecture
+
+<p align="center">
+  <img src="architecture/Error-Wrapping-Strategy.png"  alt="Bot-Java-Project-Structure.png"/>
 </p>
 
 ## Installation
@@ -88,12 +241,12 @@ If everything is correct, you will see the message:
 
 ## Environment Variables
 
-| **Environment Variable** | **Optional** |  **Possible Values**   | **Default Value** | **Description**                                                                |
-|:------------------------:|:------------:|:----------------------:|:-----------------:|--------------------------------------------------------------------------------|
-|        BOT_TOKEN         |      No      | \<Telegram bot token\> |     \<Empty\>     | Telegram bot token (you can take it from [Bot Father](https://t.me/BotFather)) |
-|      WEB_HOOK_PATH       |      No      |   HTTPS WebHook path   |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                      |
-|     APP_STARTUP_FAST     |     Yes      |       true/false       |       true        | On true value ANRE API will be called at the start of spring application       |
-
+| **Environment Variable** | **Optional** |  **Possible Values**   | **Default Value** | **Description**                                                                                   |
+|:------------------------:|:------------:|:----------------------:|:-----------------:|---------------------------------------------------------------------------------------------------|
+|        BOT_TOKEN         |      No      | \<Telegram bot token\> |     \<Empty\>     | Telegram bot token (you can take it from [Bot Father](https://t.me/BotFather))                    |
+|      WEB_HOOK_PATH       |      No      |   HTTPS WebHook path   |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                                         |
+|     APP_STARTUP_FAST     |     Yes      |       true/false       |       true        | On true value ANRE API will be called at the start of spring application                          |
+|    APP_ERROR_STRATEGY    |     Yes      |      RFC7807/XML       |        XML        | Allows to change the way errors are represented between XmlGateway and RFC7807 (REST layer only)  |
 
 # Test
 
@@ -149,7 +302,7 @@ to go to the nearest one.
 ## Plans
 1. &#9989; Release initial bot version - v1.0.0
 2. &#9989; Create unit and slice tests for basic functionality - v1.0.1
-3. &#9723; Create REST API - v1.1.0
+3. &#9989; Create REST API - v1.1.0
 4. &#9723; Create unit and slice tests for REST API - v1.1.1
 5. &#9723; Configure PostgreSQL for project - v1.2.0
 6. &#9723; Add Maven Failsafe and Surefire plugins and separate tests goals (it and test) - v1.2.1
@@ -158,3 +311,7 @@ to go to the nearest one.
 9. &#9723; Add Dockerfile and Docker-compose to build project in container - v1.3.0
 10. &#9723; Add Spring Security for REST API - v1.4.0
 11. &#9723; Add custom JWT token library - v1.5.0
+
+Good to implement:
+1. Remove user from database in case he blocked telegram bot.
+2. Fetch ANRE API on fast startup in a separate thread.

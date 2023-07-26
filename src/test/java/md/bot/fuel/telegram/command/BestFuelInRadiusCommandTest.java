@@ -6,7 +6,7 @@ import md.bot.fuel.facade.FuelStationFacade;
 import md.bot.fuel.facade.UserDataFacade;
 import md.bot.fuel.facade.dto.FuelStationDto;
 import md.bot.fuel.facade.dto.UserDataDto;
-import md.bot.fuel.infrastructure.exception.EntityNotFoundException;
+import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

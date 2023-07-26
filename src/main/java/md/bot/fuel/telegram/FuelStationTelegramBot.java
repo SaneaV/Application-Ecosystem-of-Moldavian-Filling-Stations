@@ -1,6 +1,6 @@
 package md.bot.fuel.telegram;
 
-import md.bot.fuel.infrastructure.exception.ExecutionException;
+import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
 import md.bot.fuel.telegram.command.DispatcherCommand;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class FuelStationTelegramBot extends TelegramWebhookBot {
 
     private static final String ERROR_DESCRIPTION = "An error occurred during message sending.";
+    private static final String ERROR_REASON_CODE = "INTERNAL_ERROR";
 
     private final String webHookPath;
     private final String botUserName;
@@ -41,7 +42,7 @@ public class FuelStationTelegramBot extends TelegramWebhookBot {
                     execute((SendLocation) message);
                 }
             } catch (TelegramApiException e) {
-                throw new ExecutionException(ERROR_DESCRIPTION);
+                throw new ExecutionException(ERROR_DESCRIPTION, ERROR_REASON_CODE);
             }
         });
 

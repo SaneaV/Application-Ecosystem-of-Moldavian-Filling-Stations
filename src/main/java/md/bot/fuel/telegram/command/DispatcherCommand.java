@@ -2,7 +2,7 @@ package md.bot.fuel.telegram.command;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import md.bot.fuel.infrastructure.exception.EntityNotFoundException;
+import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,6 +14,7 @@ import static java.util.Objects.isNull;
 public class DispatcherCommand {
 
     private static final String COMMAND_NOT_FOUND = "I don't understand your command, use the menu buttons.";
+    private static final String ERROR_NOT_FOUND_REASON_CODE = "NOT_FOUND";
 
     private final List<Command> commands;
     private final UpdateRadiusCommand updateRadiusCommand;
@@ -33,7 +34,7 @@ public class DispatcherCommand {
         return commands.stream()
                 .filter(c -> !isNull(c.getCommands()) && c.getCommands().contains(message))
                 .findFirst()
-                .orElseThrow(() -> new EntityNotFoundException(COMMAND_NOT_FOUND))
+                .orElseThrow(() -> new EntityNotFoundException(COMMAND_NOT_FOUND, ERROR_NOT_FOUND_REASON_CODE))
                 .execute(update);
     }
 

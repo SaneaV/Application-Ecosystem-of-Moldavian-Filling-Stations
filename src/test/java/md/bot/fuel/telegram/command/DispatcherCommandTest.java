@@ -1,7 +1,7 @@
 package md.bot.fuel.telegram.command;
 
 import java.util.List;
-import md.bot.fuel.infrastructure.exception.EntityNotFoundException;
+import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

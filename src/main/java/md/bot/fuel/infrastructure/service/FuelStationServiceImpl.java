@@ -6,8 +6,8 @@ import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import md.bot.fuel.domain.FuelStation;
 import md.bot.fuel.infrastructure.api.AnreApi;
-import md.bot.fuel.infrastructure.exception.EntityNotFoundException;
-import md.bot.fuel.infrastructure.exception.InvalidRequestException;
+import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
+import md.bot.fuel.infrastructure.exception.instance.InvalidRequestException;
 import org.springframework.stereotype.Service;
 
 import static java.util.Comparator.comparing;
@@ -21,13 +21,15 @@ import static md.bot.fuel.infrastructure.utils.DistanceCalculator.isWithinRadius
 public class FuelStationServiceImpl implements FuelStationService {
 
     private static final String ERROR_NO_FUEL_STATION_NEAR_YOU = "We can't find any fuel station near you. Try to extend search radius.";
+    private static final String ERROR_NOT_FOUND_REASON_CODE = "NOT_FOUND";
     private static final String ERROR_FOUND_MORE_THAN_LIMIT = "We found more than %s fuel stations near you. Try to decrease search radius.";
+    private static final String ERROR_EXCEED_LIMIT_REASON_CODE = "EXCEED_LIMIT";
     private static final String ERROR_NO_FUEL_IN_STOCK = "Fuel station near you do not have %s in stock. Try to extend search radius.";
     private static final String ERROR_INVALID_FUEL_TYPE = "Invalid fuel type.";
 
-    private static final String PETROL = "Petrol";
-    private static final String DIESEL = "Diesel";
-    private static final String GAS = "Gas";
+    private static final String PETROL = "petrol";
+    private static final String DIESEL = "diesel";
+    private static final String GAS = "gas";
     private static final Double ZERO_PRICE = 0D;
     private static final double ZERO_PRICE_PRIMITIVE = 0D;
 
@@ -44,7 +46,7 @@ public class FuelStationServiceImpl implements FuelStationService {
 
         checkLimit(fuelStations.size(), limit);
         if (fuelStations.isEmpty()) {
-            throw new EntityNotFoundException(ERROR_NO_FUEL_STATION_NEAR_YOU);
+            throw new EntityNotFoundException(ERROR_NO_FUEL_STATION_NEAR_YOU, ERROR_NOT_FOUND_REASON_CODE);
         }
         return fuelStations;
     }
@@ -56,7 +58,7 @@ public class FuelStationServiceImpl implements FuelStationService {
                         (!isNull(s.getGas()) && s.getGas() > ZERO_PRICE_PRIMITIVE) ||
                         (!isNull(s.getDiesel()) && s.getDiesel() > ZERO_PRICE_PRIMITIVE))
                 .min(comparing(s -> calculateMeters(userLatitude, userLongitude, s.getLatitude(), s.getLongitude())))
-                .orElseThrow(() -> new EntityNotFoundException(ERROR_NO_FUEL_STATION_NEAR_YOU));
+                .orElseThrow(() -> new EntityNotFoundException(ERROR_NO_FUEL_STATION_NEAR_YOU, ERROR_NOT_FOUND_REASON_CODE));
     }
 
     @Override
@@ -73,7 +75,8 @@ public class FuelStationServiceImpl implements FuelStationService {
         final double minimalFuelPrice = filteredFuelStationsList.stream()
                 .mapToDouble(fuelStationFunction::apply)
                 .min()
-                .orElseThrow(() -> new EntityNotFoundException(String.format(ERROR_NO_FUEL_IN_STOCK, fuelType.toLowerCase())));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(ERROR_NO_FUEL_IN_STOCK, fuelType.toLowerCase()),
+                        ERROR_NOT_FOUND_REASON_CODE));
 
         final List<FuelStation> fuelStations = filteredFuelStationsList.stream()
                 .filter(station -> fuelStationFunction.apply(station).equals(minimalFuelPrice))
@@ -85,7 +88,7 @@ public class FuelStationServiceImpl implements FuelStationService {
     }
 
     private Function<FuelStation, Double> getFuelType(String fuelType) {
-        switch (fuelType) {
+        switch (fuelType.toLowerCase()) {
             case PETROL: {
                 return FuelStation::getPetrol;
             }
@@ -96,12 +99,12 @@ public class FuelStationServiceImpl implements FuelStationService {
                 return FuelStation::getGas;
             }
         }
-        throw new EntityNotFoundException(ERROR_INVALID_FUEL_TYPE);
+        throw new EntityNotFoundException(ERROR_INVALID_FUEL_TYPE, ERROR_NOT_FOUND_REASON_CODE);
     }
 
     private void checkLimit(int numberOfFuelStation, int limit) {
         if (numberOfFuelStation > limit) {
-            throw new InvalidRequestException(String.format(ERROR_FOUND_MORE_THAN_LIMIT, limit));
+            throw new InvalidRequestException(String.format(ERROR_FOUND_MORE_THAN_LIMIT, limit), ERROR_EXCEED_LIMIT_REASON_CODE);
         }
     }
 }

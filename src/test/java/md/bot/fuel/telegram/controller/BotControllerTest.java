@@ -1,7 +1,8 @@
 package md.bot.fuel.telegram.controller;
 
+import md.bot.fuel.infrastructure.exception.ErrorWrappingStrategyFactory;
 import md.bot.fuel.telegram.FuelStationTelegramBot;
-import md.bot.fuel.telegram.exception.TelegramExceptionWrapper;
+import md.bot.fuel.telegram.exception.TelegramExceptionWrappingStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
-@Import(TelegramExceptionWrapper.class)
+@Import({TelegramExceptionWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
 @WebMvcTest(BotController.class)
 public class BotControllerTest {
 
