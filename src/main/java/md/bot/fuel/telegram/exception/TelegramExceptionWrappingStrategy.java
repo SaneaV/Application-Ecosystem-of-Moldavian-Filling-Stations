@@ -7,6 +7,7 @@ import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
 import md.bot.fuel.infrastructure.exception.instance.InvalidRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
@@ -37,6 +38,12 @@ public class TelegramExceptionWrappingStrategy implements ErrorWrappingStrategy 
 
     @Override
     public ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception, WebRequest request) {
+        return prepareErrorMessage(exception.getMessage(), request);
+    }
+
+    // TODO: Remove this handle on module separation
+    @Override
+    public ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request) {
         return prepareErrorMessage(exception.getMessage(), request);
     }
 

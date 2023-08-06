@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 import md.bot.fuel.common.GetterSetterTest;
+import md.bot.fuel.domain.exception.Errors;
+import md.bot.fuel.domain.exception.GatewayError;
+import md.bot.fuel.domain.exception.RFCError;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,7 +25,10 @@ public class DomainGetterSetterTest extends GetterSetterTest {
         return Stream.of(
                 Arguments.of(new UserData()),
                 Arguments.of(new FuelStation(EMPTY, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE,
-                        DEFAULT_DOUBLE)));
+                        DEFAULT_DOUBLE)),
+                Arguments.of(new Errors()),
+                Arguments.of(new GatewayError()),
+                Arguments.of(new RFCError(EMPTY, EMPTY, EMPTY, true)));
     }
 
     @BeforeAll

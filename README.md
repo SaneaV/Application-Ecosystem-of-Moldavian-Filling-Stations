@@ -303,7 +303,7 @@ to go to the nearest one.
 1. &#9989; Release initial bot version - v1.0.0
 2. &#9989; Create unit and slice tests for basic functionality - v1.0.1
 3. &#9989; Create REST API - v1.1.0
-4. &#9723; Create unit and slice tests for REST API - v1.1.1
+4. &#9989; Create unit and slice tests for REST API - v1.1.1
 5. &#9723; Configure PostgreSQL for project - v1.2.0
 6. &#9723; Add Maven Failsafe and Surefire plugins and separate tests goals (it and test) - v1.2.1
 7. &#9723; Add Jacoco Maven plugin - v1.2.2
@@ -315,3 +315,4 @@ to go to the nearest one.
 Good to implement:
 1. Remove user from database in case he blocked telegram bot.
 2. Fetch ANRE API on fast startup in a separate thread.
+3. Create WebFlux tests with WebTestClient

@@ -36,9 +36,9 @@ public class FuelStationServiceImpl implements FuelStationService {
     private final AnreApi anreApi;
 
     @Override
-    public List<FuelStation> getAllFuelStations(double userLatitude, double userLongitude, double radius, int limit) {
+    public List<FuelStation> getAllFuelStations(double latitude, double longitude, double radius, int limit) {
         final List<FuelStation> fuelStations = anreApi.getFuelStationsInfo().stream()
-                .filter(s -> isWithinRadius(userLatitude, userLongitude, s.getLatitude(), s.getLongitude(), radius) &&
+                .filter(s -> isWithinRadius(latitude, longitude, s.getLatitude(), s.getLongitude(), radius) &&
                         ((!isNull(s.getPetrol()) && s.getPetrol() > ZERO_PRICE_PRIMITIVE) ||
                                 (!isNull(s.getGas()) && s.getGas() > ZERO_PRICE_PRIMITIVE) ||
                                 (!isNull(s.getDiesel()) && s.getDiesel() > ZERO_PRICE_PRIMITIVE)))
@@ -52,22 +52,21 @@ public class FuelStationServiceImpl implements FuelStationService {
     }
 
     @Override
-    public FuelStation getNearestFuelStation(double userLatitude, double userLongitude, double radius) {
+    public FuelStation getNearestFuelStation(double latitude, double longitude, double radius) {
         return anreApi.getFuelStationsInfo().stream()
                 .filter(s -> (!isNull(s.getPetrol()) && s.getPetrol() > ZERO_PRICE_PRIMITIVE) ||
                         (!isNull(s.getGas()) && s.getGas() > ZERO_PRICE_PRIMITIVE) ||
                         (!isNull(s.getDiesel()) && s.getDiesel() > ZERO_PRICE_PRIMITIVE))
-                .min(comparing(s -> calculateMeters(userLatitude, userLongitude, s.getLatitude(), s.getLongitude())))
+                .min(comparing(s -> calculateMeters(latitude, longitude, s.getLatitude(), s.getLongitude())))
                 .orElseThrow(() -> new EntityNotFoundException(ERROR_NO_FUEL_STATION_NEAR_YOU, ERROR_NOT_FOUND_REASON_CODE));
     }
 
     @Override
-    public List<FuelStation> getBestFuelPrice(double userLatitude, double userLongitude, double radius,
-                                              String fuelType, int limit) {
+    public List<FuelStation> getBestFuelPrice(double latitude, double longitude, double radius, String fuelType, int limit) {
         final Function<FuelStation, Double> fuelStationFunction = getFuelType(fuelType);
 
         final List<FuelStation> filteredFuelStationsList = anreApi.getFuelStationsInfo().stream()
-                .filter(s -> isWithinRadius(userLatitude, userLongitude, s.getLatitude(), s.getLongitude(), radius)
+                .filter(s -> isWithinRadius(latitude, longitude, s.getLatitude(), s.getLongitude(), radius)
                         && !isNull(fuelStationFunction.apply(s))
                         && !Objects.equals(fuelStationFunction.apply(s), ZERO_PRICE))
                 .collect(toList());

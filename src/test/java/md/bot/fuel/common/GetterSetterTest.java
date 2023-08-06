@@ -3,6 +3,7 @@ package md.bot.fuel.common;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,10 +33,12 @@ public class GetterSetterTest {
 
         DEFAULT_SUPPLIERS.put(double.class, () -> 0.0d);
         DEFAULT_SUPPLIERS.put(long.class, () -> 0L);
+        DEFAULT_SUPPLIERS.put(boolean.class, () -> true);
 
         DEFAULT_SUPPLIERS.put(Double.class, () -> 0.0d);
         DEFAULT_SUPPLIERS.put(Boolean.class, () -> FALSE);
         DEFAULT_SUPPLIERS.put(String.class, () -> "");
+        DEFAULT_SUPPLIERS.put(List.class, Collections::emptyList);
     }
 
     private final Set<String> ignoreMethods = new HashSet<>(singleton("getClass"));

@@ -14,21 +14,18 @@ public class FuelStationPageWrapper {
 
     private final FuelStationFacade fuelStationFacade;
 
-    public PageDto<FuelStationDto> wrapAllFuelStationList(double userLatitude, double userLongitude, double userRadius,
-                                                          int limit, int pageLimit, int offset) {
-        final List<FuelStationDto> allFuelStations = fuelStationFacade.getAllFuelStations(userLatitude, userLongitude,
-                userRadius, limit);
+    public PageDto<FuelStationDto> wrapAllFuelStationList(double latitude, double longitude, double radius, int limit,
+                                                          int pageLimit, int offset) {
+        final List<FuelStationDto> allFuelStations = fuelStationFacade.getAllFuelStations(latitude, longitude, radius, limit);
         final List<FuelStationDto> fuelStationDtos = filterFuelStations(allFuelStations, pageLimit, offset);
-
         return new PageDto<>(allFuelStations.size(), fuelStationDtos);
     }
 
-    public PageDto<FuelStationDto> wrapBestFuelPrice(double userLatitude, double userLongitude, double userRadius,
-                                                     String fuelType, int limit, int pageLimit, int offset) {
-        final List<FuelStationDto> bestFuelPriceStations = fuelStationFacade.getBestFuelPrice(userLatitude, userLongitude,
-                userRadius, fuelType, limit);
+    public PageDto<FuelStationDto> wrapBestFuelPrice(double latitude, double longitude, double radius, String fuelType, int limit,
+                                                     int pageLimit, int offset) {
+        final List<FuelStationDto> bestFuelPriceStations = fuelStationFacade.getBestFuelPrice(latitude, longitude, radius,
+                fuelType, limit);
         final List<FuelStationDto> fuelStationDtos = filterFuelStations(bestFuelPriceStations, pageLimit, offset);
-
         return new PageDto<>(bestFuelPriceStations.size(), fuelStationDtos);
     }
 

@@ -19,7 +19,6 @@ public class ErrorWrappingStrategyFactory {
     private static final String ERROR_REASON_CODE = "ERROR_WRAPPING_STRATEGY_NOT_FOUND";
 
     private final List<ErrorWrappingStrategy> errorWrappingStrategies;
-
     private Map<String, ErrorWrappingStrategy> errorWrappingStrategiesByClient;
 
     @PostConstruct

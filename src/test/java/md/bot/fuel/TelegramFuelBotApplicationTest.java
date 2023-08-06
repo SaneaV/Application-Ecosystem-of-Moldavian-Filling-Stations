@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
-import org.mockito.MockedStatic.Verification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,11 +21,12 @@ public class TelegramFuelBotApplicationTest {
         @Test
         @DisplayName("Should test main method via unit test")
         void testApplication() {
-            final MockedStatic<SpringApplication> utilities = mockStatic(SpringApplication.class);
-            utilities.when((Verification) SpringApplication.run(TelegramFuelBotApplication.class, new String[]{})).thenReturn(null);
-            TelegramFuelBotApplication.main(new String[]{});
+            try (final MockedStatic<SpringApplication> utilities = mockStatic(SpringApplication.class)) {
+                utilities.when((MockedStatic.Verification) SpringApplication.run(TelegramFuelBotApplication.class, new String[]{})).thenReturn(null);
+                TelegramFuelBotApplication.main(new String[]{});
 
-            assertThat(SpringApplication.run(TelegramFuelBotApplication.class)).isEqualTo(null);
+                assertThat(SpringApplication.run(TelegramFuelBotApplication.class)).isEqualTo(null);
+            }
         }
     }
 

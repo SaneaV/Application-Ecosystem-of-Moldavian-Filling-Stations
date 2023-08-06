@@ -19,10 +19,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.context.request.WebRequest;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -73,17 +71,15 @@ public class GlobalExceptionHandlerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
     @MockBean
     private FuelStationTelegramBot fuelStationTelegramBot;
-    @MockBean
-    private WebRequest webRequest;
 
     @ParameterizedTest
     @MethodSource("getExceptions")
     @DisplayName("Should handle and wrap exceptions")
     void shouldHandleAndWrapExceptions(RuntimeException exception, String exceptionMessage) throws Exception {
         when(fuelStationTelegramBot.onWebhookUpdateReceived(any())).thenThrow(exception);
-        when(webRequest.getAttribute(any(), anyInt())).thenReturn("TELEGRAM");
 
         mockMvc.perform(MockMvcRequestBuilders.post(BOT_PATH)
                         .content(REQUEST_BODY)

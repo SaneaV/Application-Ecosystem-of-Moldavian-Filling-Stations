@@ -10,11 +10,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindException;
 import org.springframework.web.context.request.WebRequest;
 
+import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_REASON_BIND_ERROR;
 import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_REASON_INTERNAL_ERROR;
 import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_SOURCE;
 import static md.bot.fuel.rest.exception.ErrorConstants.REST_CLIENT;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 
@@ -56,6 +59,15 @@ public class XMLGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
         error.getErrors().addError(gatewayError);
 
         return buildResponseEntity(exception.getStatus(), error);
+    }
+
+    @Override
+    public ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request) {
+        final GatewayErrorDescription error = new GatewayErrorDescription();
+        final GatewayError gatewayError = buildGatewayError(ERROR_REASON_BIND_ERROR, exception.getMessage());
+        error.getErrors().addError(gatewayError);
+
+        return buildResponseEntity(BAD_REQUEST, error);
     }
 
     @Override

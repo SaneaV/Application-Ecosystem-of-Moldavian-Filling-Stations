@@ -5,10 +5,12 @@ import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
 import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
 import md.bot.fuel.infrastructure.exception.instance.InvalidRequestException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import static md.bot.fuel.rest.exception.ErrorConstants.REST_CLIENT;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 @ControllerAdvice
@@ -41,6 +43,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception, WebRequest request) {
         final String client = getClient(request);
         return errorWrappingStrategyFactory.getErrorWrappingStrategy(client).handleInvalidRequestException(exception, request);
+    }
+
+    @ExceptionHandler(BindException.class)
+    public ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request) {
+        return errorWrappingStrategyFactory.getErrorWrappingStrategy(REST_CLIENT).handleBindException(exception, request);
     }
 
     private String getClient(WebRequest request) {

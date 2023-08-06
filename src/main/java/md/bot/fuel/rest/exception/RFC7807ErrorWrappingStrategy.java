@@ -10,11 +10,14 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindException;
 import org.springframework.web.context.request.WebRequest;
 
 import static java.util.Collections.singletonList;
+import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_REASON_BIND_ERROR;
 import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_REASON_INTERNAL_ERROR;
 import static md.bot.fuel.rest.exception.ErrorConstants.REST_CLIENT;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 
@@ -55,6 +58,13 @@ public class RFC7807ErrorWrappingStrategy implements ErrorWrappingStrategy {
         final RFCErrorDescription error = buildRfcErrorDescription(exception.getStatus().value(), exception.getReasonCode(),
                 exception.getMessage());
         return buildResponseEntity(exception.getStatus(), error);
+    }
+
+    @Override
+    public ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request) {
+        final RFCErrorDescription error = buildRfcErrorDescription(BAD_REQUEST.value(), ERROR_REASON_BIND_ERROR,
+                exception.getMessage());
+        return buildResponseEntity(BAD_REQUEST, error);
     }
 
     @Override
