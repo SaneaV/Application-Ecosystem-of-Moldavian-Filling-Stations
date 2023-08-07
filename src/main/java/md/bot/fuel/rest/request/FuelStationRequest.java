@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.validation.annotation.Validated;
 
+import static lombok.AccessLevel.NONE;
+
 @Getter
 @Setter
 @Validated
@@ -13,6 +15,7 @@ public class FuelStationRequest implements Serializable {
     private double latitude;
     private double longitude;
     private double radius;
+    @Setter(NONE)
     private int limitInRadius;
     private int limit;
     private int offset;

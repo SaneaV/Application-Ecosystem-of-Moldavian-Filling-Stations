@@ -13,6 +13,8 @@
   - [Bot Installation](#bot-installation)
 - [Environment Variables](#environment-variables)
 - [Test](#test)
+  - [Execution](#execution)
+  - [Reports](#reports)
 - [QA](#qa)
 - [Tools](#tools)
 - [Useful Resources](#useful-resources)
@@ -272,19 +274,34 @@ If everything is correct, you will see the message:
 
 # Test
 
+## Execution
+
 How to run project tests:
 1. The standard way of launching via IntelliJ Idea (from it and test packages).
 2. Using maven (run from project root):
     - If you have Maven installed: 
-      - `mvn clean test` - run unit tests only
-      - `mvn clean verify` - run unit and integration tests
+      - `mvn test` - run unit tests only
+      - `mvn verify` - run unit and integration tests
     - If you don't have Maven installed: 
-      - `.\mvnw clean test` - run unit tests only
-      - `.\mvnw clean verify` - run unit and integration tests
+      - `.\mvnw test` - run unit tests only
+      - `.\mvnw verify` - run unit and integration tests
 
 - Additional maven properties:
   - `-Dskip.unit.tests=true/false` - to enable/disable unit tests phase
   - `-Dskip.integration.tests=true/false` - to enable/disable integration tests phase
+
+## Reports
+
+In order to create Jacoco test coverage reports you can run next commands:
+- Unit tests report: 
+  - Command: `mvn test`
+  - Output directory: `target/site/jacoco-unit-tests-coverage-report/index.html`
+- Integration tests report:
+  - Command: `mvn verify "-Dskip.unit.tests=true"`
+  - Output directory: `target/site/jacoco-integration-test-coverage-report/index.html`
+- Merged unit and integration tests report:
+  - Command: `mvn verify`
+  - Output directory: `target/site/jacoco-merged-tests-coverage.exec/index.html`
 
 ## QA
 
@@ -325,6 +342,7 @@ to go to the nearest one.
 13. [PostgreSQL](https://mvnrepository.com/artifact/org.postgresql/postgresql)
 14. [Maven Surefire Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin)
 15. [Maven Failsafe Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin)
+16. [Maven Jacoco Plugin](https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin)
 
 ## Useful Resources
 1. [Epsg.io](https://epsg.io/transform)

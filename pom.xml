@@ -12,7 +12,7 @@
 
     <groupId>md.bot.fuel</groupId>
     <artifactId>telegram-fuel-bot</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
     <packaging>war</packaging>
     <name>telegram-fuel-bot</name>
     <description>Telegram bot to search best fuel price</description>
@@ -34,6 +34,7 @@
         <postgresql.version>42.6.0</postgresql.version>
         <maven.failsafe.plugin.version>3.1.2</maven.failsafe.plugin.version>
         <build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
+        <jacoco.version>0.8.10</jacoco.version>
     </properties>
 
     <repositories>
@@ -168,8 +169,91 @@
             </plugin>
 
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>before-unit-tests</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/jacoco-output/jacoco-unit-tests.exec</destFile>
+                            <propertyName>surefire.jacoco.args</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>after-unit-tests</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/jacoco-output/jacoco-unit-tests.exec</dataFile>
+                            <outputDirectory>
+                                ${project.reporting.outputDirectory}/jacoco-unit-tests-coverage-report
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>before-integration-tests</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <configuration>
+                            <destFile>${project.build.directory}/jacoco-output/jacoco-integration-tests.exec</destFile>
+                            <propertyName>failsafe.jacoco.args</propertyName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>after-integration-tests</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/jacoco-output/jacoco-integration-tests.exec</dataFile>
+                            <outputDirectory>
+                                ${project.reporting.outputDirectory}/jacoco-integration-test-coverage-report
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>merger-unit-and-integration-reports</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>merge</goal>
+                        </goals>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <directory>${project.build.directory}/jacoco-output/</directory>
+                                    <includes>
+                                        <include>*.exec</include>
+                                    </includes>
+                                </fileSet>
+                            </fileSets>
+                            <destFile>${project.build.directory}/jacoco-output/merged.exec</destFile>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-merged-report</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <configuration>
+                            <dataFile>${project.build.directory}/jacoco-output/merged.exec</dataFile>
+                            <outputDirectory>
+                                ${project.reporting.outputDirectory}/jacoco-merged-tests-coverage.exec
+                            </outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -177,6 +261,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <skipTests>${skip.unit.tests}</skipTests>
+                    <argLine>${surefire.jacoco.args}</argLine>
                 </configuration>
             </plugin>
 
@@ -206,6 +291,7 @@
                 <version>${maven.failsafe.plugin.version}</version>
                 <configuration>
                     <skipTests>${skip.integration.tests}</skipTests>
+                    <argLine>${failsafe.jacoco.args}</argLine>
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>

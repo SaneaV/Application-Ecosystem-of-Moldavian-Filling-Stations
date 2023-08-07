@@ -8,10 +8,10 @@
 - [X] Create unit and slice tests for REST API
 - [X] Configure PostgreSQL for project
 - [X] Add Maven Failsafe and Surefire plugins and separate tests goals (it and test)
+- [X] Add Jacoco Maven plugin
 
 ## Important Features
 
-- [ ] Add Jacoco Maven plugin
 - [ ] Add Dependency Check maven plugin
 - [ ] Add Dockerfile and Docker-compose to build project in container
 - [ ] Add Spring Security for REST API (using mock LDAP)
@@ -26,3 +26,4 @@
 - [ ] Fetch ANRE API on fast startup in a separate thread.
 - [ ] Create WebFlux tests with WebTestClient
 - [ ] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot)
+- [ ] Replace REST description in README.md with swagger auto documentation
