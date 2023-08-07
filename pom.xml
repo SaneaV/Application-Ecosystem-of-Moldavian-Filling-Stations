@@ -12,7 +12,7 @@
 
     <groupId>md.bot.fuel</groupId>
     <artifactId>telegram-fuel-bot</artifactId>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <packaging>war</packaging>
     <name>telegram-fuel-bot</name>
     <description>Telegram bot to search best fuel price</description>

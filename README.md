@@ -16,7 +16,7 @@
 - [QA](#qa)
 - [Tools](#tools)
 - [Useful Resources](#useful-resources)
-- [Plans](#plans)
+- [TODO](#todo)
 
 # API
 To identify best fuel price and fuel station location was used: [ANRE-API](https://api.iharta.md/anre/public/)
@@ -332,23 +332,6 @@ to go to the nearest one.
 3. [Earth.google.com](https://earth.google.com/)
 4. [Geleot.ru](https://geleot.ru/technology/navigation/coordinate_distance)
 
-## Plans
-1. &#9989; Release initial bot version - v1.0.0
-2. &#9989; Create unit and slice tests for basic functionality - v1.0.1
-3. &#9989; Create REST API - v1.1.0
-4. &#9989; Create unit and slice tests for REST API - v1.1.1
-5. &#9989; Configure PostgreSQL for project - v1.2.0
-6. &#9989; Add Maven Failsafe and Surefire plugins and separate tests goals (it and test) - v1.2.1
-7. &#9723; Add Jacoco Maven plugin - v1.2.2
-8. &#9723; Add Dependency Check maven plugin - v1.2.3
-9. &#9723; Add Dockerfile and Docker-compose to build project in container - v1.3.0
-10. &#9723; Add Spring Security for REST API (using mock LDAP) - v1.4.0
-11. &#9723; Add custom JWT token library - v1.5.0
+## TODO
 
-Good to implement:
-1. Remove user from database in case he blocked telegram bot.
-2. Fetch ANRE API on fast startup in a separate thread.
-3. Create WebFlux tests with WebTestClient
-4. Create a Kafka-Statistics module to collect data about the cities from which the request is made (implement through aspects 
-   and Thymeleaf)
-5. Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot)
+Read the [TODO](TODO.md) to see the current task list.
