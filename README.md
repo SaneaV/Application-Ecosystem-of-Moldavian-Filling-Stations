@@ -9,6 +9,8 @@
   - [Package Architecture](#package-architecture)
   - [Exception Architecture](#exception-architecture)
 - [Installation](#installation)
+  - [Database Installation](#database-installation)
+  - [Bot Installation](#bot-installation)
 - [Environment Variables](#environment-variables)
 - [Test](#test)
 - [QA](#qa)
@@ -188,14 +190,31 @@ Result example:
 
 ## Installation
 
+### Database Installation
+
+Setting up and installing a database using Docker.
+1. Run command: `docker run
+                -e POSTGRES_DB=${POSTGRES_DB}
+                -e POSTGRES_USER=${POSTGRES_USER}
+                -e POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+                -p 5432:5432
+                postgres:latest`
+2. Provide `DATABASE_URL`, `DATABASE_USERNAME`, `DATABASE_PASSWORD` values in `application.properties` file or as environment 
+   variables.
+
+- `DATABASE_URL` example: `jdbc:postgresql://localhost:5432/telegram-user-preference`
+- Note that the database must exist or use `?createDatabaseIfNotExist=true` in the `DATABASE_URL`.
+
+### Bot Installation
+
 1. Download and install 
     + Program installation: [ngrok](https://ngrok.com/download)
-    + Docker container: Fetch image from docker hub`docker pull ngrok/ngrok`
+    + Docker container: Fetch image from docker hub `docker pull ngrok/ngrok`
 2. Download and install [maven](https://maven.apache.org/).
 3. Create your Telegram [bot](https://telegram.me/BotFather).
 4. Clone this repository to any folder on your computer.
 
-## Usage
+#### Usage
 
 Program way:
 1. Open ngrok.exe and write the command:
@@ -241,12 +260,15 @@ If everything is correct, you will see the message:
 
 ## Environment Variables
 
-| **Environment Variable** | **Optional** |  **Possible Values**   | **Default Value** | **Description**                                                                                   |
-|:------------------------:|:------------:|:----------------------:|:-----------------:|---------------------------------------------------------------------------------------------------|
-|        BOT_TOKEN         |      No      | \<Telegram bot token\> |     \<Empty\>     | Telegram bot token (you can take it from [Bot Father](https://t.me/BotFather))                    |
-|      WEB_HOOK_PATH       |      No      |   HTTPS WebHook path   |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                                         |
-|     APP_STARTUP_FAST     |     Yes      |       true/false       |       true        | On true value ANRE API will be called at the start of spring application                          |
-|    APP_ERROR_STRATEGY    |     Yes      |      RFC7807/XML       |        XML        | Allows to change the way errors are represented between XmlGateway and RFC7807 (REST layer only)  |
+| **Environment Variable** | **Optional** | **Possible Values** | **Default Value** | **Description**                                                                                  |
+|:------------------------:|:------------:|:-------------------:|:-----------------:|--------------------------------------------------------------------------------------------------|
+|        BOT_TOKEN         |      No      | Telegram bot token  |     \<Empty\>     | Telegram bot token (you can take it from [Bot Father](https://t.me/BotFather))                   |
+|      WEB_HOOK_PATH       |      No      | HTTPS WebHook path  |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                                        |
+|     APP_STARTUP_FAST     |     Yes      |    `true/false`     |      `true`       | On true value ANRE API will be called at the start of spring application                         |
+|    APP_ERROR_STRATEGY    |     Yes      |    `RFC7807/XML`    |       `XML`       | Allows to change the way errors are represented between XmlGateway and RFC7807 (REST layer only) |
+|       DATABASE_URL       |      No      |    Database URL     |     \<Empty\>     | PostgreSQL connection URL                                                                        |
+|    DATABASE_USERNAME     |      No      |  Database username  |     \<Empty\>     | PostgreSQL username                                                                              |
+|    DATABASE_PASSWORD     |      No      |  Database password  |     \<Empty\>     | PostgreSQL user password                                                                         |
 
 # Test
 
@@ -292,6 +314,7 @@ to go to the nearest one.
 10. [Mockito Inline](https://mvnrepository.com/artifact/org.mockito/mockito-inline)
 11. [JUnit](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api)
 12. [WireMock](https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock)
+13. [PostgreSQL](https://mvnrepository.com/artifact/org.postgresql/postgresql)
 
 ## Useful Resources
 1. [Epsg.io](https://epsg.io/transform)
@@ -304,7 +327,7 @@ to go to the nearest one.
 2. &#9989; Create unit and slice tests for basic functionality - v1.0.1
 3. &#9989; Create REST API - v1.1.0
 4. &#9989; Create unit and slice tests for REST API - v1.1.1
-5. &#9723; Configure PostgreSQL for project - v1.2.0
+5. &#9989; Configure PostgreSQL for project - v1.2.0
 6. &#9723; Add Maven Failsafe and Surefire plugins and separate tests goals (it and test) - v1.2.1
 7. &#9723; Add Jacoco Maven plugin - v1.2.2
 8. &#9723; Add Dependency Check maven plugin - v1.2.3
