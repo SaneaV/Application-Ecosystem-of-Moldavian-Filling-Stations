@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @Import({TelegramExceptionWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
 @WebMvcTest(BotController.class)
-public class BotControllerTest {
+public class BotControllerIT {
 
     private static final String BOT_PATH = "/";
 

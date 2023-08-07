@@ -21,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @ExtendWith(SpringExtension.class)
 @Import({AnreApiImpl.class, AnreApiMapperImpl.class, WebClientTestConfiguration.class})
 @TestPropertySource(properties = "anre.api.path=/")
-public class AnreApiTest {
+public class AnreApiIT {
 
     private static final String PATH = "/";
     private static final String CONTENT_TYPE = "Content-Type";

@@ -273,10 +273,18 @@ If everything is correct, you will see the message:
 # Test
 
 How to run project tests:
-1. The standard way of launching via IntelliJ Idea.
-2. Using maven:
-    - If you have Maven installed: `.\mvnw clean test`
-    - If you don't have Maven installed: `mvn clean test`
+1. The standard way of launching via IntelliJ Idea (from it and test packages).
+2. Using maven (run from project root):
+    - If you have Maven installed: 
+      - `mvn clean test` - run unit tests only
+      - `mvn clean verify` - run unit and integration tests
+    - If you don't have Maven installed: 
+      - `.\mvnw clean test` - run unit tests only
+      - `.\mvnw clean verify` - run unit and integration tests
+
+- Additional maven properties:
+  - `-Dskip.unit.tests=true/false` - to enable/disable unit tests phase
+  - `-Dskip.integration.tests=true/false` - to enable/disable integration tests phase
 
 ## QA
 
@@ -315,6 +323,8 @@ to go to the nearest one.
 11. [JUnit](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api)
 12. [WireMock](https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock)
 13. [PostgreSQL](https://mvnrepository.com/artifact/org.postgresql/postgresql)
+14. [Maven Surefire Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin)
+15. [Maven Failsafe Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin)
 
 ## Useful Resources
 1. [Epsg.io](https://epsg.io/transform)
@@ -328,14 +338,17 @@ to go to the nearest one.
 3. &#9989; Create REST API - v1.1.0
 4. &#9989; Create unit and slice tests for REST API - v1.1.1
 5. &#9989; Configure PostgreSQL for project - v1.2.0
-6. &#9723; Add Maven Failsafe and Surefire plugins and separate tests goals (it and test) - v1.2.1
+6. &#9989; Add Maven Failsafe and Surefire plugins and separate tests goals (it and test) - v1.2.1
 7. &#9723; Add Jacoco Maven plugin - v1.2.2
 8. &#9723; Add Dependency Check maven plugin - v1.2.3
 9. &#9723; Add Dockerfile and Docker-compose to build project in container - v1.3.0
-10. &#9723; Add Spring Security for REST API - v1.4.0
+10. &#9723; Add Spring Security for REST API (using mock LDAP) - v1.4.0
 11. &#9723; Add custom JWT token library - v1.5.0
 
 Good to implement:
 1. Remove user from database in case he blocked telegram bot.
 2. Fetch ANRE API on fast startup in a separate thread.
 3. Create WebFlux tests with WebTestClient
+4. Create a Kafka-Statistics module to collect data about the cities from which the request is made (implement through aspects 
+   and Thymeleaf)
+5. Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot)

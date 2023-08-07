@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @Import({RFC7807ErrorWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
 @WebMvcTest(value = FuelStationController.class)
-public class FuelStationControllerTest {
+public class FuelStationControllerIT {
 
     private static final FuelStationDto FUEL_STATION_DTO = new FuelStationDto("Fortress", 25.75, 22.3, 13.45,
             46.34746746138542, 28.947447953963454);

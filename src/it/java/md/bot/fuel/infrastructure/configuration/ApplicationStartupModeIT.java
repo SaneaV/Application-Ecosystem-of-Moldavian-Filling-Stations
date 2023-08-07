@@ -12,7 +12,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-public class ApplicationStartupModeTest {
+public class ApplicationStartupModeIT {
 
     @Nested
     @SpringBootTest(properties = {"app.startup.fast=true"}, classes = ApplicationStartupMode.class)

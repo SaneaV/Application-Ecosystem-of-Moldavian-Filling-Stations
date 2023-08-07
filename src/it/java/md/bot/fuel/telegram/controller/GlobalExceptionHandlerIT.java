@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @Import({TelegramExceptionWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
 @WebMvcTest(BotController.class)
-public class GlobalExceptionHandlerTest {
+public class GlobalExceptionHandlerIT {
 
     private static final String BOT_PATH = "/";
     private static final String ERROR_MESSAGE = "Standard error message";

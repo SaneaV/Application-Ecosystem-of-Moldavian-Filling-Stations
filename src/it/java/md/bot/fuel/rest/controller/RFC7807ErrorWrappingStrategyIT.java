@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @Import({RFC7807ErrorWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
 @WebMvcTest(value = FuelStationController.class, properties = {"app.error.strategy=RFC7807"})
-public class RFC7807ErrorWrappingStrategyTest {
+public class RFC7807ErrorWrappingStrategyIT {
 
     private static final String PATH = "/fuel-station";
     private static final String LATITUDE_PARAM = "latitude";
