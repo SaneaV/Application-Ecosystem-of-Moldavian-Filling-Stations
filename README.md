@@ -15,6 +15,7 @@
 - [Test](#test)
   - [Execution](#execution)
   - [Reports](#reports)
+- [Dependency Check](#dependency-check)
 - [QA](#qa)
 - [Tools](#tools)
 - [Useful Resources](#useful-resources)
@@ -304,6 +305,14 @@ In order to create Jacoco test coverage reports, you can run next commands:
   - Command: `mvn verify`
   - Output directory: `target/site/jacoco-merged-tests-coverage.exec/index.html`
 
+# Dependency Check
+
+In order to check for the presence of Vulnerable Dependencies in a project, you can use the following commands:
+1. `mvn clean verify` - Full application build and generation of Dependency-Check Report.
+2. `mvn dependency-check:check` - Short command to check dependencies.
+
+The end result can be found at: `target/dependency-check-report.html`
+
 ## QA
 
 1. (<b>Q</b>) Why is the distance calculation in EPSG:4326? 
@@ -344,6 +353,7 @@ to go to the nearest one.
 14. [Maven Surefire Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin)
 15. [Maven Failsafe Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin)
 16. [Maven Jacoco Plugin](https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin)
+17. [Maven Dependency Check Plugin](https://mvnrepository.com/artifact/org.owasp/dependency-check-maven)
 
 ## Useful Resources
 1. [Epsg.io](https://epsg.io/transform)

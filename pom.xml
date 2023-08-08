@@ -12,7 +12,7 @@
 
     <groupId>md.bot.fuel</groupId>
     <artifactId>telegram-fuel-bot</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
     <packaging>war</packaging>
     <name>telegram-fuel-bot</name>
     <description>Telegram bot to search best fuel price</description>
@@ -34,6 +34,7 @@
         <postgresql.version>42.6.0</postgresql.version>
         <maven.failsafe.plugin.version>3.1.2</maven.failsafe.plugin.version>
         <build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
+        <dependency.check.maven.version>8.3.1</dependency.check.maven.version>
         <jacoco.version>0.8.10</jacoco.version>
     </properties>
 
@@ -302,6 +303,19 @@
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${dependency.check.maven.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>

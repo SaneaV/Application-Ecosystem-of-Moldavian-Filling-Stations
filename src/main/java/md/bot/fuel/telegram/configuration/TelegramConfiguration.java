@@ -12,7 +12,6 @@ public class TelegramConfiguration {
     private final String botName;
     private final String botToken;
 
-
     public TelegramConfiguration(@Value("${telegram.webhook.host}") String webhookHost,
                                  @Value("${telegram.bot-name}") String botName,
                                  @Value("${telegram.bot-token}") String botToken) {

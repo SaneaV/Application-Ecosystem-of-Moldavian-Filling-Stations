@@ -10,10 +10,10 @@
 - [X] Add Maven Failsafe and Surefire plugins and separate tests goals (it and test).
 - [X] Add Jacoco Maven plugin.
 - [X] Configure Webhook setup on application startup.
+- [X] Add Dependency Check maven plugin.
 
 ## Important Features
 
-- [ ] Add Dependency Check maven plugin.
 - [ ] Add Dockerfile and Docker-compose to build a project in container.
 - [ ] Add Spring Security for REST API (using mock LDAP).
 - [ ] Add custom JWT token library.
