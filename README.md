@@ -1,4 +1,4 @@
-# Moldova - Best Fuel Price Around Me - Telegram bot
+# Moldova — Best Fuel Price Around Me — Telegram bot
 
 <b>This bot is made for educational purposes only and is not used for commercial purposes.</b>
 
@@ -21,11 +21,11 @@
 - [TODO](#todo)
 
 # API
-To identify best fuel price and fuel station location was used: [ANRE-API](https://api.iharta.md/anre/public/)
+To identify the best fuel price and fuel station location was used: [ANRE-API](https://api.iharta.md/anre/public/)
 
 ## Telegram functionality
 
-User is able to specify a certain search radius and coordinates to execute the following functions:
+The User is able to specify a certain search radius and coordinates to execute the following functions:
 1. Display all fuel stations (coordinates on map + all available fuel prices).
 2. Display nearest fuel station (coordinates on map + all available fuel prices).
 3. Display fuel station with the best \<fuel\> price (coordinates on map + \<fuel\> price).
@@ -113,7 +113,7 @@ Result example:
 }
 ```
 
-4. Get fuel stations with the best specified fuel type:
+4. Get fuel stations with the best-specified fuel type:
 
 `http://localhost:8080/fuel-station/<fuel-type>`
 
@@ -142,7 +142,7 @@ Result example:
 ]
 ```
 
-5. Get fuel stations with the best specified fuel type in page format:
+5. Get fuel stations with the best-specified fuel type in page format:
 
 `http://localhost:8080/page/fuel-station/<fuel-type>`
 
@@ -230,7 +230,7 @@ Docker way:
  
 `docker run -it -e NGROK_AUTHTOKEN=xyz ngrok/ngrok:latest http host.docker.internal:8080`
 
-(*command specific for Windows and MacOS*)
+(*command specific for Windows and macOS*)
 
 `xyz` - should be your ngrok token, you can take it from: [ngrok](https://dashboard.ngrok.com/get-started/setup)
 
@@ -241,9 +241,18 @@ Forwarding http://27fs-299-323-0-285.ngrok.io
 Forwarding [this URL] -> https://27fs-299-323-0-285.ngrok.io <- [this URL]  
 ```
 
-3. Copy the token of your telegram bot from bot father.
-4. Paste the required parameters into the link and open it in a browser:
+3. Copy your telegram bot token from bot father.
+4. Go to the folder with this repository.
+5. Open a Windows/Bash command prompt and write the next command:
 
+```bash
+./mvnw spring-boot:run -Dspring-boot.run.jvmArguments="-DDATABASE_URL=[DATABASE_URL] -DDATABASE_USERNAME=[DATABASE_USERNAME]
+-DDATABASE_PASSWORD=[DATABASE_PASSWORD] -DBOT_TOKEN=[BOT_TOKEN] -DWEB_HOOK_HOST=[WEB_HOOK_HOST]"
+```
+
+6. Go to the bot and send a message `/start` message.
+
+(OPTIONAL - manual approach to set up webhook) Paste the required parameters into the link and open it in a browser:
 ```text
 https://api.telegram.org/bot[BOT_TOKEN]/setWebhook?url=[URL_FROM_OPTION_2]
 ```
@@ -251,21 +260,13 @@ If everything is correct, you will see the message:
 ```text
 {"ok":true,"result":true,"description":"Webhook was set"}
 ```
-5. Go to the folder with this repository.
-6. Open a Windows/Bash command prompt and write the command:
-
-```bash
-./mvnw spring-boot:run "-DBOT_TOKEN=[YOUR_TELEGRAM_BOT_TOKEN]" "-DWEB_HOOK_PATH=[URL_FROM_FROM_OPTION_2]"
-```
-
-7. Go to the bot and send a message `/start` message.
 
 ## Environment Variables
 
 | **Environment Variable** | **Optional** | **Possible Values** | **Default Value** | **Description**                                                                                  |
 |:------------------------:|:------------:|:-------------------:|:-----------------:|--------------------------------------------------------------------------------------------------|
 |        BOT_TOKEN         |      No      | Telegram bot token  |     \<Empty\>     | Telegram bot token (you can take it from [Bot Father](https://t.me/BotFather))                   |
-|      WEB_HOOK_PATH       |      No      | HTTPS WebHook path  |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                                        |
+|      WEB_HOOK_HOST       |      No      | HTTPS WebHook path  |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                                        |
 |     APP_STARTUP_FAST     |     Yes      |    `true/false`     |      `true`       | On true value ANRE API will be called at the start of spring application                         |
 |    APP_ERROR_STRATEGY    |     Yes      |    `RFC7807/XML`    |       `XML`       | Allows to change the way errors are represented between XmlGateway and RFC7807 (REST layer only) |
 |       DATABASE_URL       |      No      |    Database URL     |     \<Empty\>     | PostgreSQL connection URL                                                                        |
@@ -277,7 +278,7 @@ If everything is correct, you will see the message:
 ## Execution
 
 How to run project tests:
-1. The standard way of launching via IntelliJ Idea (from it and test packages).
+1. The standard way of launching via IntelliJ IDEA (from it and test packages).
 2. Using maven (run from project root):
     - If you have Maven installed: 
       - `mvn test` - run unit tests only
@@ -292,7 +293,7 @@ How to run project tests:
 
 ## Reports
 
-In order to create Jacoco test coverage reports you can run next commands:
+In order to create Jacoco test coverage reports, you can run next commands:
 - Unit tests report: 
   - Command: `mvn test`
   - Output directory: `target/site/jacoco-unit-tests-coverage-report/index.html`
@@ -323,11 +324,11 @@ and calculate the distance in EPSG:4326.<br>
 2. (<b>Q</b>) Why is there a limit of 10 petrol stations within a specified radius (Specific for Telegram only)?
 
 (<b>A</b>) This is necessary to improve performance and also to avoid loading the system with large requests. The main 
-idea of this bot to find best fuel price, in case you have more than 10 fuel stations in specified radius, it's better 
+idea of this bot is to find the best fuel price; in case you have more than 10 fuel stations in the specified radius it's better 
 to go to the nearest one.
 
 ## Tools
-1. [Telegram Bots](https://mvnrepository.com/artifact/org.telegram/telegrambots)
+1. [Telegram Bots Spring Boot Starter](https://mvnrepository.com/artifact/org.telegram/telegrambots-spring-boot-starter)
 2. [Spring Boot](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter)
 3. [H2](https://mvnrepository.com/artifact/com.h2database/h2)
 4. [Lombok](https://mvnrepository.com/artifact/org.projectlombok/lombok)

@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BotController.class)
 public class BotControllerIT {
 
-    private static final String BOT_PATH = "/";
+    private static final String BOT_PATH = "/callback/moldova-fuel-bot";
 
     private static final String REQUEST_BODY = "{\n" +
             "    \"message\": {\n" +

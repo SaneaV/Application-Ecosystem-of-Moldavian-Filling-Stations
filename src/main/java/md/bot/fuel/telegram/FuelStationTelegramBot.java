@@ -1,33 +1,33 @@
 package md.bot.fuel.telegram;
 
+import lombok.Getter;
+import lombok.Setter;
 import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
 import md.bot.fuel.telegram.command.DispatcherCommand;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.starter.SpringWebhookBot;
 
-@Component
-public class FuelStationTelegramBot extends TelegramWebhookBot {
+import static lombok.AccessLevel.NONE;
+
+@Getter
+@Setter
+public class FuelStationTelegramBot extends SpringWebhookBot {
 
     private static final String ERROR_DESCRIPTION = "An error occurred during message sending.";
     private static final String ERROR_REASON_CODE = "INTERNAL_ERROR";
 
-    private final String webHookPath;
-    private final String botUserName;
+    private String botPath;
+    private String botUsername;
+    @Getter(NONE)
     private final DispatcherCommand dispatcherCommand;
 
-    public FuelStationTelegramBot(@Value("${telegrambot.webHookPath}") String webHookPath,
-                                  @Value("${telegrambot.userName}") String botUserName,
-                                  @Value("${telegrambot.botToken}") String botToken,
-                                  DispatcherCommand dispatcherCommand) {
-        super(botToken);
-        this.webHookPath = webHookPath;
-        this.botUserName = botUserName;
+    public FuelStationTelegramBot(SetWebhook setWebhook, String botToken, DispatcherCommand dispatcherCommand) {
+        super(setWebhook, botToken);
         this.dispatcherCommand = dispatcherCommand;
     }
 
@@ -45,17 +45,6 @@ public class FuelStationTelegramBot extends TelegramWebhookBot {
                 throw new ExecutionException(ERROR_DESCRIPTION, ERROR_REASON_CODE);
             }
         });
-
         return null;
-    }
-
-    @Override
-    public String getBotPath() {
-        return webHookPath;
-    }
-
-    @Override
-    public String getBotUsername() {
-        return botUserName;
     }
 }

@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BotController.class)
 public class GlobalExceptionHandlerIT {
 
-    private static final String BOT_PATH = "/";
+    private static final String BOT_PATH = "/callback/moldova-fuel-bot";
     private static final String ERROR_MESSAGE = "Standard error message";
     private static final String ERROR_REASON_CODE = "Standard reason code";
     private static final String STANDARD_RUNTIME_EXCEPTION_MESSAGE = "Unknown error. Please contact bot administrator";

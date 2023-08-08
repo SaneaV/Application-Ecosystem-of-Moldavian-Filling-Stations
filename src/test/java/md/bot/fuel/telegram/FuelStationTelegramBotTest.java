@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -94,27 +95,26 @@ public class FuelStationTelegramBotTest {
     @Nested
     class FuelStationTelegramBotTestWithoutInjection {
 
-        private static final String WEB_HOOK_PATH = "https://www.google.com";
-        private static final String BOT_NAME = "bot name";
         private static final String BOT_TOKEN = "bot_token";
 
         private final FuelStationTelegramBot fuelStationTelegramBot;
 
         FuelStationTelegramBotTestWithoutInjection() {
-            DispatcherCommand dispatcherCommand = mock(DispatcherCommand.class);
-            this.fuelStationTelegramBot = new FuelStationTelegramBot(WEB_HOOK_PATH, BOT_NAME, BOT_TOKEN, dispatcherCommand);
+            final DispatcherCommand dispatcherCommand = mock(DispatcherCommand.class);
+            final SetWebhook setWebhook = mock(SetWebhook.class);
+            this.fuelStationTelegramBot = new FuelStationTelegramBot(setWebhook, BOT_TOKEN, dispatcherCommand);
         }
 
         @Test
-        @DisplayName("Should return bot username")
+        @DisplayName("Should return null bot name")
         void shouldReturnBotUsername() {
-            assertThat(fuelStationTelegramBot.getBotUsername()).isEqualTo(BOT_NAME);
+            assertThat(fuelStationTelegramBot.getBotUsername()).isNull();
         }
 
         @Test
-        @DisplayName("Should return bot path")
+        @DisplayName("Should return null bot path")
         void shouldReturnBotPath() {
-            assertThat(fuelStationTelegramBot.getBotPath()).isEqualTo(WEB_HOOK_PATH);
+            assertThat(fuelStationTelegramBot.getBotPath()).isNull();
         }
     }
 }

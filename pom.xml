@@ -12,7 +12,7 @@
 
     <groupId>md.bot.fuel</groupId>
     <artifactId>telegram-fuel-bot</artifactId>
-    <version>1.2.4</version>
+    <version>1.2.5</version>
     <packaging>war</packaging>
     <name>telegram-fuel-bot</name>
     <description>Telegram bot to search best fuel price</description>
@@ -63,6 +63,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-spring-boot-starter</artifactId>
+            <version>${telegrambots.version}</version>
+        </dependency>
 
         <!--USEFUL TOOLS-->
         <dependency>
@@ -94,11 +99,6 @@
             <groupId>org.locationtech.proj4j</groupId>
             <artifactId>proj4j-epsg</artifactId>
             <version>${proj4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.telegram</groupId>
-            <artifactId>telegrambots</artifactId>
-            <version>${telegrambots.version}</version>
         </dependency>
 
         <!--DATABASE-->
