@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-import static java.util.Objects.isNull;
-
 @Component
 @RequiredArgsConstructor
 public class DispatcherCommand {
@@ -27,12 +25,12 @@ public class DispatcherCommand {
             return updateCoordinatesCommand.execute(update);
         }
 
-        if (!isNull(message) && message.length() != 0 && isDouble(message)) {
+        if (message.length() != 0 && isDouble(message)) {
             return updateRadiusCommand.execute(update);
         }
 
         return commands.stream()
-                .filter(c -> !isNull(c.getCommands()) && c.getCommands().contains(message))
+                .filter(c -> !c.getCommands().isEmpty() && c.getCommands().contains(message))
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException(COMMAND_NOT_FOUND, ERROR_NOT_FOUND_REASON_CODE))
                 .execute(update);

@@ -34,6 +34,7 @@ public class AllInRadiusFuelStationCommandTest {
             "%s Gas : %s lei\n\n" +
             "\uD83D\uDCCA Last price update: %s";
     private static final String GREEN_CIRCLE = "\uD83D\uDFE2";
+    private static final String RED_CIRCLE = "\uD83D\uDD34";
 
     private final AllInRadiusFuelStationCommand allInRadiusFuelStationCommand;
     private final FuelStationFacade fuelStationFacade;
@@ -53,7 +54,7 @@ public class AllInRadiusFuelStationCommandTest {
         final String fuelStationName = "Fuel Station Name";
         final double petrol = 10;
         final double diesel = 20;
-        final double gas = 30;
+        final Double gas = null;
         final double latitude = 40;
         final double longitude = 50;
         final double defaultDoubleValue = 0;
@@ -68,7 +69,7 @@ public class AllInRadiusFuelStationCommandTest {
         final UserDataDto userDataDto = new UserDataDto(defaultLongValue, defaultDoubleValue, defaultDoubleValue,
                 defaultDoubleValue);
         final String messageText = String.format(FUEL_STATION_MESSAGE, fuelStationName, GREEN_CIRCLE, petrol, GREEN_CIRCLE,
-                diesel, GREEN_CIRCLE, gas, FuelStationDto.timestamp);
+                diesel, RED_CIRCLE, 0.0, FuelStationDto.timestamp);
 
         user.setId(userId);
         chat.setId(chatId);

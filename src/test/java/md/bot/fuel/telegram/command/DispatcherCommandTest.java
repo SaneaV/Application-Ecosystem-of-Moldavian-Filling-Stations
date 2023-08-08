@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static wiremock.com.github.jknack.handlebars.internal.lang3.StringUtils.EMPTY;
 
 public class DispatcherCommandTest {
 
@@ -110,6 +112,7 @@ public class DispatcherCommandTest {
 
         when(update.getMessage()).thenReturn(message);
         when(message.hasLocation()).thenReturn(false);
+        when(command.getCommands()).thenReturn(singletonList("textCommand"));
         when(message.getText()).thenReturn("command");
 
         assertThatThrownBy(() -> dispatcherCommand.getMessages(update))
@@ -119,5 +122,42 @@ public class DispatcherCommandTest {
         verify(update, times(2)).getMessage();
         verify(message).hasLocation();
         verify(command, times(2)).getCommands();
+    }
+
+    @Test
+    @DisplayName("Should throw EntityNotFoundException on empty text")
+    void shouldThrowEntityNotFoundExceptionOnNullCommand() {
+        final Update update = mock(Update.class);
+        final Message message = mock(Message.class);
+
+        when(update.getMessage()).thenReturn(message);
+        when(message.getText()).thenReturn(EMPTY);
+
+        assertThatThrownBy(() -> dispatcherCommand.getMessages(update))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage(COMMAND_NOT_FOUND);
+
+        verify(update, times(2)).getMessage();
+        verify(message).hasLocation();
+        verify(command, times(1)).getCommands();
+    }
+
+    @Test
+    @DisplayName("Should throw EntityNotFoundException on empty list of commands")
+    void shouldThrowEntityNotFoundExceptionOnEmptyListOfCommands() {
+        final Update update = mock(Update.class);
+        final Message message = mock(Message.class);
+
+        when(update.getMessage()).thenReturn(message);
+        when(message.getText()).thenReturn("command");
+        when(command.getCommands()).thenReturn(emptyList());
+
+        assertThatThrownBy(() -> dispatcherCommand.getMessages(update))
+                .isInstanceOf(EntityNotFoundException.class)
+                .hasMessage(COMMAND_NOT_FOUND);
+
+        verify(update, times(2)).getMessage();
+        verify(message).hasLocation();
+        verify(command).getCommands();
     }
 }

@@ -46,4 +46,20 @@ public class AnreApiMapperTest {
 
         assertThat(result).isNull();
     }
+
+    @Test
+    @DisplayName("Should map zero or null price to null")
+    void shouldMapZeroOrNullPriceToNull() {
+        final FuelStationApi fuelStationApi = new FuelStationApi(FUEL_STATION_NAME, 0.0, null, 0.0D,
+                LATITUDE, LONGITUDE);
+
+        final FuelStation result = anreApiMapper.toEntity(fuelStationApi);
+
+        assertThat(result.getName()).isEqualTo(fuelStationApi.getName());
+        assertThat(result.getPetrol()).isNull();
+        assertThat(result.getDiesel()).isNull();
+        assertThat(result.getGas()).isNull();
+        assertThat(result.getLongitude()).isEqualTo(fuelStationApi.getCoordinates().fst());
+        assertThat(result.getLatitude()).isEqualTo(fuelStationApi.getCoordinates().snd());
+    }
 }

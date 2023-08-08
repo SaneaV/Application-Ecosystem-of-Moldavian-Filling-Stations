@@ -33,6 +33,7 @@ public class NearestFuelStationCommandTest {
             "%s Gas : %s lei\n\n" +
             "\uD83D\uDCCA Last price update: %s";
     private static final String GREEN_CIRCLE = "\uD83D\uDFE2";
+    private static final String RED_CIRCLE = "\uD83D\uDD34";
 
     private final NearestFuelStationCommand nearestFuelStationCommand;
     private final FuelStationFacade fuelStationFacade;
@@ -51,7 +52,7 @@ public class NearestFuelStationCommandTest {
         final long userId = 10L;
         final String fuelStationName = "Fuel Station Name";
         final double petrol = 10;
-        final double diesel = 20;
+        final Double diesel = null;
         final double gas = 30;
         final double latitude = 40;
         final double longitude = 50;
@@ -66,8 +67,8 @@ public class NearestFuelStationCommandTest {
         FuelStationDto.timestamp = LocalDateTime.now().toString();
         final UserDataDto userDataDto = new UserDataDto(defaultLongValue, defaultDoubleValue, defaultDoubleValue,
                 defaultDoubleValue);
-        final String messageText = String.format(FUEL_STATION_MESSAGE, fuelStationName, GREEN_CIRCLE, petrol, GREEN_CIRCLE,
-                diesel, GREEN_CIRCLE, gas, FuelStationDto.timestamp);
+        final String messageText = String.format(FUEL_STATION_MESSAGE, fuelStationName, GREEN_CIRCLE, petrol, RED_CIRCLE,
+                0.0, GREEN_CIRCLE, gas, FuelStationDto.timestamp);
 
         user.setId(userId);
         chat.setId(chatId);

@@ -66,12 +66,16 @@ public class FuelStationServiceImplTest {
         verify(anreApi).getFuelStationsInfo();
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = {PETROL, DIESEL, GAS})
     @DisplayName("Should throw EntityNotFoundException on getBestFuelPrice if no fuel station found")
-    void shouldThrowEntityNotFoundExceptionOnGetBestFuelPrice() {
-        assertThatThrownBy(() -> fuelStationService.getBestFuelPrice(LATITUDE, LONGITUDE, RADIUS, PETROL, LIMIT))
+    void shouldThrowEntityNotFoundExceptionOnGetBestFuelPrice(String fuelType) {
+        final List<FuelStation> fuelStations = getFuelStations();
+        when(anreApi.getFuelStationsInfo()).thenReturn(fuelStations);
+
+        assertThatThrownBy(() -> fuelStationService.getBestFuelPrice(0, 0, RADIUS, fuelType, LIMIT))
                 .isInstanceOf(EntityNotFoundException.class)
-                .hasMessage(String.format(ERROR_NO_FUEL_IN_STOCK, PETROL.toLowerCase()));
+                .hasMessage(String.format(ERROR_NO_FUEL_IN_STOCK, fuelType.toLowerCase()));
 
         verify(anreApi).getFuelStationsInfo();
     }

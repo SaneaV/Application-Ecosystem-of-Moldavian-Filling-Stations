@@ -39,9 +39,7 @@ public class FuelStationServiceImpl implements FuelStationService {
     public List<FuelStation> getAllFuelStations(double latitude, double longitude, double radius, int limit) {
         final List<FuelStation> fuelStations = anreApi.getFuelStationsInfo().stream()
                 .filter(s -> isWithinRadius(latitude, longitude, s.getLatitude(), s.getLongitude(), radius) &&
-                        ((!isNull(s.getPetrol()) && s.getPetrol() > ZERO_PRICE_PRIMITIVE) ||
-                                (!isNull(s.getGas()) && s.getGas() > ZERO_PRICE_PRIMITIVE) ||
-                                (!isNull(s.getDiesel()) && s.getDiesel() > ZERO_PRICE_PRIMITIVE)))
+                        (checkCorrectPrice(s.getPetrol()) || checkCorrectPrice(s.getDiesel()) || checkCorrectPrice(s.getGas())))
                 .collect(toList());
 
         checkLimit(fuelStations.size(), limit);
@@ -54,9 +52,8 @@ public class FuelStationServiceImpl implements FuelStationService {
     @Override
     public FuelStation getNearestFuelStation(double latitude, double longitude, double radius) {
         return anreApi.getFuelStationsInfo().stream()
-                .filter(s -> (!isNull(s.getPetrol()) && s.getPetrol() > ZERO_PRICE_PRIMITIVE) ||
-                        (!isNull(s.getGas()) && s.getGas() > ZERO_PRICE_PRIMITIVE) ||
-                        (!isNull(s.getDiesel()) && s.getDiesel() > ZERO_PRICE_PRIMITIVE))
+                .filter(s -> (checkCorrectPrice(s.getPetrol()) || checkCorrectPrice(s.getDiesel()) ||
+                        checkCorrectPrice(s.getGas())))
                 .min(comparing(s -> calculateMeters(latitude, longitude, s.getLatitude(), s.getLongitude())))
                 .orElseThrow(() -> new EntityNotFoundException(ERROR_NO_FUEL_STATION_NEAR_YOU, ERROR_NOT_FOUND_REASON_CODE));
     }
@@ -105,5 +102,9 @@ public class FuelStationServiceImpl implements FuelStationService {
         if (numberOfFuelStation > limit) {
             throw new InvalidRequestException(String.format(ERROR_FOUND_MORE_THAN_LIMIT, limit), ERROR_EXCEED_LIMIT_REASON_CODE);
         }
+    }
+
+    private boolean checkCorrectPrice(Double price) {
+        return !isNull(price) && price > ZERO_PRICE_PRIMITIVE;
     }
 }
