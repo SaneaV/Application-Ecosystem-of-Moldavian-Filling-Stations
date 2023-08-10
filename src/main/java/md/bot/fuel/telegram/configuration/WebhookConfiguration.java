@@ -1,9 +1,11 @@
 package md.bot.fuel.telegram.configuration;
 
+import com.github.alexdlaird.ngrok.protocol.Tunnel;
 import lombok.RequiredArgsConstructor;
 import md.bot.fuel.telegram.FuelStationTelegramBot;
 import md.bot.fuel.telegram.command.DispatcherCommand;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -21,26 +23,39 @@ public class WebhookConfiguration {
     @Value("${telegram.webhook.internal-url}")
     private String internalUrl;
 
+    @Value("${ngrok.enabled}")
+    private String enabled;
+
     @Bean
-    public SetWebhook setWebhookInstance() {
+    @ConditionalOnProperty(value = "ngrok.enabled", havingValue = "false")
+    public SetWebhook setWebhookWithProperty() {
+        System.out.println(enabled);
         return SetWebhook.builder()
                 .url(telegramConfiguration.getWebhookHost())
                 .build();
     }
 
     @Bean
-    public FuelStationTelegramBot fuelStationTelegramBot(SetWebhook setWebhookInstance, DispatcherCommand dispatcherCommand,
-                                                         DefaultWebhook defaultWebhook) throws TelegramApiException {
-        final FuelStationTelegramBot fuelStationTelegramBot = new FuelStationTelegramBot(setWebhookInstance,
-                telegramConfiguration.getBotToken(), dispatcherCommand);
+    @ConditionalOnProperty(value = "ngrok.enabled", havingValue = "true")
+    public SetWebhook setWebhookWithNgrok(Tunnel tunnel) {
+        return SetWebhook.builder()
+                .url(tunnel.getPublicUrl())
+                .build();
+    }
 
-        fuelStationTelegramBot.setBotPath(telegramConfiguration.getBotName());
-        fuelStationTelegramBot.setBotUsername(telegramConfiguration.getBotName());
+    @Bean
+    public FuelStationTelegramBot fuelStationTelegramBot(SetWebhook setWebhook, DispatcherCommand dispatcherCommand,
+                                                         DefaultWebhook defaultWebhook) throws TelegramApiException {
+        final FuelStationTelegramBot bot = new FuelStationTelegramBot(setWebhook, telegramConfiguration.getBotToken(),
+                dispatcherCommand);
+
+        bot.setBotPath(telegramConfiguration.getBotName());
+        bot.setBotUsername(telegramConfiguration.getBotName());
 
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class, defaultWebhook);
 
-        telegramBotsApi.registerBot(fuelStationTelegramBot, setWebhookInstance);
-        return fuelStationTelegramBot;
+        telegramBotsApi.registerBot(bot, setWebhook);
+        return bot;
     }
 
     @Bean
