@@ -10,10 +10,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Errors {
 
-    @Getter(onMethod_ = {@JsonGetter("Error")})
-    private final List<GatewayError> error = new ArrayList<>();
+  @Getter(onMethod_ = {@JsonGetter("Error")})
+  private final List<GatewayError> error = new ArrayList<>();
 
-    public void addError(GatewayError error) {
-        this.error.add(error);
-    }
+  public void addError(GatewayError error) {
+    this.error.add(error);
+  }
 }

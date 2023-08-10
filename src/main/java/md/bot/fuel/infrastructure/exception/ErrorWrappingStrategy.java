@@ -9,15 +9,15 @@ import org.springframework.web.context.request.WebRequest;
 
 public interface ErrorWrappingStrategy {
 
-    ResponseEntity<ErrorDescriptionResponse> handleRuntimeException(RuntimeException exception, WebRequest request);
+  ResponseEntity<ErrorDescriptionResponse> handleRuntimeException(RuntimeException exception, WebRequest request);
 
-    ResponseEntity<ErrorDescriptionResponse> handleEntityNotFoundException(EntityNotFoundException exception, WebRequest request);
+  ResponseEntity<ErrorDescriptionResponse> handleEntityNotFoundException(EntityNotFoundException exception, WebRequest request);
 
-    ResponseEntity<ErrorDescriptionResponse> handleExecutionException(ExecutionException exception, WebRequest request);
+  ResponseEntity<ErrorDescriptionResponse> handleExecutionException(ExecutionException exception, WebRequest request);
 
-    ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception, WebRequest request);
+  ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception, WebRequest request);
 
-    ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request);
+  ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request);
 
-    String getClient();
+  String getClient();
 }

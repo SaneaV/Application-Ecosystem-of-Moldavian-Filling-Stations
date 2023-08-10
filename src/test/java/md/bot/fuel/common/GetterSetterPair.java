@@ -8,10 +8,10 @@ import lombok.Setter;
 @Setter
 public class GetterSetterPair {
 
-    private Method getter;
-    private Method setter;
+  private Method getter;
+  private Method setter;
 
-    public boolean hasGetterAndSetter() {
-        return this.getter != null && this.setter != null;
-    }
+  public boolean hasGetterAndSetter() {
+    return this.getter != null && this.setter != null;
+  }
 }

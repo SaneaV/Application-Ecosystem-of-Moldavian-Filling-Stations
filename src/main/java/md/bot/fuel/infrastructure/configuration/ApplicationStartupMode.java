@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(value = "app.startup.fast", havingValue = "true")
 public class ApplicationStartupMode {
 
-    private final AnreApi anreApi;
+  private final AnreApi anreApi;
 
-    @PostConstruct
-    public void fetchFuelStationInfoOnStartup() {
-        anreApi.getFuelStationsInfo();
-    }
+  @PostConstruct
+  public void fetchFuelStationInfoOnStartup() {
+    anreApi.getFuelStationsInfo();
+  }
 }

@@ -12,16 +12,16 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 @RequiredArgsConstructor
 public class WebhookTestConfiguration {
 
-    private final TelegramConfiguration telegramConfiguration;
+  private final TelegramConfiguration telegramConfiguration;
 
-    @Bean
-    public FuelStationTelegramBot fuelStationTelegramBot(SetWebhook setWebhookInstance, DispatcherCommand dispatcherCommand) {
-        final FuelStationTelegramBot fuelStationTelegramBot = new FuelStationTelegramBot(setWebhookInstance,
-                telegramConfiguration.getBotToken(), dispatcherCommand);
+  @Bean
+  public FuelStationTelegramBot fuelStationTelegramBot(SetWebhook setWebhookInstance, DispatcherCommand dispatcherCommand) {
+    final FuelStationTelegramBot fuelStationTelegramBot = new FuelStationTelegramBot(setWebhookInstance,
+        telegramConfiguration.getBotToken(), dispatcherCommand);
 
-        fuelStationTelegramBot.setBotPath(telegramConfiguration.getBotName());
-        fuelStationTelegramBot.setBotUsername(telegramConfiguration.getBotName());
+    fuelStationTelegramBot.setBotPath(telegramConfiguration.getBotName());
+    fuelStationTelegramBot.setBotUsername(telegramConfiguration.getBotName());
 
-        return fuelStationTelegramBot;
-    }
+    return fuelStationTelegramBot;
+  }
 }

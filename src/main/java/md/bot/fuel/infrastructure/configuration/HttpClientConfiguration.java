@@ -7,8 +7,8 @@ import reactor.netty.http.client.HttpClient;
 @Configuration
 public class HttpClientConfiguration {
 
-    @Bean
-    public HttpClient httpClient() {
-        return HttpClient.create();
-    }
+  @Bean
+  public HttpClient httpClient() {
+    return HttpClient.create();
+  }
 }

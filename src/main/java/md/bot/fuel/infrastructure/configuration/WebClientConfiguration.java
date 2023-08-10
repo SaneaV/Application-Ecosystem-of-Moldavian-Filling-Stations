@@ -13,20 +13,20 @@ import reactor.netty.http.client.HttpClient;
 @Configuration
 public class WebClientConfiguration {
 
-    @Bean
-    public WebClient webClient(ObjectMapper objectMapper, HttpClient httpClient) {
-        return WebClient.builder()
-                .exchangeStrategies(exchangeStrategies(objectMapper))
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
-    }
+  @Bean
+  public WebClient webClient(ObjectMapper objectMapper, HttpClient httpClient) {
+    return WebClient.builder()
+        .exchangeStrategies(exchangeStrategies(objectMapper))
+        .clientConnector(new ReactorClientHttpConnector(httpClient))
+        .build();
+  }
 
-    private ExchangeStrategies exchangeStrategies(ObjectMapper objectMapper) {
-        return ExchangeStrategies.builder()
-                .codecs(clientCodecConfigurer -> {
-                    clientCodecConfigurer.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper));
-                    clientCodecConfigurer.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper));
-                })
-                .build();
-    }
+  private ExchangeStrategies exchangeStrategies(ObjectMapper objectMapper) {
+    return ExchangeStrategies.builder()
+        .codecs(clientCodecConfigurer -> {
+          clientCodecConfigurer.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper));
+          clientCodecConfigurer.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper));
+        })
+        .build();
+  }
 }

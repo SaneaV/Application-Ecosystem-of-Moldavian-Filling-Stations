@@ -11,9 +11,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 @AllArgsConstructor
 public class TelegramErrorDescription extends SendMessage implements ErrorDescriptionResponse {
 
-    @Getter(onMethod_ = {@JsonGetter("chat_id")})
-    private Long errorChatId;
-    private String text;
-    @Getter(onMethod_ = {@JsonGetter("reply_markup")})
-    private ReplyKeyboardMarkup replyMarkup;
+  @Getter(onMethod_ = {@JsonGetter("chat_id")})
+  private Long errorChatId;
+  private String text;
+  @Getter(onMethod_ = {@JsonGetter("reply_markup")})
+  private ReplyKeyboardMarkup replyMarkup;
 }

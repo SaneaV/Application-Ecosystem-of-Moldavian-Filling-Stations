@@ -6,9 +6,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public interface Command {
 
-    int FUEL_STATIONS_LIMIT = 10;
+  int FUEL_STATIONS_LIMIT = 10;
 
-    List<? super PartialBotApiMethod<?>> execute(Update update);
+  List<? super PartialBotApiMethod<?>> execute(Update update);
 
-    List<String> getCommands();
+  List<String> getCommands();
 }

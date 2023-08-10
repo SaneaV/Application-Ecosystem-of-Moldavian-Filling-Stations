@@ -11,11 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class AnreTimestampAspect {
 
-    private static final String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+  private static final String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
+  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
-    @After("execution(* md.bot.fuel.infrastructure.api.AnreApiImpl.getFuelStationsInfo())")
-    public void setAnreTimestamp() {
-        FuelStation.timestamp = FORMATTER.format(LocalDateTime.now());
-    }
+  @After("execution(* md.bot.fuel.infrastructure.api.AnreApiImpl.getFuelStationsInfo())")
+  public void setAnreTimestamp() {
+    FuelStation.timestamp = FORMATTER.format(LocalDateTime.now());
+  }
 }

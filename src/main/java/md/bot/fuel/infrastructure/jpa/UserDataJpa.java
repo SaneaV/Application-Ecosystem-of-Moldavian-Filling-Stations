@@ -17,15 +17,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserDataJpa {
 
-    @Id
-    private long id;
+  @Id
+  private long id;
 
-    @Column(nullable = false)
-    private double radius;
+  @Column(nullable = false)
+  private double radius;
 
-    @Column(nullable = false)
-    private double latitude;
+  @Column(nullable = false)
+  private double latitude;
 
-    @Column(nullable = false)
-    private double longitude;
+  @Column(nullable = false)
+  private double longitude;
 }

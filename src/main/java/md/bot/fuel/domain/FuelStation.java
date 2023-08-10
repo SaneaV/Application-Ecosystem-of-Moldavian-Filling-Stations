@@ -8,12 +8,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FuelStation implements Serializable {
 
-    public static String timestamp;
+  public static String timestamp;
 
-    private final String name;
-    private final Double petrol;
-    private final Double diesel;
-    private final Double gas;
-    private final double latitude;
-    private final double longitude;
+  private final String name;
+  private final Double petrol;
+  private final Double diesel;
+  private final Double gas;
+  private final double latitude;
+  private final double longitude;
 }

@@ -8,6 +8,6 @@ import md.bot.fuel.infrastructure.exception.ErrorDescriptionResponse;
 @Getter
 public class GatewayErrorDescription implements ErrorDescriptionResponse {
 
-    @Getter(onMethod_ = {@JsonGetter("Errors")})
-    private final Errors errors = new Errors();
+  @Getter(onMethod_ = {@JsonGetter("Errors")})
+  private final Errors errors = new Errors();
 }

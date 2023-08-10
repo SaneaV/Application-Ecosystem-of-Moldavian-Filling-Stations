@@ -1,12 +1,12 @@
 package md.bot.fuel.domain.exception;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 @Getter
 @Builder
@@ -15,13 +15,13 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @NoArgsConstructor
 public class GatewayError {
 
-    private String source;
-    private String reasonCode;
-    private String description;
-    private boolean recoverable;
+  private String source;
+  private String reasonCode;
+  private String description;
+  private boolean recoverable;
 
-    /*
-        Always null, present for backward compatibility
-    */
-    private static String DETAILS = null;
+  /*
+      Always null, present for backward compatibility
+  */
+  private static String DETAILS = null;
 }

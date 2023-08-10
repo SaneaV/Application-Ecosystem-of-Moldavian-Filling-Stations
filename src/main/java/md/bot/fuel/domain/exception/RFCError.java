@@ -9,8 +9,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class RFCError {
 
-    private final String source;
-    private final String reason;
-    private final String message;
-    private final boolean recoverable;
+  private final String source;
+  private final String reason;
+  private final String message;
+  private final boolean recoverable;
 }

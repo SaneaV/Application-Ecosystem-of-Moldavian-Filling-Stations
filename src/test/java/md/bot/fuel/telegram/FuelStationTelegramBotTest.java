@@ -1,5 +1,15 @@
 package md.bot.fuel.telegram;
 
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
 import md.bot.fuel.telegram.command.DispatcherCommand;
 import org.junit.jupiter.api.DisplayName;
@@ -19,102 +29,92 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 public class FuelStationTelegramBotTest {
 
-    @Nested
-    @ExtendWith(MockitoExtension.class)
-    @Import({FuelStationTelegramBot.class})
-    class FuelStationTelegramBotTestWithInjection {
+  @Nested
+  @ExtendWith(MockitoExtension.class)
+  @Import({FuelStationTelegramBot.class})
+  class FuelStationTelegramBotTestWithInjection {
 
-        @Mock
-        private DispatcherCommand dispatcherCommand;
-        @Spy
-        @InjectMocks
-        private FuelStationTelegramBot fuelStationTelegramBot;
+    @Mock
+    private DispatcherCommand dispatcherCommand;
+    @Spy
+    @InjectMocks
+    private FuelStationTelegramBot fuelStationTelegramBot;
 
-        @Test
-        @DisplayName("Should execute send message on WebhookUpdateReceived")
-        void shouldExecuteSendMessageOnWebhookUpdateReceived() throws TelegramApiException {
-            final Update update = mock(Update.class);
-            final Message message = mock(Message.class);
-            final SendMessage sendMessage = new SendMessage();
+    @Test
+    @DisplayName("Should execute send message on WebhookUpdateReceived")
+    void shouldExecuteSendMessageOnWebhookUpdateReceived() throws TelegramApiException {
+      final Update update = mock(Update.class);
+      final Message message = mock(Message.class);
+      final SendMessage sendMessage = new SendMessage();
 
-            when(dispatcherCommand.getMessages(update)).thenReturn(singletonList(sendMessage));
-            doReturn(message).when(fuelStationTelegramBot).execute(any(SendMessage.class));
+      when(dispatcherCommand.getMessages(update)).thenReturn(singletonList(sendMessage));
+      doReturn(message).when(fuelStationTelegramBot).execute(any(SendMessage.class));
 
-            final BotApiMethod<?> botApiMethod = fuelStationTelegramBot.onWebhookUpdateReceived(update);
+      final BotApiMethod<?> botApiMethod = fuelStationTelegramBot.onWebhookUpdateReceived(update);
 
-            verify(dispatcherCommand).getMessages(any());
+      verify(dispatcherCommand).getMessages(any());
 
-            assertThat(botApiMethod).isNull();
-        }
-
-        @Test
-        @DisplayName("Should execute send location on WebhookUpdateReceived")
-        void shouldExecuteSendLocationOnWebhookUpdateReceived() throws TelegramApiException {
-            final Update update = mock(Update.class);
-            final Message message = mock(Message.class);
-            final SendLocation sendLocation = new SendLocation();
-
-            when(dispatcherCommand.getMessages(update)).thenReturn(singletonList(sendLocation));
-            doReturn(message).when(fuelStationTelegramBot).execute(any(SendLocation.class));
-
-            final BotApiMethod<?> botApiMethod = fuelStationTelegramBot.onWebhookUpdateReceived(update);
-
-            verify(dispatcherCommand).getMessages(any());
-
-            assertThat(botApiMethod).isNull();
-        }
-
-        @Test
-        @DisplayName("Should throw ExecutionException on WebhookUpdateReceived")
-        void shouldThrowExecutionExceptionOnWebhookUpdateReceived() throws TelegramApiException {
-            final Update update = mock(Update.class);
-            final SendLocation sendLocation = new SendLocation();
-
-            when(dispatcherCommand.getMessages(update)).thenReturn(singletonList(sendLocation));
-            doThrow(TelegramApiException.class).when(fuelStationTelegramBot).execute(any(SendLocation.class));
-
-            assertThatThrownBy(() -> fuelStationTelegramBot.onWebhookUpdateReceived(update))
-                    .isInstanceOf(ExecutionException.class);
-
-            verify(dispatcherCommand).getMessages(any());
-        }
+      assertThat(botApiMethod).isNull();
     }
 
-    @Nested
-    class FuelStationTelegramBotTestWithoutInjection {
+    @Test
+    @DisplayName("Should execute send location on WebhookUpdateReceived")
+    void shouldExecuteSendLocationOnWebhookUpdateReceived() throws TelegramApiException {
+      final Update update = mock(Update.class);
+      final Message message = mock(Message.class);
+      final SendLocation sendLocation = new SendLocation();
 
-        private static final String BOT_TOKEN = "bot_token";
+      when(dispatcherCommand.getMessages(update)).thenReturn(singletonList(sendLocation));
+      doReturn(message).when(fuelStationTelegramBot).execute(any(SendLocation.class));
 
-        private final FuelStationTelegramBot fuelStationTelegramBot;
+      final BotApiMethod<?> botApiMethod = fuelStationTelegramBot.onWebhookUpdateReceived(update);
 
-        FuelStationTelegramBotTestWithoutInjection() {
-            final DispatcherCommand dispatcherCommand = mock(DispatcherCommand.class);
-            final SetWebhook setWebhook = mock(SetWebhook.class);
-            this.fuelStationTelegramBot = new FuelStationTelegramBot(setWebhook, BOT_TOKEN, dispatcherCommand);
-        }
+      verify(dispatcherCommand).getMessages(any());
 
-        @Test
-        @DisplayName("Should return null bot name")
-        void shouldReturnBotUsername() {
-            assertThat(fuelStationTelegramBot.getBotUsername()).isNull();
-        }
-
-        @Test
-        @DisplayName("Should return null bot path")
-        void shouldReturnBotPath() {
-            assertThat(fuelStationTelegramBot.getBotPath()).isNull();
-        }
+      assertThat(botApiMethod).isNull();
     }
+
+    @Test
+    @DisplayName("Should throw ExecutionException on WebhookUpdateReceived")
+    void shouldThrowExecutionExceptionOnWebhookUpdateReceived() throws TelegramApiException {
+      final Update update = mock(Update.class);
+      final SendLocation sendLocation = new SendLocation();
+
+      when(dispatcherCommand.getMessages(update)).thenReturn(singletonList(sendLocation));
+      doThrow(TelegramApiException.class).when(fuelStationTelegramBot).execute(any(SendLocation.class));
+
+      assertThatThrownBy(() -> fuelStationTelegramBot.onWebhookUpdateReceived(update))
+          .isInstanceOf(ExecutionException.class);
+
+      verify(dispatcherCommand).getMessages(any());
+    }
+  }
+
+  @Nested
+  class FuelStationTelegramBotTestWithoutInjection {
+
+    private static final String BOT_TOKEN = "bot_token";
+
+    private final FuelStationTelegramBot fuelStationTelegramBot;
+
+    FuelStationTelegramBotTestWithoutInjection() {
+      final DispatcherCommand dispatcherCommand = mock(DispatcherCommand.class);
+      final SetWebhook setWebhook = mock(SetWebhook.class);
+      this.fuelStationTelegramBot = new FuelStationTelegramBot(setWebhook, BOT_TOKEN, dispatcherCommand);
+    }
+
+    @Test
+    @DisplayName("Should return null bot name")
+    void shouldReturnBotUsername() {
+      assertThat(fuelStationTelegramBot.getBotUsername()).isNull();
+    }
+
+    @Test
+    @DisplayName("Should return null bot path")
+    void shouldReturnBotPath() {
+      assertThat(fuelStationTelegramBot.getBotPath()).isNull();
+    }
+  }
 }

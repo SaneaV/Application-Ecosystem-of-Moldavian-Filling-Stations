@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class FuelStationTimestampAspect {
 
-    @After("execution(* md.bot.fuel.facade.FuelStationFacadeImpl.*(..))")
-    public void setFuelStationAspect() {
-        FuelStationDto.timestamp = FuelStation.timestamp;
-    }
+  @After("execution(* md.bot.fuel.facade.FuelStationFacadeImpl.*(..))")
+  public void setFuelStationAspect() {
+    FuelStationDto.timestamp = FuelStation.timestamp;
+  }
 }

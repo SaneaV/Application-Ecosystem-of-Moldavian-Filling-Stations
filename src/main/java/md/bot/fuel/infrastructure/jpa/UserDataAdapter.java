@@ -4,7 +4,7 @@ import md.bot.fuel.domain.UserData;
 
 public interface UserDataAdapter {
 
-    UserData getUserData(long userId);
+  UserData getUserData(long userId);
 
-    void save(UserData userData);
+  void save(UserData userData);
 }

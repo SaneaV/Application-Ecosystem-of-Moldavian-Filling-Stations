@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserDataDto {
 
-    private final long id;
-    private final double radius;
-    private final double latitude;
-    private final double longitude;
+  private final long id;
+  private final double radius;
+  private final double latitude;
+  private final double longitude;
 }

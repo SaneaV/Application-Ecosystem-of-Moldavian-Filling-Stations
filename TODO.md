@@ -18,7 +18,7 @@
 - [ ] Add Dockerfile and Docker-compose to build a project in container.
 - [ ] Add Spring Security for REST API (using mock LDAP).
 - [ ] Add custom JWT token library.
-- [ ] Create a Kafka-Statistics module to collect data about the cities from which the request is made (implement through 
+- [ ] Create a Kafka-Statistics module to collect data about the cities from which the request is made (implement through
   aspects and Thymeleaf).
 - [ ] Separate Telegram and Rest modules (pseudo-microservice architecture).
 - [ ] Add Flyway instead of `spring.jpa.hibernate.ddl-auto=update`.

@@ -9,8 +9,8 @@ import lombok.Setter;
 @RequiredArgsConstructor
 public class UserData {
 
-    private long id;
-    private double radius;
-    private double latitude;
-    private double longitude;
+  private long id;
+  private double radius;
+  private double latitude;
+  private double longitude;
 }

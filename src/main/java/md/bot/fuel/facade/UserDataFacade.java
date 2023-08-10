@@ -4,11 +4,11 @@ import md.bot.fuel.facade.dto.UserDataDto;
 
 public interface UserDataFacade {
 
-    UserDataDto getUserData(long userId);
+  UserDataDto getUserData(long userId);
 
-    void addNewUser(long userId);
+  void addNewUser(long userId);
 
-    void updateRadius(long userId, double radius);
+  void updateRadius(long userId, double radius);
 
-    void updateCoordinates(long userId, double latitude, double longitude);
+  void updateCoordinates(long userId, double latitude, double longitude);
 }
