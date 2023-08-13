@@ -13,9 +13,10 @@
     - [Manual Ngrok Installation](#manual-ngrok-installation)
 - [Environment Variables](#environment-variables)
 - [Test](#test)
-    - [Execution](#execution)
+- [Plugins](#plugins)
     - [Reports](#reports)
-- [Dependency Check](#dependency-check)
+    - [Dependency Check](#dependency-check)
+    - [Checkstyle](#checkstyle)
 - [QA](#qa)
 - [Tools](#tools)
 - [Useful Resources](#useful-resources)
@@ -33,9 +34,9 @@ The User is able to specify a certain search radius and coordinates to execute t
 2. Display nearest fuel station (coordinates on map + all available fuel prices).
 3. Display fuel station with the best \<fuel\> price (coordinates on map + \<fuel\> price).
 
-<p align="center">
+<div style="text-align:center;">
   <img src="architecture/Bot-Menu-Structure.png"  alt="Bot-Menu-Structure.png"/>
-</p>
+</div>
 
 # REST Functionality
 
@@ -188,15 +189,15 @@ Result example:
 
 ## Package Architecture
 
-<p align="center">
+<div style="text-align:center;">
   <img src="architecture/Bot-Java-Project-Structure.png"  alt="Bot-Java-Project-Structure.png"/>
-</p>
+</div>
 
 ## Exception Architecture
 
-<p align="center">
+<div style="text-align:center;">
   <img src="architecture/Error-Wrapping-Strategy.png"  alt="Bot-Java-Project-Structure.png"/>
-</p>
+</div>
 
 # Installation
 
@@ -277,8 +278,6 @@ Run project via maven:
 
 # Test
 
-## Execution
-
 How to run project tests:
 
 1. The standard way of launching via IntelliJ IDEA (from it and test packages).
@@ -294,10 +293,13 @@ How to run project tests:
     - `-Dskip.unit.tests=true/false` - to enable/disable unit tests phase
     - `-Dskip.integration.tests=true/false` - to enable/disable integration tests phase
 
+# Plugins
+
 ## Reports
 
 In order to create Jacoco test coverage reports, you can run next commands:
 
+- `mvn clean verify` - Complete application build and generate a full jacoco project report.
 - Unit tests report:
     - Command: `mvn test`
     - Output directory: `target/site/jacoco-unit-tests-coverage-report/index.html`
@@ -312,10 +314,19 @@ In order to create Jacoco test coverage reports, you can run next commands:
 
 In order to check for the presence of Vulnerable Dependencies in a project, you can use the following commands:
 
-1. `mvn clean verify` - Full application build and generation of Dependency-Check Report.
+1. `mvn clean verify` - Complete application build and generate dependency checking report.
 2. `mvn dependency-check:check` - Short command to check dependencies.
 
 The end result can be found at: `target/dependency-check-report.html`
+
+# Checkstyle
+
+In order to check project checkstyle, you can use the following commands:
+
+1. `mvn clean verify` - Complete application build and generate the checkstyle.html file.
+2. `mvn checkstyle:checkstyle` - Short command to generate checkstyle.html file.
+
+The end result can be found at: `target/checkstyle/ui/checkstyle.html`
 
 # QA
 
@@ -361,7 +372,8 @@ to go to the nearest one.
 16. [Maven Failsafe Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin)
 17. [Maven Jacoco Plugin](https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin)
 18. [Maven Dependency Check Plugin](https://mvnrepository.com/artifact/org.owasp/dependency-check-maven)
-19. [Java Ngrok](https://mvnrepository.com/artifact/com.github.alexdlaird/java-ngrok)
+19. [Maven Checkstyle Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-checkstyle-plugin)
+20. [Java Ngrok](https://mvnrepository.com/artifact/com.github.alexdlaird/java-ngrok)
 
 # Useful Resources
 

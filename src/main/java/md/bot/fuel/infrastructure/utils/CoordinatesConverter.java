@@ -16,23 +16,23 @@ public class CoordinatesConverter {
   private static final String WGS84_EPSG = "epsg:3857";
   private static final String UTM_EPSG = "epsg:4326";
 
-  private final static CRSFactory crsFactory;
-  private final static CoordinateReferenceSystem WGS84;
-  private final static CoordinateReferenceSystem UTM;
-  private final static CoordinateTransformFactory coordinateTransformFactory;
-  private final static CoordinateTransform coordinateTransform;
+  private static final CRSFactory CRS_FACTORY;
+  private static final CoordinateReferenceSystem WGS84;
+  private static final CoordinateReferenceSystem UTM;
+  private static final CoordinateTransformFactory COORDINATE_TRANSFORM_FACTORY;
+  private static final CoordinateTransform COORDINATE_TRANSFORM;
 
   static {
-    crsFactory = new CRSFactory();
-    WGS84 = crsFactory.createFromName(WGS84_EPSG);
-    UTM = crsFactory.createFromName(UTM_EPSG);
-    coordinateTransformFactory = new CoordinateTransformFactory();
-    coordinateTransform = coordinateTransformFactory.createTransform(WGS84, UTM);
+    CRS_FACTORY = new CRSFactory();
+    WGS84 = CRS_FACTORY.createFromName(WGS84_EPSG);
+    UTM = CRS_FACTORY.createFromName(UTM_EPSG);
+    COORDINATE_TRANSFORM_FACTORY = new CoordinateTransformFactory();
+    COORDINATE_TRANSFORM = COORDINATE_TRANSFORM_FACTORY.createTransform(WGS84, UTM);
   }
 
-  public static Pair<Double, Double> convertWGS84ToUTM(double x, double y) {
+  public static Pair<Double, Double> convertWgs84ToUtm(double x, double y) {
     final ProjCoordinate result = new ProjCoordinate();
-    coordinateTransform.transform(new ProjCoordinate(x, y), result);
+    COORDINATE_TRANSFORM.transform(new ProjCoordinate(x, y), result);
     return new Pair<>(result.x, result.y);
   }
 }

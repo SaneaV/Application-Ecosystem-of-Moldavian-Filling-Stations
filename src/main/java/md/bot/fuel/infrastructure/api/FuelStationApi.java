@@ -1,6 +1,6 @@
 package md.bot.fuel.infrastructure.api;
 
-import static md.bot.fuel.infrastructure.utils.CoordinatesConverter.convertWGS84ToUTM;
+import static md.bot.fuel.infrastructure.utils.CoordinatesConverter.convertWgs84ToUtm;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,6 +28,6 @@ public class FuelStationApi {
     this.petrol = petrol;
     this.diesel = diesel;
     this.gas = gas;
-    this.coordinates = convertWGS84ToUTM(latitude, longitude);
+    this.coordinates = convertWgs84ToUtm(latitude, longitude);
   }
 }

@@ -17,7 +17,7 @@ import md.bot.fuel.infrastructure.exception.ErrorWrappingStrategyFactory;
 import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
 import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
 import md.bot.fuel.infrastructure.exception.instance.InvalidRequestException;
-import md.bot.fuel.rest.exception.XMLGatewayErrorWrappingStrategy;
+import md.bot.fuel.rest.exception.XmlGatewayErrorWrappingStrategy;
 import md.bot.fuel.rest.wrapper.FuelStationPageWrapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,9 +33,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ExtendWith(SpringExtension.class)
-@Import({XMLGatewayErrorWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
+@Import({XmlGatewayErrorWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
 @WebMvcTest(value = FuelStationController.class, properties = {"app.error.strategy=XML"})
-public class XMLGatewayErrorWrappingStrategyIT {
+public class XmlGatewayErrorWrappingStrategyIT {
 
   private static final String PATH = "/fuel-station";
   private static final String LATITUDE_PARAM = "latitude";

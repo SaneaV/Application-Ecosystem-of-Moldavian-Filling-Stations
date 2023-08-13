@@ -28,13 +28,13 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class AllInRadiusFuelStationCommandTest {
 
   private static final String COMMAND = "All fuel stations";
-  private static final String FUEL_STATION_MESSAGE = "⛽ Fuel station - \"%s\"\n\n" +
-      "%s Petrol: %s lei\n" +
-      "%s Diesel: %s lei\n" +
-      "%s Gas : %s lei\n\n" +
-      "\uD83D\uDCCA Last price update: %s";
-  private static final String GREEN_CIRCLE = "\uD83D\uDFE2";
-  private static final String RED_CIRCLE = "\uD83D\uDD34";
+  private static final String FUEL_STATION_MESSAGE = "⛽ Fuel station - \"%s\"\n\n"
+      + "%s Petrol: %s lei\n"
+      + "%s Diesel: %s lei\n"
+      + "%s Gas : %s lei\n\n"
+      + "📊 Last price update: %s";
+  private static final String GREEN_CIRCLE = "🟢";
+  private static final String RED_CIRCLE = "🔴";
 
   private final AllInRadiusFuelStationCommand allInRadiusFuelStationCommand;
   private final FuelStationFacade fuelStationFacade;

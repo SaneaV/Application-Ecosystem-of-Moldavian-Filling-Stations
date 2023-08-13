@@ -11,16 +11,16 @@ import org.springframework.data.util.Pair;
 public class MessageConverter {
 
   private static final double ZERO_PRICE = 0.0D;
-  private static final String GREEN_CIRCLE = "\uD83D\uDFE2";
-  private static final String RED_CIRCLE = "\uD83D\uDD34";
-  private static final String FUEL_STATION_MESSAGE = "⛽ Fuel station - \"%s\"\n\n" +
-      "%s Petrol: %s lei\n" +
-      "%s Diesel: %s lei\n" +
-      "%s Gas : %s lei\n\n" +
-      "\uD83D\uDCCA Last price update: %s";
-  private static final String SPECIFIC_FUEL_STATION_MESSAGE = "⛽ Fuel station - \"%s\"\n\n" +
-      "%s %s: %s lei\n\n" +
-      "\uD83D\uDCCA Last price update: %s";
+  private static final String GREEN_CIRCLE = "🟢";
+  private static final String RED_CIRCLE = "🔴";
+  private static final String FUEL_STATION_MESSAGE = "⛽ Fuel station - \"%s\"\n\n"
+      + "%s Petrol: %s lei\n"
+      + "%s Diesel: %s lei\n"
+      + "%s Gas : %s lei\n\n"
+      + "📊 Last price update: %s";
+  private static final String SPECIFIC_FUEL_STATION_MESSAGE = "⛽ Fuel station - \"%s\"\n\n"
+      + "%s %s: %s lei\n\n"
+      + "📊 Last price update: %s";
   private static final String PETROL = "Petrol";
   private static final String DIESEL = "Diesel";
   private static final String GAS = "Gas";
@@ -59,7 +59,9 @@ public class MessageConverter {
       case GAS: {
         return getPrice(fuelStation.getGas());
       }
+      default: {
+        throw new EntityNotFoundException(ERROR_NO_FUEL_TYPE_EXIST, ERROR_NOT_FOUND_REASON_CODE);
+      }
     }
-    throw new EntityNotFoundException(ERROR_NO_FUEL_TYPE_EXIST, ERROR_NOT_FOUND_REASON_CODE);
   }
 }

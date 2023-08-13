@@ -23,7 +23,7 @@ import org.springframework.web.context.request.WebRequest;
 
 @Component
 @ConditionalOnProperty(name = "app.error.strategy", havingValue = "XML")
-public class XMLGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
+public class XmlGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
 
   @Override
   public ResponseEntity<ErrorDescriptionResponse> handleRuntimeException(RuntimeException exception, WebRequest request) {

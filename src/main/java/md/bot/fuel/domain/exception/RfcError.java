@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class RFCError {
+public class RfcError {
 
   private final String source;
   private final String reason;

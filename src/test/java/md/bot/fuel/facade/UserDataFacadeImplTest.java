@@ -20,7 +20,8 @@ import org.junit.jupiter.api.Test;
 public class UserDataFacadeImplTest {
 
   private static final String ERROR_SPECIFY_COORDINATES = "To start working with bot you have to send your geolocation";
-  private static final String ERROR_SPECIFY_RADIUS = "To start working with bot you have to specify search radius in kilometers (ex. 0.5 - 500 meters, 5 - 5 kilometers)";
+  private static final String ERROR_SPECIFY_RADIUS =
+      "To start working with bot you have to specify search radius in kilometers (ex. 0.5 - 500 meters, 5 - 5 kilometers)";
   private static final String ERROR_USER_NOT_FOUND = "User not found, please contact administrator";
 
   private static final long USER_ID = 10;

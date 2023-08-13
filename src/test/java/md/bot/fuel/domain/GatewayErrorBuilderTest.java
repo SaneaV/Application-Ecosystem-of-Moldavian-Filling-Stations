@@ -10,7 +10,7 @@ public class GatewayErrorBuilderTest {
 
   @Test
   @DisplayName("Should return toString for GatewayErrorBuilder")
-  void shouldReturnToStringForRFCErrorBuilder() {
+  void shouldReturnToStringForGatewayErrorBuilder() {
     final GatewayError.GatewayErrorBuilder gatewayErrorBuilder = GatewayError.builder()
         .source("source")
         .reasonCode("reasonCode")

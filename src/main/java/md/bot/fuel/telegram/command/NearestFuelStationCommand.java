@@ -24,7 +24,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @RequiredArgsConstructor
 public class NearestFuelStationCommand implements Command {
 
-  public final static String COMMAND = "Nearest fuel station";
+  public static final String COMMAND = "Nearest fuel station";
 
   private final FuelStationFacade fuelStationFacade;
   private final UserDataFacade userDataFacade;

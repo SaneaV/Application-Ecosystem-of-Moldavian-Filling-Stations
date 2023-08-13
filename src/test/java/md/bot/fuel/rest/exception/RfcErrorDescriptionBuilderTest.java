@@ -6,12 +6,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class RFCErrorDescriptionBuilderTest {
+public class RfcErrorDescriptionBuilderTest {
 
   @Test
   @DisplayName("Should return toString for RFCErrorDescriptionBuilder")
-  void shouldReturnToStringForRFCErrorDescriptionBuilder() {
-    final RFCErrorDescription.RFCErrorDescriptionBuilder rfcErrorDescriptionBuilder = RFCErrorDescription.builder()
+  void shouldReturnToStringForRfcErrorDescriptionBuilder() {
+    final RfcErrorDescription.RfcErrorDescriptionBuilder rfcErrorDescriptionBuilder = RfcErrorDescription.builder()
         .type("type")
         .correlationId("correlationId")
         .status(1)
@@ -19,8 +19,8 @@ public class RFCErrorDescriptionBuilderTest {
         .title("title")
         .errorDetails(emptyList());
 
-    final String builderToString = "RFCErrorDescription.RFCErrorDescriptionBuilder(status=1, detail=detail, title=title, " +
-        "type=type, correlationId=correlationId, errorDetails=[])";
+    final String builderToString = "RfcErrorDescription.RfcErrorDescriptionBuilder(status=1, detail=detail, title=title, "
+        + "type=type, correlationId=correlationId, errorDetails=[])";
 
     assertThat(rfcErrorDescriptionBuilder.toString()).isEqualTo(builderToString);
   }

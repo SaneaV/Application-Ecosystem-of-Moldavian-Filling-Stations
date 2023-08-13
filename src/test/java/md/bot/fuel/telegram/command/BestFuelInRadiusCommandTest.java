@@ -35,10 +35,10 @@ public class BestFuelInRadiusCommandTest {
   public static final String PETROL = "Petrol";
   public static final String DIESEL = "Diesel";
   public static final String GAS = "Gas";
-  private static final String SPECIFIC_FUEL_STATION_MESSAGE = "⛽ Fuel station - \"%s\"\n\n" +
-      "%s %s: %s lei\n\n" +
-      "\uD83D\uDCCA Last price update: %s";
-  private static final String GREEN_CIRCLE = "\uD83D\uDFE2";
+  private static final String SPECIFIC_FUEL_STATION_MESSAGE = "⛽ Fuel station - \"%s\"\n\n"
+      + "%s %s: %s lei\n\n"
+      + "📊 Last price update: %s";
+  private static final String GREEN_CIRCLE = "🟢";
   private static final String ERROR_NO_FUEL_TYPE_EXIST = "Can't find specified fuel type";
 
   private final BestFuelInRadiusCommand bestFuelInRadiusCommand;

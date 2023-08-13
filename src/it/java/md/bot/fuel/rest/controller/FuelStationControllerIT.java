@@ -14,7 +14,7 @@ import java.util.List;
 import md.bot.fuel.facade.FuelStationFacade;
 import md.bot.fuel.facade.dto.FuelStationDto;
 import md.bot.fuel.infrastructure.exception.ErrorWrappingStrategyFactory;
-import md.bot.fuel.rest.exception.RFC7807ErrorWrappingStrategy;
+import md.bot.fuel.rest.exception.Rfc7807ErrorWrappingStrategy;
 import md.bot.fuel.rest.wrapper.FuelStationPageWrapper;
 import md.bot.fuel.rest.wrapper.PageDto;
 import org.junit.jupiter.api.DisplayName;
@@ -28,7 +28,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ExtendWith(SpringExtension.class)
-@Import({RFC7807ErrorWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
+@Import({Rfc7807ErrorWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
 @WebMvcTest(value = FuelStationController.class)
 public class FuelStationControllerIT {
 

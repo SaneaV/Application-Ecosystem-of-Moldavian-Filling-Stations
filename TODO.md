@@ -12,6 +12,7 @@
 - [X] Configure Webhook setup on application startup.
 - [X] Add Dependency Check maven plugin.
 - [X] Add automatic generation of a ngrok https tunnel. Should be an optional function depending on property (true/false).
+- [X] Add checkstyle plugin.
 
 ## Important Features
 
@@ -22,6 +23,7 @@
   aspects and Thymeleaf).
 - [ ] Separate Telegram and Rest modules (pseudo-microservice architecture).
 - [ ] Add Flyway instead of `spring.jpa.hibernate.ddl-auto=update`.
+- [ ] Add SL4FJ logging in a project.
 
 ## Secondary
 
@@ -33,3 +35,4 @@
 - [ ] Add an automatic request to ANRE API every 15 minutes. Must be optional depending on property (true/false)
 - [ ] Add @ConfigurationProperties for telegram.-properties.
 - [ ] Add Actuator.
+- [ ] Analyze mapstruct warning "Unmapped target properties."

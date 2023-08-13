@@ -20,11 +20,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FuelStationServiceImpl implements FuelStationService {
 
-  private static final String ERROR_NO_FUEL_STATION_NEAR_YOU = "We can't find any fuel station near you. Try to extend search radius.";
+  private static final String ERROR_NO_FUEL_STATION_NEAR_YOU =
+      "We can't find any fuel station near you. Try to extend search radius.";
   private static final String ERROR_NOT_FOUND_REASON_CODE = "NOT_FOUND";
-  private static final String ERROR_FOUND_MORE_THAN_LIMIT = "We found more than %s fuel stations near you. Try to decrease search radius.";
+  private static final String ERROR_FOUND_MORE_THAN_LIMIT =
+      "We found more than %s fuel stations near you. Try to decrease search radius.";
   private static final String ERROR_EXCEED_LIMIT_REASON_CODE = "EXCEED_LIMIT";
-  private static final String ERROR_NO_FUEL_IN_STOCK = "Fuel station near you do not have %s in stock. Try to extend search radius.";
+  private static final String ERROR_NO_FUEL_IN_STOCK =
+      "Fuel station near you do not have %s in stock. Try to extend search radius.";
   private static final String ERROR_INVALID_FUEL_TYPE = "Invalid fuel type.";
 
   private static final String PETROL = "petrol";
@@ -38,8 +41,8 @@ public class FuelStationServiceImpl implements FuelStationService {
   @Override
   public List<FuelStation> getAllFuelStations(double latitude, double longitude, double radius, int limit) {
     final List<FuelStation> fuelStations = anreApi.getFuelStationsInfo().stream()
-        .filter(s -> isWithinRadius(latitude, longitude, s.getLatitude(), s.getLongitude(), radius) &&
-            (checkCorrectPrice(s.getPetrol()) || checkCorrectPrice(s.getDiesel()) || checkCorrectPrice(s.getGas())))
+        .filter(s -> isWithinRadius(latitude, longitude, s.getLatitude(), s.getLongitude(), radius)
+            && (checkCorrectPrice(s.getPetrol()) || checkCorrectPrice(s.getDiesel()) || checkCorrectPrice(s.getGas())))
         .collect(toList());
 
     checkLimit(fuelStations.size(), limit);
@@ -52,8 +55,8 @@ public class FuelStationServiceImpl implements FuelStationService {
   @Override
   public FuelStation getNearestFuelStation(double latitude, double longitude, double radius) {
     return anreApi.getFuelStationsInfo().stream()
-        .filter(s -> (checkCorrectPrice(s.getPetrol()) || checkCorrectPrice(s.getDiesel()) ||
-            checkCorrectPrice(s.getGas())))
+        .filter(s -> (checkCorrectPrice(s.getPetrol()) || checkCorrectPrice(s.getDiesel())
+            || checkCorrectPrice(s.getGas())))
         .min(comparing(s -> calculateMeters(latitude, longitude, s.getLatitude(), s.getLongitude())))
         .orElseThrow(() -> new EntityNotFoundException(ERROR_NO_FUEL_STATION_NEAR_YOU, ERROR_NOT_FOUND_REASON_CODE));
   }
@@ -94,8 +97,10 @@ public class FuelStationServiceImpl implements FuelStationService {
       case GAS: {
         return FuelStation::getGas;
       }
+      default: {
+        throw new EntityNotFoundException(ERROR_INVALID_FUEL_TYPE, ERROR_NOT_FOUND_REASON_CODE);
+      }
     }
-    throw new EntityNotFoundException(ERROR_INVALID_FUEL_TYPE, ERROR_NOT_FOUND_REASON_CODE);
   }
 
   private void checkLimit(int numberOfFuelStation, int limit) {

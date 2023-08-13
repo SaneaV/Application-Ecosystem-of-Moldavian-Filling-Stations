@@ -21,9 +21,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class FuelStationServiceImplTest {
 
-  private static final String ERROR_NO_FUEL_STATION_NEAR_YOU = "We can't find any fuel station near you. Try to extend search radius.";
-  private static final String ERROR_FOUND_MORE_THAN_LIMIT = "We found more than %s fuel stations near you. Try to decrease search radius.";
-  private static final String ERROR_NO_FUEL_IN_STOCK = "Fuel station near you do not have %s in stock. Try to extend search radius.";
+  private static final String ERROR_NO_FUEL_STATION_NEAR_YOU =
+      "We can't find any fuel station near you. Try to extend search radius.";
+  private static final String ERROR_FOUND_MORE_THAN_LIMIT =
+      "We found more than %s fuel stations near you. Try to decrease search radius.";
+  private static final String ERROR_NO_FUEL_IN_STOCK =
+      "Fuel station near you do not have %s in stock. Try to extend search radius.";
   private static final String ERROR_INVALID_FUEL_TYPE = "Invalid fuel type.";
 
   private static final String FUEL_STATION_NAME = "Fuel station";
