@@ -1,11 +1,9 @@
 package md.bot.fuel.telegram;
 
-import static lombok.AccessLevel.NONE;
-
-import lombok.Getter;
-import lombok.Setter;
 import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
 import md.bot.fuel.telegram.command.DispatcherCommand;
+import md.bot.fuel.telegram.configuration.TelegramBotConfiguration;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,21 +12,20 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
-@Getter
-@Setter
+@Component
 public class FuelStationTelegramBot extends SpringWebhookBot {
 
   private static final String ERROR_DESCRIPTION = "An error occurred during message sending.";
   private static final String ERROR_REASON_CODE = "INTERNAL_ERROR";
 
-  private String botPath;
-  private String botUsername;
-  @Getter(NONE)
+  private final TelegramBotConfiguration telegramBotConfiguration;
   private final DispatcherCommand dispatcherCommand;
 
-  public FuelStationTelegramBot(SetWebhook setWebhook, String botToken, DispatcherCommand dispatcherCommand) {
-    super(setWebhook, botToken);
+  public FuelStationTelegramBot(SetWebhook setWebhook, DispatcherCommand dispatcherCommand,
+      TelegramBotConfiguration telegramBotConfiguration) {
+    super(setWebhook, telegramBotConfiguration.getBotToken());
     this.dispatcherCommand = dispatcherCommand;
+    this.telegramBotConfiguration = telegramBotConfiguration;
   }
 
   @Override
@@ -46,5 +43,15 @@ public class FuelStationTelegramBot extends SpringWebhookBot {
       }
     });
     return null;
+  }
+
+  @Override
+  public String getBotPath() {
+    return telegramBotConfiguration.getWebhookHost();
+  }
+
+  @Override
+  public String getBotUsername() {
+    return telegramBotConfiguration.getBotName();
   }
 }

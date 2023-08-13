@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
 import md.bot.fuel.telegram.command.DispatcherCommand;
+import md.bot.fuel.telegram.configuration.TelegramBotConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,6 +39,8 @@ public class FuelStationTelegramBotTest {
 
     @Mock
     private DispatcherCommand dispatcherCommand;
+    @Mock
+    private TelegramBotConfiguration telegramBotConfiguration;
     @Spy
     @InjectMocks
     private FuelStationTelegramBot fuelStationTelegramBot;
@@ -95,26 +98,30 @@ public class FuelStationTelegramBotTest {
   @Nested
   class FuelStationTelegramBotTestWithoutInjection {
 
-    private static final String BOT_TOKEN = "bot_token";
+    private static final String WEBHOOK_HOST = "Webhook host";
+    private static final String BOT_NAME = "Bot name";
+    private static final String BOT_TOKEN = "Bot token";
 
     private final FuelStationTelegramBot fuelStationTelegramBot;
+    private final TelegramBotConfiguration telegramBotConfiguration;
 
     FuelStationTelegramBotTestWithoutInjection() {
       final DispatcherCommand dispatcherCommand = mock(DispatcherCommand.class);
       final SetWebhook setWebhook = mock(SetWebhook.class);
-      this.fuelStationTelegramBot = new FuelStationTelegramBot(setWebhook, BOT_TOKEN, dispatcherCommand);
+      this.telegramBotConfiguration = new TelegramBotConfiguration(WEBHOOK_HOST, BOT_NAME, BOT_TOKEN);
+      this.fuelStationTelegramBot = new FuelStationTelegramBot(setWebhook, dispatcherCommand, telegramBotConfiguration);
     }
 
     @Test
     @DisplayName("Should return null bot name")
     void shouldReturnBotUsername() {
-      assertThat(fuelStationTelegramBot.getBotUsername()).isNull();
+      assertThat(fuelStationTelegramBot.getBotUsername()).isEqualTo(telegramBotConfiguration.getBotName());
     }
 
     @Test
     @DisplayName("Should return null bot path")
     void shouldReturnBotPath() {
-      assertThat(fuelStationTelegramBot.getBotPath()).isNull();
+      assertThat(fuelStationTelegramBot.getBotPath()).isEqualTo(telegramBotConfiguration.getWebhookHost());
     }
   }
 }

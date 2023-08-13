@@ -23,7 +23,7 @@ public class BotController {
 
   private final FuelStationTelegramBot fuelStationTelegramBot;
 
-  @PostMapping(value = "/callback/${telegram.bot-name}")
+  @PostMapping(value = "/callback/${telegram.bot-token}")
   public ResponseEntity<BotApiMethod<?>> onUpdateReceived(@RequestBody Update update, WebRequest webRequest) {
     webRequest.setAttribute(CHAT_ID_ATTRIBUTE, update.getMessage().getChat().getId(), SCOPE_REQUEST);
     webRequest.setAttribute(CLIENT_ATTRIBUTE, CLIENT_PARAM, SCOPE_REQUEST);

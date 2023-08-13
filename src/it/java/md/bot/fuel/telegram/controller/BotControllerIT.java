@@ -3,6 +3,7 @@ package md.bot.fuel.telegram.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -13,12 +14,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
@@ -27,7 +28,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 @WebMvcTest(BotController.class)
 public class BotControllerIT {
 
-  private static final String BOT_PATH = "/callback/moldova-fuel-bot";
+  private static final String BOT_PATH = "/callback/%s";
 
   private static final String REQUEST_BODY = "{\n" +
       "    \"message\": {\n" +
@@ -37,6 +38,9 @@ public class BotControllerIT {
       "    }\n" +
       "}";
   private static final String RESPONSE_BODY = "{\"method\":\"sendmessage\"}";
+
+  @Value("${telegram.bot-token")
+  private String botToken;
 
   @Autowired
   private MockMvc mockMvc;
@@ -50,7 +54,9 @@ public class BotControllerIT {
 
     when(fuelStationTelegramBot.onWebhookUpdateReceived(any())).thenReturn(message);
 
-    mockMvc.perform(MockMvcRequestBuilders.post(BOT_PATH)
+    final String uri = String.format(BOT_PATH, botToken);
+
+    mockMvc.perform(post(uri)
             .content(REQUEST_BODY)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
