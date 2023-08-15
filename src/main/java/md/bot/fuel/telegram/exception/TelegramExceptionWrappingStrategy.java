@@ -3,6 +3,7 @@ package md.bot.fuel.telegram.exception;
 import static md.bot.fuel.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
+import javax.validation.ConstraintViolationException;
 import md.bot.fuel.infrastructure.exception.ErrorDescriptionResponse;
 import md.bot.fuel.infrastructure.exception.ErrorWrappingStrategy;
 import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
@@ -46,6 +47,12 @@ public class TelegramExceptionWrappingStrategy implements ErrorWrappingStrategy 
   // TODO: Remove this handle on module separation
   @Override
   public ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request) {
+    return prepareErrorMessage(exception.getMessage(), request);
+  }
+
+  @Override
+  public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception,
+      WebRequest request) {
     return prepareErrorMessage(exception.getMessage(), request);
   }
 

@@ -1,6 +1,9 @@
 package md.bot.fuel.telegram.command;
 
 import static java.util.Arrays.asList;
+import static md.bot.fuel.domain.FuelType.DIESEL;
+import static md.bot.fuel.domain.FuelType.GAS;
+import static md.bot.fuel.domain.FuelType.PETROL;
 import static md.bot.fuel.telegram.converter.MessageConverter.toMessage;
 import static md.bot.fuel.telegram.utils.MessageUtil.sendLocation;
 import static md.bot.fuel.telegram.utils.MessageUtil.sendMessage;
@@ -23,10 +26,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 @RequiredArgsConstructor
 public class BestFuelInRadiusCommand implements Command {
-
-  public static final String PETROL = "Petrol";
-  public static final String DIESEL = "Diesel";
-  public static final String GAS = "Gas";
 
   private final FuelStationFacade fuelStationFacade;
   private final UserDataFacade userDataFacade;
@@ -56,11 +55,15 @@ public class BestFuelInRadiusCommand implements Command {
 
   @Override
   public List<String> getCommands() {
-    return asList(PETROL, DIESEL, GAS);
+    return asList(PETROL.getDescription(), DIESEL.getDescription(), GAS.getDescription());
   }
 
   private void setReplyKeyboard(List<? super PartialBotApiMethod<?>> messages) {
-    final SendLocation sendLocation = (SendLocation) messages.get(messages.size() - 1);
+    final SendLocation sendLocation = (SendLocation) getLastMessage(messages);
     sendLocation.setReplyMarkup(getMainMenuKeyboard());
+  }
+
+  private Object getLastMessage(List<? super PartialBotApiMethod<?>> messages) {
+    return messages.get(messages.size() - 1);
   }
 }

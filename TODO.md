@@ -13,6 +13,7 @@
 - [X] Add Dependency Check maven plugin.
 - [X] Add automatic generation of a ngrok https tunnel. Should be an optional function depending on property (true/false).
 - [X] Add checkstyle plugin.
+- [X] Replace REST description in README.md with swagger auto documentation.
 
 ## Important Features
 
@@ -31,7 +32,6 @@
 - [ ] Fetch ANRE API on fast startup in a separate thread.
 - [ ] Create WebFlux tests with WebTestClient.
 - [ ] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
-- [ ] Replace REST description in README.md with swagger auto documentation.
 - [ ] Add an automatic request to ANRE API every 15 minutes. Must be optional depending on property (true/false)
 - [ ] Add @ConfigurationProperties for telegram.-properties.
 - [ ] Add Actuator.

@@ -3,6 +3,7 @@ package md.bot.fuel.infrastructure.exception;
 import static md.bot.fuel.rest.exception.ErrorConstants.REST_CLIENT;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
+import javax.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
 import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
@@ -50,6 +51,11 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(BindException.class)
   public ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request) {
     return errorWrappingStrategyFactory.getErrorWrappingStrategy(REST_CLIENT).handleBindException(exception, request);
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception, WebRequest request) {
+    return errorWrappingStrategyFactory.getErrorWrappingStrategy(REST_CLIENT).handleConstraintViolationException(exception, request);
   }
 
   private String getClient(WebRequest request) {

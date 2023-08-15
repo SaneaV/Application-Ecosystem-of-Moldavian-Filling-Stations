@@ -1,13 +1,18 @@
 package md.bot.fuel.rest.exception;
 
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_REASON_BIND_ERROR;
+import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_REASON_CONSTRAINT_ERROR;
 import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_REASON_INTERNAL_ERROR;
+import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_SOURCE;
 import static md.bot.fuel.rest.exception.ErrorConstants.REST_CLIENT;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 
+import java.util.List;
+import javax.validation.ConstraintViolationException;
 import md.bot.fuel.domain.exception.RfcError;
 import md.bot.fuel.infrastructure.exception.ErrorDescriptionResponse;
 import md.bot.fuel.infrastructure.exception.ErrorWrappingStrategy;
@@ -64,7 +69,29 @@ public class Rfc7807ErrorWrappingStrategy implements ErrorWrappingStrategy {
 
   @Override
   public ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request) {
-    final RfcErrorDescription error = buildRfcErrorDescription(BAD_REQUEST.value(), ERROR_REASON_BIND_ERROR,
+
+    final List<RfcError> rfcErrors = exception.getFieldErrors().stream()
+        .map(e -> RfcError.builder()
+            .source(ERROR_SOURCE)
+            .message(e.getDefaultMessage())
+            .reason(ERROR_REASON_BIND_ERROR)
+            .recoverable(false)
+            .build())
+        .collect(toList());
+
+    final RfcErrorDescription error = RfcErrorDescription.builder()
+        .status(BAD_REQUEST.value())
+        .title(ERROR_REASON_BIND_ERROR)
+        .errorDetails(rfcErrors)
+        .build();
+
+    return buildResponseEntity(BAD_REQUEST, error);
+  }
+
+  @Override
+  public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception,
+      WebRequest request) {
+    final RfcErrorDescription error = buildRfcErrorDescription(BAD_REQUEST.value(), ERROR_REASON_CONSTRAINT_ERROR,
         exception.getMessage());
     return buildResponseEntity(BAD_REQUEST, error);
   }

@@ -1,5 +1,6 @@
 package md.bot.fuel.infrastructure.exception;
 
+import javax.validation.ConstraintViolationException;
 import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
 import md.bot.fuel.infrastructure.exception.instance.ExecutionException;
 import md.bot.fuel.infrastructure.exception.instance.InvalidRequestException;
@@ -18,6 +19,8 @@ public interface ErrorWrappingStrategy {
   ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception, WebRequest request);
 
   ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request);
+
+  ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception, WebRequest request);
 
   String getClient();
 }

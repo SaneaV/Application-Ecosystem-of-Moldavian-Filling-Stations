@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @ExtendWith(SpringExtension.class)
 @Import({XmlGatewayErrorWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
-@WebMvcTest(value = FuelStationController.class, properties = {"app.error.strategy=XML"})
+@WebMvcTest(value = FuelStationControllerImpl.class, properties = {"app.error.strategy=XML"})
 public class XmlGatewayErrorWrappingStrategyIT {
 
   private static final String PATH = "/fuel-station";
@@ -89,8 +89,8 @@ public class XmlGatewayErrorWrappingStrategyIT {
   }
 
   @Test
-  @DisplayName("Should throw runtime exception in RFC7807 format")
-  void shouldHandleRuntimeExceptionInRFC7807Format() throws Exception {
+  @DisplayName("Should throw runtime exception in XML format")
+  void shouldHandleRuntimeExceptionInXMLFormat() throws Exception {
     final RuntimeException runtimeException = new RuntimeException(ERROR_MESSAGE);
     when(fuelStationFacade.getAllFuelStations(anyDouble(), anyDouble(), anyDouble(), anyInt())).thenThrow(runtimeException);
 
@@ -108,16 +108,12 @@ public class XmlGatewayErrorWrappingStrategyIT {
   }
 
   @Test
-  @DisplayName("Should throw bind exception in RFC7807 format")
-  void shouldHandleBindExceptionInRFC7807Format() throws Exception {
-    final String response = "{\"Errors\":{\"Error\":[{\"source\":\"MD_FUEL_PRICE_APP\",\"reasonCode\":\"BIND_ERROR\"," +
-        "\"description\":\"org.springframework.validation.BeanPropertyBindingResult: 1 errors\\nField error in object " +
-        "'fuelStationRequest' on field 'radius': rejected value [RADIUS_VALUE]; codes [typeMismatch.fuelStationRequest" +
-        ".radius,typeMismatch.radius,typeMismatch.double,typeMismatch]; arguments [org.springframework.context.support" +
-        ".DefaultMessageSourceResolvable: codes [fuelStationRequest.radius,radius]; arguments []; default message " +
-        "[radius]]; default message [Failed to convert property value of type 'java.lang.String' to required type " +
-        "'double' for property 'radius'; nested exception is java.lang.NumberFormatException: For input string: " +
-        "\\\"RADIUS_VALUE\\\"]\",\"recoverable\":false}]}}\n";
+  @DisplayName("Should throw bind exception in XML format")
+  void shouldHandleBindExceptionInXMLFormat() throws Exception {
+    final String response = "{\"Errors\":{\"Error\":[{\"source\":\"MD_FUEL_PRICE_APP\",\"reasonCode\":\"BIND_ERROR\","
+        + "\"description\":\"Failed to convert property value of type 'java.lang.String' to required type 'double' for property"
+        + " 'radius'; nested exception is java.lang.NumberFormatException: For input string: \\\"RADIUS_VALUE\\\"\","
+        + "\"recoverable\":false}]}}\n";
 
     mockMvc.perform(get(PATH)
             .param(LATITUDE_PARAM, LATITUDE_VALUE)

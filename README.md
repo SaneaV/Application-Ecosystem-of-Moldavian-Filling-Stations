@@ -4,7 +4,7 @@
 
 - [API](#api)
 - [Telegram Functionality](#telegram-functionality)
-- [REST Functionality](#rest-functionality)
+- [REST API Contracts](#rest-api-contracts)
 - [Project Architecture](#project-architecture)
     - [Package Architecture](#package-architecture)
     - [Exception Architecture](#exception-architecture)
@@ -38,152 +38,14 @@ The User is able to specify a certain search radius and coordinates to execute t
   <img src="architecture/Bot-Menu-Structure.png"  alt="Bot-Menu-Structure.png"/>
 </div>
 
-# REST Functionality
+# REST API Contracts
 
-1. Get all fuel stations in radius:
+Swagger is used to create REST API contracts.
 
-`http://localhost:8080/fuel-station`
+In runtime swagger contracts can be obtained from the [Swagger UI](http://localhost:8080/swagger-ui/index.html)
 
-| **Request param** | **Optional** |  **Possible Values**  | **Default Value** | **Description**                              |
-|:-----------------:|:------------:|:---------------------:|:-----------------:|----------------------------------------------|
-|     latitude      |  Partially   | <EPSG:4326 Latitude>  |        0.0        | Latitude (x) coordinate in EPSG:4326 format  |
-|     longitude     |  Partially   | <EPSG:4326 Longitude> |        0.0        | Longitude (y) coordinate in EPSG:4326 format |
-|      radius       |      No      | \<Radius in meters\>  |         0         | Radius of search in meters                   |
-|  limit_in_radius  |  Partially   |    \<Integer > 0\>    |         0         | Number of fuel stations allowed in result    |
-
-Result example:
-
-```json
-[
-  {
-    "name": "FUEL STATION NAME",
-    "petrol": 25.1,
-    "diesel": 21.05,
-    "gas": null,
-    "latitude": 46.24415116079208,
-    "longitude": 28.76462449820587
-  }
-]
-```
-
-2. Get all fuel stations in radius in page format:
-
-`http://localhost:8080/page/fuel-station`
-
-| **Request param** | **Optional** |  **Possible Values**  | **Default Value** | **Description**                              |
-|:-----------------:|:------------:|:---------------------:|:-----------------:|----------------------------------------------|
-|     latitude      |  Partially   | <EPSG:4326 Latitude>  |        0.0        | Latitude (x) coordinate in EPSG:4326 format  |
-|     longitude     |  Partially   | <EPSG:4326 Longitude> |        0.0        | Longitude (y) coordinate in EPSG:4326 format |
-|      radius       |      No      | \<Double value > 0\>  |         0         | Radius of search in meters                   |
-|  limit_in_radius  |  Partially   |    \<Integer > 0\>    |         0         | Number of fuel stations allowed in result    |
-|       limit       |  Partially   |    \<Integer > 0\>    |         0         | Number of items on the page                  |
-|      offset       |  Partially   |    \<Integer > 0\>    |         0         | Number of skipped items from the beginning   |
-
-Result example:
-
-```json
-{
-  "totalResults": 5,
-  "items": [
-    {
-      "name": "FUEL STATION NAME",
-      "petrol": 25.1,
-      "diesel": 21.05,
-      "gas": null,
-      "latitude": 46.24415116079208,
-      "longitude": 28.76462449820587
-    }
-  ]
-}
-```
-
-3. Get nearest fuel station in radius:
-
-`http://localhost:8080/fuel-station/nearest`
-
-| **Request param** | **Optional** |  **Possible Values**  | **Default Value** | **Description**                              |
-|:-----------------:|:------------:|:---------------------:|:-----------------:|----------------------------------------------|
-|     latitude      |  Partially   | <EPSG:4326 Latitude>  |        0.0        | Latitude (x) coordinate in EPSG:4326 format  |
-|     longitude     |  Partially   | <EPSG:4326 Longitude> |        0.0        | Longitude (y) coordinate in EPSG:4326 format |
-|      radius       |      No      | \<Double value > 0\>  |         0         | Radius of search in meters                   |
-
-Result example:
-
-```json
-{
-  "name": "FUEL STATION NAME",
-  "petrol": 25.14,
-  "diesel": 21.09,
-  "gas": null,
-  "latitude": 46.326925437643354,
-  "longitude": 28.982692581584732
-}
-```
-
-4. Get fuel stations with the best-specified fuel type:
-
-`http://localhost:8080/fuel-station/<fuel-type>`
-
-```text
-<fuel-type> should be replaced with any of the next values (case insensitive): petrol, diesel, gas
-```
-
-| **Request param** | **Optional** |  **Possible Values**  | **Default Value** | **Description**                              |
-|:-----------------:|:------------:|:---------------------:|:-----------------:|----------------------------------------------|
-|     latitude      |  Partially   | <EPSG:4326 Latitude>  |        0.0        | Latitude (x) coordinate in EPSG:4326 format  |
-|     longitude     |  Partially   | <EPSG:4326 Longitude> |        0.0        | Longitude (y) coordinate in EPSG:4326 format |
-|      radius       |      No      | \<Double value > 0\>  |         0         | Radius of search in meters                   |
-|  limit_in_radius  |  Partially   |    \<Integer > 0\>    |         0         | Number of fuel stations allowed in result    |
-
-Result example:
-
-```json
-[
-  {
-    "name": "FUEL STATION NAME",
-    "petrol": 25.1,
-    "diesel": 21.05,
-    "gas": 13.45,
-    "latitude": 46.34746746138542,
-    "longitude": 28.947447953963454
-  }
-]
-```
-
-5. Get fuel stations with the best-specified fuel type in page format:
-
-`http://localhost:8080/page/fuel-station/<fuel-type>`
-
-```text
-<fuel-type> should be replaced with any of the next values (case insensitive): petrol, diesel, gas
-```
-
-| **Request param** | **Optional** |  **Possible Values**  | **Default Value** | **Description**                              |
-|:-----------------:|:------------:|:---------------------:|:-----------------:|----------------------------------------------|
-|     latitude      |  Partially   | <EPSG:4326 Latitude>  |        0.0        | Latitude (x) coordinate in EPSG:4326 format  |
-|     longitude     |  Partially   | <EPSG:4326 Longitude> |        0.0        | Longitude (y) coordinate in EPSG:4326 format |
-|      radius       |      No      | \<Double value > 0\>  |         0         | Radius of search in meters                   |
-|  limit_in_radius  |  Partially   |    \<Integer > 0\>    |         0         | Number of fuel stations allowed in result    |
-|       limit       |  Partially   |    \<Integer > 0\>    |         0         | Number of items on the page                  |
-|      offset       |  Partially   |    \<Integer > 0\>    |         0         | Number of skipped items from the beginning   |
-
-Result example:
-
-```json
-{
-  "totalResults": 1,
-  "items": [
-    {
-      "name": "FUEL STATION NAME",
-      "petrol": 25.1,
-      "diesel": 21.05,
-      "gas": 13.45,
-      "latitude": 46.34746746138542,
-      "longitude": 28.947447953963454
-    }
-  ]
-}
-```
+You can also find current contracts in the file: REST-API.yaml.<br>
+Yaml to HTML converter: [Swagger Editor](https://editor.swagger.io/)
 
 # Project Architecture
 
@@ -355,25 +217,34 @@ to go to the nearest one.
 # Tools
 
 1. [Telegram Bots Spring Boot Starter](https://mvnrepository.com/artifact/org.telegram/telegrambots-spring-boot-starter)
-2. [Spring Boot](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter)
-3. [H2](https://mvnrepository.com/artifact/com.h2database/h2)
-4. [Lombok](https://mvnrepository.com/artifact/org.projectlombok/lombok)
-5. [Proj4J](https://mvnrepository.com/artifact/org.locationtech.proj4j/proj4j)
-6. [Proj4J-EPSG](https://mvnrepository.com/artifact/org.locationtech.proj4j/proj4j-epsg)
-7. [Mapstruct](https://mvnrepository.com/artifact/org.mapstruct/mapstruct)
-8. [Ehcache](https://mvnrepository.com/artifact/org.ehcache/ehcache)
-9. [JSR107 API and SPI](https://mvnrepository.com/artifact/javax.cache/cache-api)
-10. [Mockito Core](https://mvnrepository.com/artifact/org.mockito/mockito-core)
-11. [Mockito Inline](https://mvnrepository.com/artifact/org.mockito/mockito-inline)
-12. [JUnit](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api)
-13. [WireMock](https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock)
-14. [PostgreSQL](https://mvnrepository.com/artifact/org.postgresql/postgresql)
-15. [Maven Surefire Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin)
-16. [Maven Failsafe Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin)
-17. [Maven Jacoco Plugin](https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin)
-18. [Maven Dependency Check Plugin](https://mvnrepository.com/artifact/org.owasp/dependency-check-maven)
-19. [Maven Checkstyle Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-checkstyle-plugin)
-20. [Java Ngrok](https://mvnrepository.com/artifact/com.github.alexdlaird/java-ngrok)
+2. [Spring Boot Starter](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter)
+3. [Spring Boot Starter Validation](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation)
+4. [Spring Boot Starter Cache](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-cache)
+5. [Spring Boot Starter Data JPA](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa)
+6. [Spring Boot Starter WebFlux](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-webflux)
+7. [Spring Boot Starter Web](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web)
+8. [Spring Boot Starter Test](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-test)
+9. [SpringDoc OpenAPI UI](https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-ui)
+10. [H2](https://mvnrepository.com/artifact/com.h2database/h2)
+11. [Lombok](https://mvnrepository.com/artifact/org.projectlombok/lombok)
+12. [Proj4J](https://mvnrepository.com/artifact/org.locationtech.proj4j/proj4j)
+13. [Proj4J-EPSG](https://mvnrepository.com/artifact/org.locationtech.proj4j/proj4j-epsg)
+14. [Mapstruct](https://mvnrepository.com/artifact/org.mapstruct/mapstruct)
+15. [Ehcache](https://mvnrepository.com/artifact/org.ehcache/ehcache)
+16. [JSR107 API and SPI](https://mvnrepository.com/artifact/javax.cache/cache-api)
+17. [Mockito Core](https://mvnrepository.com/artifact/org.mockito/mockito-core)
+18. [Mockito Inline](https://mvnrepository.com/artifact/org.mockito/mockito-inline)
+19. [JUnit](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api)
+20. [WireMock](https://mvnrepository.com/artifact/com.github.tomakehurst/wiremock)
+21. [PostgreSQL](https://mvnrepository.com/artifact/org.postgresql/postgresql)
+22. [Maven Surefire Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-surefire-plugin)
+23. [Maven Failsafe Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-failsafe-plugin)
+24. [Maven Jacoco Plugin](https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin)
+25. [Maven Dependency Check Plugin](https://mvnrepository.com/artifact/org.owasp/dependency-check-maven)
+26. [Maven Checkstyle Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-checkstyle-plugin)
+27. [Java Ngrok](https://mvnrepository.com/artifact/com.github.alexdlaird/java-ngrok)
+28. [Swagger Core](https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-core)
+29. [Swagger UI](https://mvnrepository.com/artifact/org.webjars/swagger-ui)
 
 # Useful Resources
 

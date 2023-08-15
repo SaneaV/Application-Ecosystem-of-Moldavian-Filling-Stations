@@ -1,6 +1,7 @@
 package md.bot.fuel.rest.exception;
 
 import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_REASON_BIND_ERROR;
+import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_REASON_CONSTRAINT_ERROR;
 import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_REASON_INTERNAL_ERROR;
 import static md.bot.fuel.rest.exception.ErrorConstants.ERROR_SOURCE;
 import static md.bot.fuel.rest.exception.ErrorConstants.REST_CLIENT;
@@ -8,6 +9,8 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 
+import java.util.List;
+import javax.validation.ConstraintViolationException;
 import md.bot.fuel.domain.exception.GatewayError;
 import md.bot.fuel.infrastructure.exception.ErrorDescriptionResponse;
 import md.bot.fuel.infrastructure.exception.ErrorWrappingStrategy;
@@ -19,6 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.context.request.WebRequest;
 
 @Component
@@ -66,7 +70,21 @@ public class XmlGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
   @Override
   public ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request) {
     final GatewayErrorDescription error = new GatewayErrorDescription();
-    final GatewayError gatewayError = buildGatewayError(ERROR_REASON_BIND_ERROR, exception.getMessage());
+    final List<FieldError> fieldErrors = exception.getFieldErrors();
+
+    fieldErrors.forEach(e -> {
+      final GatewayError gatewayError = buildGatewayError(ERROR_REASON_BIND_ERROR, e.getDefaultMessage());
+      error.getErrors().addError(gatewayError);
+    });
+
+    return buildResponseEntity(BAD_REQUEST, error);
+  }
+
+  @Override
+  public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception,
+      WebRequest request) {
+    final GatewayErrorDescription error = new GatewayErrorDescription();
+    final GatewayError gatewayError = buildGatewayError(ERROR_REASON_CONSTRAINT_ERROR, exception.getMessage());
     error.getErrors().addError(gatewayError);
 
     return buildResponseEntity(BAD_REQUEST, error);

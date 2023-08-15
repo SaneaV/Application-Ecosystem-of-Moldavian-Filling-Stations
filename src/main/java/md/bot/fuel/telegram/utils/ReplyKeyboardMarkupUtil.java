@@ -4,9 +4,9 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PRIVATE;
-import static md.bot.fuel.telegram.command.BestFuelInRadiusCommand.DIESEL;
-import static md.bot.fuel.telegram.command.BestFuelInRadiusCommand.GAS;
-import static md.bot.fuel.telegram.command.BestFuelInRadiusCommand.PETROL;
+import static md.bot.fuel.domain.FuelType.DIESEL;
+import static md.bot.fuel.domain.FuelType.GAS;
+import static md.bot.fuel.domain.FuelType.PETROL;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ public class ReplyKeyboardMarkupUtil {
   static {
     MAIN_MENU_ITEMS.addAll(
         asList(AllInRadiusFuelStationCommand.COMMAND, NearestFuelStationCommand.COMMAND, SpecificFuelInRadiusCommand.COMMAND));
-    FUEL_TYPE_MENU_ITEMS.addAll(asList(PETROL, DIESEL, GAS));
+    FUEL_TYPE_MENU_ITEMS.addAll(asList(PETROL.getDescription(), DIESEL.getDescription(), GAS.getDescription()));
   }
 
   public static ReplyKeyboardMarkup getMainMenuKeyboard() {

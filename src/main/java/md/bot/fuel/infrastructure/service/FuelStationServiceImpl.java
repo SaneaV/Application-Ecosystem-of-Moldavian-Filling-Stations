@@ -3,14 +3,19 @@ package md.bot.fuel.infrastructure.service;
 import static java.util.Comparator.comparing;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
+import static md.bot.fuel.domain.FuelType.DIESEL;
+import static md.bot.fuel.domain.FuelType.GAS;
+import static md.bot.fuel.domain.FuelType.PETROL;
 import static md.bot.fuel.infrastructure.utils.DistanceCalculator.calculateMeters;
 import static md.bot.fuel.infrastructure.utils.DistanceCalculator.isWithinRadius;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import md.bot.fuel.domain.FuelStation;
+import md.bot.fuel.domain.FuelType;
 import md.bot.fuel.infrastructure.api.AnreApi;
 import md.bot.fuel.infrastructure.exception.instance.EntityNotFoundException;
 import md.bot.fuel.infrastructure.exception.instance.InvalidRequestException;
@@ -30,11 +35,15 @@ public class FuelStationServiceImpl implements FuelStationService {
       "Fuel station near you do not have %s in stock. Try to extend search radius.";
   private static final String ERROR_INVALID_FUEL_TYPE = "Invalid fuel type.";
 
-  private static final String PETROL = "petrol";
-  private static final String DIESEL = "diesel";
-  private static final String GAS = "gas";
   private static final Double ZERO_PRICE = 0D;
   private static final double ZERO_PRICE_PRIMITIVE = 0D;
+  private static final HashMap<FuelType, Function<FuelStation, Double>> FUEL_TYPE_FUNCTION_HASH_MAP = new HashMap<>();
+
+  static {
+    FUEL_TYPE_FUNCTION_HASH_MAP.put(PETROL, FuelStation::getPetrol);
+    FUEL_TYPE_FUNCTION_HASH_MAP.put(DIESEL, FuelStation::getDiesel);
+    FUEL_TYPE_FUNCTION_HASH_MAP.put(GAS, FuelStation::getGas);
+  }
 
   private final AnreApi anreApi;
 
@@ -87,19 +96,17 @@ public class FuelStationServiceImpl implements FuelStationService {
   }
 
   private Function<FuelStation, Double> getFuelType(String fuelType) {
-    switch (fuelType.toLowerCase()) {
-      case PETROL: {
-        return FuelStation::getPetrol;
-      }
-      case DIESEL: {
-        return FuelStation::getDiesel;
-      }
-      case GAS: {
-        return FuelStation::getGas;
-      }
-      default: {
+    try {
+      final Function<FuelStation, Double> priceFunction = FUEL_TYPE_FUNCTION_HASH_MAP.get(
+          FuelType.valueOf(fuelType.toUpperCase()));
+
+      if (isNull(priceFunction)) {
         throw new EntityNotFoundException(ERROR_INVALID_FUEL_TYPE, ERROR_NOT_FOUND_REASON_CODE);
       }
+
+      return priceFunction;
+    } catch (IllegalArgumentException e) {
+      throw new EntityNotFoundException(ERROR_INVALID_FUEL_TYPE, ERROR_NOT_FOUND_REASON_CODE);
     }
   }
 

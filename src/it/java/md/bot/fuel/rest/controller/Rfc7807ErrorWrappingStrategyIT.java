@@ -34,7 +34,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @ExtendWith(SpringExtension.class)
 @Import({Rfc7807ErrorWrappingStrategy.class, ErrorWrappingStrategyFactory.class})
-@WebMvcTest(value = FuelStationController.class, properties = {"app.error.strategy=RFC7807"})
+@WebMvcTest(value = FuelStationControllerImpl.class, properties = {"app.error.strategy=RFC7807"})
 public class Rfc7807ErrorWrappingStrategyIT {
 
   private static final String PATH = "/fuel-station";
@@ -105,13 +105,10 @@ public class Rfc7807ErrorWrappingStrategyIT {
   @Test
   @DisplayName("Should throw bind exception in RFC7807 format")
   void shouldHandleBindExceptionInRFC7807Format() throws Exception {
-    final String response = "{\"status\":400,\"detail\":\"org.springframework.validation.BeanPropertyBindingResult: 1 " +
-        "errors\\nField error in object 'fuelStationRequest' on field 'radius': rejected value [RADIUS_VALUE]; codes " +
-        "[typeMismatch.fuelStationRequest.radius,typeMismatch.radius,typeMismatch.double,typeMismatch]; arguments [org" +
-        ".springframework.context.support.DefaultMessageSourceResolvable: codes [fuelStationRequest.radius,radius]; " +
-        "arguments []; default message [radius]]; default message [Failed to convert property value of type 'java.lang" +
-        ".String' to required type 'double' for property 'radius'; nested exception is java.lang.NumberFormatException:" +
-        " For input string: \\\"RADIUS_VALUE\\\"]\",\"title\":\"BIND_ERROR\"}\n";
+    final String response = "{\"status\":400,\"title\":\"BIND_ERROR\",\"errorDetails\":[{\"source\":\"MD_FUEL_PRICE_APP\","
+        + "\"reason\":\"BIND_ERROR\",\"message\":\"Failed to convert property value of type 'java.lang.String' to required type"
+        + " 'double' for property 'radius'; nested exception is java.lang.NumberFormatException: For input string: "
+        + "\\\"RADIUS_VALUE\\\"\",\"recoverable\":false}]}\n";
 
     mockMvc.perform(get(PATH)
             .param(LATITUDE_PARAM, LATITUDE_VALUE)
