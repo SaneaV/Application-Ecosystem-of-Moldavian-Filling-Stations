@@ -3,8 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-src/main/resources/application-h2.properties
-src/main/resources/application-postgresql.properties
+telegram-bot/src/main/resources/application-h2.properties
+telegram-bot/src/main/resources/application-postgresql.properties
 
 ### IntelliJ IDEA ###
 .idea

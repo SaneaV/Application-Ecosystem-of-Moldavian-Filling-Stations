@@ -14,25 +14,33 @@
 - [X] Add automatic generation of a ngrok https tunnel. Should be an optional function depending on property (true/false).
 - [X] Add checkstyle plugin.
 - [X] Replace REST description in README.md with swagger auto documentation.
+- [X] Separate Telegram and Rest modules (pseudo-microservice architecture).
 
 ## Important Features
 
-- [ ] Add Dockerfile and Docker-compose to build a project in container.
-- [ ] Add Spring Security for REST API (using mock LDAP).
-- [ ] Add custom JWT token library.
-- [ ] Create a Kafka-Statistics module to collect data about the cities from which the request is made (implement through
+- [ ] [CORE] Add Dockerfile and Docker-compose to build a project in container.
+- [ ] [API] Add Spring Security for REST API (using mock LDAP).
+- [ ] [EXTERNAL] Add custom JWT token library.
+- [ ] [CORE] Create a Kafka-Statistics module to collect data about the cities from which the request is made (implement through
   aspects and Thymeleaf).
-- [ ] Separate Telegram and Rest modules (pseudo-microservice architecture).
-- [ ] Add Flyway instead of `spring.jpa.hibernate.ddl-auto=update`.
-- [ ] Add SL4FJ logging in a project.
+- [ ] [TELEGRAM] Add Flyway instead of `spring.jpa.hibernate.ddl-auto=update`.
+- [ ] [CORE] Add SL4FJ logging in a project.
+- [ ] [API] Add auditable for controllers (save data in database).
+- [ ] [API] Implement stub for ANRE call, using property (for local testing).
+- [ ] [TELEGRAM] Implement exception rethrowing from third-party API.
 
 ## Secondary
 
-- [ ] Remove user from a database in case he blocked telegram bot.
-- [ ] Fetch ANRE API on fast startup in a separate thread.
-- [ ] Create WebFlux tests with WebTestClient.
-- [ ] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
-- [ ] Add an automatic request to ANRE API every 15 minutes. Must be optional depending on property (true/false)
-- [ ] Add @ConfigurationProperties for telegram.-properties.
-- [ ] Add Actuator.
-- [ ] Analyze mapstruct warning "Unmapped target properties."
+- [ ] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
+- [ ] [API] Fetch ANRE API on fast startup in a separate thread.
+- [ ] [API] Create WebFlux tests with WebTestClient.
+- [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
+- [ ] [API] Add an automatic request to ANRE API every 15 minutes. Must be optional depending on property (true/false)
+- [ ] [TELEGRAM] Add @ConfigurationProperties for telegram.-properties.
+- [ ] [CORE] Add Actuator.
+- [ ] [API] Analyze mapstruct warning "Unmapped target properties."
+- [ ] [TELEGRAM] Implement filling station cache.
+- [ ] [API] Read `filling-station.api-` from YAML file.
+- [ ] [CORE] Add findbugs maven plugin.
+- [ ] [TELEGRAM] Implement request per time unit limiter.
+- [ ] [CORE] Implement Jacoco report-aggregate goal.

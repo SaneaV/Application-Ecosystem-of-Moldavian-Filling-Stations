@@ -1,0 +1,690 @@
+openapi: 3.0.1
+info:
+  title: Moldova Filling Station API
+  description: Description of available APIs for interacting with filling stations in Moldova.
+  version: v1
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+tags:
+  - name: Filling Station Controller
+    description: A group of controllers to work with filling station data.
+paths:
+  /page/filling-station:
+    get:
+      tags:
+        - Filling Station Controller
+      summary: Get page of all filling stations within a certain radius.
+      description: Returns all filling stations within a certain radius in page format.
+      operationId: getPageOfAllFillingStations
+      parameters:
+        - name: limit_in_radius
+          in: query
+          description: Number of filling stations allowed to be displayed within a certain radius.
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+          example: 10
+        - name: latitude
+          in: query
+          description: Latitude of the starting point of the search.
+          required: true
+          schema:
+            maximum: 90
+            exclusiveMaximum: false
+            minimum: -90
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 46
+        - name: longitude
+          in: query
+          description: Longitude of the starting point of the search.
+          required: true
+          schema:
+            maximum: 90
+            exclusiveMaximum: false
+            minimum: -90
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 28
+        - name: radius
+          in: query
+          description: Search radius for petrol stations in metres.
+          required: true
+          schema:
+            minimum: 0
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 5000
+        - name: limit
+          in: query
+          description: Limit of one page of returned results.
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+          example: 20
+        - name: offset
+          in: query
+          description: The number of items skipped from the beginning of the list.
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+          example: 0
+      responses:
+        '200':
+          description: OK.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageDtoFillingStationDto'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+  /page/filling-station/{fuel-type}:
+    get:
+      tags:
+        - Filling Station Controller
+      summary: Get page of filling stations with the best specified fuel type within a certain radius.
+      description: Return filling stations with the best specified fuel type within a certain radius in page format.
+      operationId: getPageOfBestFuelPrice
+      parameters:
+        - name: limit_in_radius
+          in: query
+          description: Number of filling stations allowed to be displayed within a certain radius.
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+          example: 10
+        - name: latitude
+          in: query
+          description: Latitude of the starting point of the search.
+          required: true
+          schema:
+            maximum: 90
+            exclusiveMaximum: false
+            minimum: -90
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 46
+        - name: longitude
+          in: query
+          description: Longitude of the starting point of the search.
+          required: true
+          schema:
+            maximum: 90
+            exclusiveMaximum: false
+            minimum: -90
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 28
+        - name: radius
+          in: query
+          description: Search radius for petrol stations in metres.
+          required: true
+          schema:
+            minimum: 0
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 5000
+        - name: limit
+          in: query
+          description: Limit of one page of returned results.
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+          example: 20
+        - name: offset
+          in: query
+          description: The number of items skipped from the beginning of the list.
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+          example: 0
+        - name: fuel-type
+          in: path
+          description: Type of fuel for price search.
+          required: true
+          schema:
+            type: string
+            enum:
+              - Petrol
+              - Diesel
+              - Gas
+      responses:
+        '200':
+          description: OK.
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageDtoFillingStationDto'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+  /filling-station:
+    get:
+      tags:
+        - Filling Station Controller
+      summary: Get all filling stations in specific radius.
+      description: Returns all filling stations within a certain radius.
+      operationId: getAllFillingStations
+      parameters:
+        - name: limit_in_radius
+          in: query
+          description: Number of filling stations allowed to be displayed within a certain radius.
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+          example: 10
+        - name: latitude
+          in: query
+          description: Latitude of the starting point of the search.
+          required: true
+          schema:
+            maximum: 90
+            exclusiveMaximum: false
+            minimum: -90
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 46
+        - name: longitude
+          in: query
+          description: Longitude of the starting point of the search.
+          required: true
+          schema:
+            maximum: 90
+            exclusiveMaximum: false
+            minimum: -90
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 28
+        - name: radius
+          in: query
+          description: Search radius for petrol stations in metres.
+          required: true
+          schema:
+            minimum: 0
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 5000
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FillingStationDto'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+  /filling-station/{fuel-type}:
+    get:
+      tags:
+        - Filling Station Controller
+      summary: Get filling stations with the best specified fuel type within a certain radius.
+      description: Return filling stations with the best specified fuel type within a certain radius.
+      operationId: getBestFuelPrice
+      parameters:
+        - name: limit_in_radius
+          in: query
+          description: Number of filling stations allowed to be displayed within a certain radius.
+          required: true
+          schema:
+            minimum: 1
+            type: integer
+            format: int32
+          example: 10
+        - name: latitude
+          in: query
+          description: Latitude of the starting point of the search.
+          required: true
+          schema:
+            maximum: 90
+            exclusiveMaximum: false
+            minimum: -90
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 46
+        - name: longitude
+          in: query
+          description: Longitude of the starting point of the search.
+          required: true
+          schema:
+            maximum: 90
+            exclusiveMaximum: false
+            minimum: -90
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 28
+        - name: radius
+          in: query
+          description: Search radius for petrol stations in metres.
+          required: true
+          schema:
+            minimum: 0
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 5000
+        - name: fuel-type
+          in: path
+          description: Type of fuel for price search.
+          required: true
+          schema:
+            type: string
+            enum:
+              - Petrol
+              - Diesel
+              - Gas
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FillingStationDto'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+  /filling-station/nearest:
+    get:
+      tags:
+        - Filling Station Controller
+      summary: Get nearest filling station within a certain radius.
+      description: Returns nearest filling station within a certain radius.
+      operationId: getNearestFillingStation
+      parameters:
+        - name: latitude
+          in: query
+          description: Latitude of the starting point of the search.
+          required: true
+          schema:
+            maximum: 90
+            exclusiveMaximum: false
+            minimum: -90
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 46
+        - name: longitude
+          in: query
+          description: Longitude of the starting point of the search.
+          required: true
+          schema:
+            maximum: 90
+            exclusiveMaximum: false
+            minimum: -90
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 28
+        - name: radius
+          in: query
+          description: Search radius for petrol stations in metres.
+          required: true
+          schema:
+            minimum: 0
+            exclusiveMinimum: false
+            type: number
+            format: double
+          example: 5000
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FillingStationDto'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+  /filling-station/last-update:
+    get:
+      tags:
+        - Filling Station Controller
+      summary: Get last update timestamp.
+      description: Return last update timestamp.
+      operationId: getLastUpdateTimestamp
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: string
+                format: date-time
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+  /filling-station/fuel-type:
+    get:
+      tags:
+        - Filling Station Controller
+      summary: Get list of supporting fuel types.
+      description: Return list of supporting fuel types.
+      operationId: getAvailableFuelTypes
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '500':
+          description: Internal Server Error.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/GatewayErrorDescription'
+                  - $ref: '#/components/schemas/RfcErrorDescription'
+components:
+  schemas:
+    Errors:
+      required:
+        - Error
+      type: object
+      properties:
+        Error:
+          type: array
+          description: List of gateway errors.
+          items:
+            $ref: '#/components/schemas/GatewayError'
+      description: Errors list wrapper.
+    GatewayError:
+      required:
+        - description
+        - reasonCode
+        - recoverable
+        - source
+      type: object
+      properties:
+        source:
+          type: string
+          description: Error source.
+          example: MD_FUEL_APP
+        reasonCode:
+          type: string
+          description: Error reason code.
+          example: NOT_FOUND
+        description:
+          type: string
+          description: Error description.
+          example: Not Found.
+        recoverable:
+          type: boolean
+          description: Error recoverable status.
+          example: true
+      description: Gateway error.
+    GatewayErrorDescription:
+      required:
+        - Errors
+      type: object
+      properties:
+        Errors:
+          $ref: '#/components/schemas/Errors'
+      description: Gateway error list wrapper.
+    RfcError:
+      required:
+        - message
+        - reason
+        - recoverable
+        - source
+      type: object
+      properties:
+        source:
+          type: string
+          description: Error source.
+          example: MD_FUEL_APP
+        reason:
+          type: string
+          description: Error reason code.
+          example: NOT_FOUND
+        message:
+          type: string
+          description: Error description.
+          example: Not Found.
+        recoverable:
+          type: boolean
+          description: Error recoverable status.
+          example: true
+      description: Error in RFC format.
+    RfcErrorDescription:
+      required:
+        - detail
+        - status
+        - title
+      type: object
+      properties:
+        status:
+          type: integer
+          description: Error status.
+          format: int32
+          example: 404
+        detail:
+          type: string
+          description: Error description.
+          example: Not Found.
+        title:
+          type: string
+          description: Error reason code.
+          example: NOT_FOUND
+        type:
+          type: string
+          description: Error type.
+          example: Error type.
+        correlationId:
+          type: string
+          description: Correlation id.
+          example: Correlation id
+        errorDetails:
+          type: array
+          description: List of errors in RFC format.
+          items:
+            $ref: '#/components/schemas/RfcError'
+      description: RFC Errors wrapper.
+    FillingStationDto:
+      required:
+        - diesel
+        - gas
+        - latitude
+        - longitude
+        - name
+        - petrol
+      type: object
+      properties:
+        name:
+          type: string
+          description: Filling Station Name.
+          example: Filling-Station
+        petrol:
+          type: number
+          description: Petrol price.
+          format: double
+          example: 10
+        diesel:
+          type: number
+          description: Diesel price.
+          format: double
+          example: 15
+        gas:
+          type: number
+          description: Gas price.
+          format: double
+          example: 20
+        latitude:
+          type: number
+          description: Filling station latitude.
+          format: double
+          example: 46
+        longitude:
+          type: number
+          description: Filling station longitude.
+          format: double
+          example: 28
+      description: Filling Station Data.
+    PageDtoFillingStationDto:
+      required:
+        - items
+        - totalResults
+      type: object
+      properties:
+        totalResults:
+          type: integer
+          description: Total number of filling stations in radius.
+          format: int32
+          example: 10
+        items:
+          type: array
+          description: List of filling stations.
+          items:
+            $ref: '#/components/schemas/FillingStationDto'
+      description: Page with list of items and total results.
