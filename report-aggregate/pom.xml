@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>md.fuel.ecosystem</groupId>
+    <artifactId>ecosystem</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <groupId>md.fuel.jacoco</groupId>
+  <artifactId>report-aggregate</artifactId>
+  <packaging>jar</packaging>
+
+  <name>report-aggregate</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>md.fuel.bot</groupId>
+      <artifactId>telegram-bot</artifactId>
+      <version>1.0.0</version>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>md.fuel.api</groupId>
+      <artifactId>rest-api</artifactId>
+      <version>1.0.0</version>
+      <type>war</type>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>report-aggregate</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>report-aggregate</goal>
+            </goals>
+            <configuration>
+              <dataFileIncludes>**/target/jacoco-output/merged.exec</dataFileIncludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>merge-results</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>merge</goal>
+            </goals>
+            <configuration>
+              <fileSets>
+                <fileSet>
+                  <directory>${basedir}/../</directory>
+                  <includes>
+                    <include>**/target/jacoco-output/merged.exec</include>
+                  </includes>
+                </fileSet>
+              </fileSets>
+              <destFile>${basedir}/target/jacoco-output/merged.exec</destFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

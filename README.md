@@ -9,6 +9,7 @@ in building application architecture, customizing third-party tools and librarie
 - [Structure](#structure)
 - [Tools](#tools)
 - [TODO](#todo)
+- [Useful Resources](#useful-resources)
 
 # API
 
@@ -16,8 +17,9 @@ To identify the best fuel price, and filling station location was used: [ANRE-AP
 
 # Structure
 
-- [Contract-Generator](/contract-generator) - is library used in the bundle between Rest-API and Telegram-Bot, Java classes are
+- [Contract-Generator](/contract-generator) - is a library used in the bundle between Rest-API and Telegram-Bot; Java classes are
   generated using Swagger OpenAPI generator.
+- [Report-Aggregate](/report-aggregate) - is a module that allows to aggregate Jacoco test coverage report data.
 - [REST-API](/rest-api) - is a web service offering a set of REST APIs for working with filling stations in Moldova.
 - [Telegram-Bot](/telegram-bot) - is a bot that uses Telegram messenger for comfortable search of information about locations and
   prices of Moldovan filling stations.
@@ -58,3 +60,7 @@ To identify the best fuel price, and filling station location was used: [ANRE-AP
 # TODO
 
 Read the [TODO](TODO.md) to see the current task list.
+
+# Useful Resources
+
+I used these resources in the process of creating this Pet Project: [Useful](Useful.md)

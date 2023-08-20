@@ -21,6 +21,7 @@
     <module>rest-api</module>
     <module>telegram-bot</module>
     <module>contract-generator</module>
+    <module>report-aggregate</module>
   </modules>
 
   <properties>

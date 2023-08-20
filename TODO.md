@@ -15,6 +15,7 @@
 - [X] Add checkstyle plugin.
 - [X] Replace REST description in README.md with swagger auto documentation.
 - [X] Separate Telegram and Rest modules (pseudo-microservice architecture).
+- [X] [CORE] Implement Jacoco report-aggregate goal.
 
 ## Important Features
 
@@ -43,4 +44,3 @@
 - [ ] [API] Read `filling-station.api-` from YAML file.
 - [ ] [CORE] Add findbugs maven plugin.
 - [ ] [TELEGRAM] Implement request per time unit limiter.
-- [ ] [CORE] Implement Jacoco report-aggregate goal.

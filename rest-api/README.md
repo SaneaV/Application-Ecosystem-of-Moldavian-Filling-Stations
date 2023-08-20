@@ -10,7 +10,6 @@ This web service provides the possibility to get different data about filling st
     - [Reports](#reports)
     - [Dependency Check](#dependency-check)
     - [Checkstyle](#checkstyle)
-- [Useful Resources](#useful-resources)
 
 # REST API Contracts
 
@@ -91,10 +90,3 @@ In order to check project checkstyle, you can use the following commands:
 2. `mvn checkstyle:checkstyle` - Short command to generate checkstyle.html file.
 
 The end result can be found at: `target/checkstyle/ui/checkstyle.html`
-
-# Useful Resources
-
-1. [Epsg.io](https://epsg.io/transform)
-2. [Gis.stackexchange.com](https://gis.stackexchange.com/)
-3. [Earth.google.com](https://earth.google.com/)
-4. [Geleot.ru](https://geleot.ru/technology/navigation/coordinate_distance)
