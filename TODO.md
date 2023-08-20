@@ -16,6 +16,7 @@
 - [X] Replace REST description in README.md with swagger auto documentation.
 - [X] Separate Telegram and Rest modules (pseudo-microservice architecture).
 - [X] [CORE] Implement Jacoco report-aggregate goal.
+- [X] [TELEGRAM] Add @ConfigurationProperties for telegram.-properties.
 
 ## Important Features
 
@@ -37,7 +38,6 @@
 - [ ] [API] Create WebFlux tests with WebTestClient.
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [API] Add an automatic request to ANRE API every 15 minutes. Must be optional depending on property (true/false)
-- [ ] [TELEGRAM] Add @ConfigurationProperties for telegram.-properties.
 - [ ] [CORE] Add Actuator.
 - [ ] [API] Analyze mapstruct warning "Unmapped target properties."
 - [ ] [TELEGRAM] Implement filling station cache.

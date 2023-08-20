@@ -46,7 +46,7 @@ public class FillingStationTelegramBot extends SpringWebhookBot {
 
   @Override
   public String getBotPath() {
-    return telegramBotConfiguration.getWebhookHost();
+    return telegramBotConfiguration.getWebhook();
   }
 
   @Override

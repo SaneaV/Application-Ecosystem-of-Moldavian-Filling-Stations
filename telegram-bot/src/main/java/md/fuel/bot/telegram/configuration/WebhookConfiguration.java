@@ -18,7 +18,7 @@ public class WebhookConfiguration {
   @Bean
   @ConditionalOnProperty(value = "ngrok.enabled", havingValue = "false")
   public SetWebhook setWebhookWithProperty() {
-    return buildSetWebhook(telegramBotConfiguration.getWebhookHost());
+    return buildSetWebhook(telegramBotConfiguration.getWebhook());
   }
 
   @Bean
@@ -27,8 +27,8 @@ public class WebhookConfiguration {
     return buildSetWebhook(tunnel.getPublicUrl());
   }
 
-  private SetWebhook buildSetWebhook(String webhookHost) {
-    final String webhookUrl = String.format(SET_WEBHOOK_URL, webhookHost, telegramBotConfiguration.getBotToken());
+  private SetWebhook buildSetWebhook(String webhook) {
+    final String webhookUrl = String.format(SET_WEBHOOK_URL, webhook, telegramBotConfiguration.getBotToken());
     return SetWebhook.builder()
         .url(webhookUrl)
         .build();

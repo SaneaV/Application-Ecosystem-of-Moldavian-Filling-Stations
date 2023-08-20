@@ -98,7 +98,7 @@ public class FillingStationTelegramBotTest {
   @Nested
   class FillingStationTelegramBotTestWithoutInjection {
 
-    private static final String WEBHOOK_HOST = "Webhook host";
+    private static final String WEBHOOK = "Webhook host";
     private static final String BOT_NAME = "Bot name";
     private static final String BOT_TOKEN = "Bot token";
 
@@ -108,7 +108,10 @@ public class FillingStationTelegramBotTest {
     FillingStationTelegramBotTestWithoutInjection() {
       final DispatcherCommand dispatcherCommand = mock(DispatcherCommand.class);
       final SetWebhook setWebhook = mock(SetWebhook.class);
-      this.telegramBotConfiguration = new TelegramBotConfiguration(WEBHOOK_HOST, BOT_NAME, BOT_TOKEN);
+      this.telegramBotConfiguration = new TelegramBotConfiguration();
+      telegramBotConfiguration.setBotName(BOT_NAME);
+      telegramBotConfiguration.setBotToken(BOT_TOKEN);
+      telegramBotConfiguration.setWebhook(WEBHOOK);
       this.fillingStationTelegramBot = new FillingStationTelegramBot(setWebhook, dispatcherCommand, telegramBotConfiguration);
     }
 
@@ -121,7 +124,7 @@ public class FillingStationTelegramBotTest {
     @Test
     @DisplayName("Should return null bot path")
     void shouldReturnBotPath() {
-      assertThat(fillingStationTelegramBot.getBotPath()).isEqualTo(telegramBotConfiguration.getWebhookHost());
+      assertThat(fillingStationTelegramBot.getBotPath()).isEqualTo(telegramBotConfiguration.getWebhook());
     }
   }
 }
