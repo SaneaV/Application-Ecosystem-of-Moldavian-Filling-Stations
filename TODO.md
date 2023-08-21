@@ -31,6 +31,7 @@
 - [ ] [API] Add auditable for controllers (save data in database).
 - [ ] [API] Implement stub for ANRE call, using property (for local testing).
 - [ ] [TELEGRAM] Implement exception rethrowing from third-party API.
+- [ ] [TELEGRAM] Generalize fuel prices to avoid `if` and `switch` checks (at converter level).
 
 ## Secondary
 
@@ -43,3 +44,5 @@
 - [ ] [API] Read `filling-station.api-` from YAML file.
 - [ ] [CORE] Add findbugs maven plugin.
 - [ ] [TELEGRAM] Implement request per time unit limiter.
+- [ ] [API] Add sort by proximity to getAllFillingStations.
+- [ ] [API] Add an endpoint to request the official fuel price from ANRE.
