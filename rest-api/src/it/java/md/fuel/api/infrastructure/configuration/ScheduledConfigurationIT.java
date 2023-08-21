@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-public class ApplicationStartupModeIT {
+public class ScheduledConfigurationIT {
 
   @Nested
-  @SpringBootTest(properties = {"app.startup.fast=true"}, classes = ApplicationStartupMode.class)
+  @SpringBootTest(properties = {"app.scheduled-fetching=true"}, classes = ScheduledConfiguration.class)
   class FastStartup {
 
     @MockBean
@@ -30,7 +30,7 @@ public class ApplicationStartupModeIT {
   }
 
   @Nested
-  @SpringBootTest(properties = {"app.startup.fast=false"}, classes = ApplicationStartupMode.class)
+  @SpringBootTest(properties = {"app.scheduled-fetching=false"}, classes = ScheduledConfiguration.class)
   class NonFastStartup {
 
     @MockBean

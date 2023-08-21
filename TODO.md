@@ -17,6 +17,7 @@
 - [X] Separate Telegram and Rest modules (pseudo-microservice architecture).
 - [X] [CORE] Implement Jacoco report-aggregate goal.
 - [X] [TELEGRAM] Add @ConfigurationProperties for telegram.-properties.
+- [X] [API] Add an automatic request to ANRE API every `<value>` minutes. Must be optional depending on property (true/false)
 
 ## Important Features
 
@@ -34,10 +35,8 @@
 ## Secondary
 
 - [ ] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
-- [ ] [API] Fetch ANRE API on fast startup in a separate thread.
 - [ ] [API] Create WebFlux tests with WebTestClient.
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
-- [ ] [API] Add an automatic request to ANRE API every 15 minutes. Must be optional depending on property (true/false)
 - [ ] [CORE] Add Actuator.
 - [ ] [API] Analyze mapstruct warning "Unmapped target properties."
 - [ ] [TELEGRAM] Implement filling station cache.
