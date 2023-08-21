@@ -92,7 +92,7 @@ If everything is correct, you will see the message:
 |        BOT_TOKEN         |            No            | Telegram bot token  |     \<Empty\>     | Telegram bot token (you can take it from [Bot Father](https://t.me/BotFather))                                  |
 |      NGROK_ENABLED       |           Yes            |    `true/false`     |       true        | Enable/Disable automatic tunnel creation.                                                                       |
 |       NGROK_TOKEN        | Depends on NGROK_ENABLED |  Ngrok auth token   |     \<Empty\>     | If NGROK_ENABLED=true, you must specify a personal ngrok [token](https://dashboard.ngrok.com/get-started/setup) |
-|      WEB_HOOK_HOST       | Depends on NGROK_ENABLED | HTTPS WebHook path  |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                                                       |
+|         WEBHOOK          | Depends on NGROK_ENABLED | HTTPS WebHook path  |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                                                       |
 |       DATABASE_URL       |            No            |    Database URL     |     \<Empty\>     | PostgreSQL connection URL                                                                                       |
 |    DATABASE_USERNAME     |            No            |  Database username  |     \<Empty\>     | PostgreSQL username                                                                                             |
 |    DATABASE_PASSWORD     |            No            |  Database password  |     \<Empty\>     | PostgreSQL user password                                                                                        |

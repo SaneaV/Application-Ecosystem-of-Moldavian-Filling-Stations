@@ -28,11 +28,12 @@ Yaml to HTML converter: [Swagger Editor](https://editor.swagger.io/)
 
 # Environment Variables
 
-| **Environment Variable** | **Optional** | **Possible Values** | **Default Value** | **Description**                                                                                                              |
-|:------------------------:|:------------:|:-------------------:|:-----------------:|------------------------------------------------------------------------------------------------------------------------------|
-|  APP_SCHEDULED_FETCHING  |     Yes      |    `true/false`     |      `true`       | On true value ANRE API will be called at the start of spring application and every `CACHE_EXPIRY_TIME` will be re-requested. |
-|    CACHE_EXPIRY_TIME     |     Yes      |   Integer minutes   |        15         | ANRE API cache storage time.                                                                                                 |
-|    APP_ERROR_STRATEGY    |     Yes      |    `RFC7807/XML`    |       `XML`       | Allows to change the way errors are represented between XmlGateway and RFC7807.                                              |
+|    **Environment Variable**    | **Optional** | **Possible Values** | **Default Value** | **Description**                                                                                                                      |
+|:------------------------------:|:------------:|:-------------------:|:-----------------:|--------------------------------------------------------------------------------------------------------------------------------------|
+| APP_SCHEDULED_FETCHING_ENABLED |     Yes      |    `true/false`     |      `true`       | On true value ANRE API will be called at the start of spring application and every `CACHE_EXPIRY_TIME` minutes will be re-requested. |
+|     APP_ANRE_STUB_ENABLED      |     Yes      |    `true/false`     |      `false`      | Allows to use a prepared json file with data about filling stations (does not make a request to ANRE)                                |
+|       CACHE_EXPIRY_TIME        |     Yes      |   Integer minutes   |        15         | ANRE API cache storage time.                                                                                                         |
+|       APP_ERROR_STRATEGY       |     Yes      |    `RFC7807/XML`    |       `XML`       | Allows to change the way errors are represented between XmlGateway and RFC7807.                                                      |
 
 Run project via maven:
 

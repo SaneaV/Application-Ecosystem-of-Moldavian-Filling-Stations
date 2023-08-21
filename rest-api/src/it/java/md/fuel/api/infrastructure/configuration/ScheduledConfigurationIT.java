@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 public class ScheduledConfigurationIT {
 
   @Nested
-  @SpringBootTest(properties = {"app.scheduled-fetching=true"}, classes = ScheduledConfiguration.class)
+  @SpringBootTest(properties = {"app.scheduled-fetching.enabled=true"}, classes = ScheduledConfiguration.class)
   class FastStartup {
 
     @MockBean
@@ -30,7 +30,7 @@ public class ScheduledConfigurationIT {
   }
 
   @Nested
-  @SpringBootTest(properties = {"app.scheduled-fetching=false"}, classes = ScheduledConfiguration.class)
+  @SpringBootTest(properties = {"app.scheduled-fetching.enabled=false"}, classes = ScheduledConfiguration.class)
   class NonFastStartup {
 
     @MockBean

@@ -18,6 +18,7 @@
 - [X] [CORE] Implement Jacoco report-aggregate goal.
 - [X] [TELEGRAM] Add @ConfigurationProperties for telegram.-properties.
 - [X] [API] Add an automatic request to ANRE API every `<value>` minutes. Must be optional depending on property (true/false)
+- [X] [API] Implement stub for ANRE call, using property.
 
 ## Important Features
 
@@ -29,7 +30,6 @@
 - [ ] [TELEGRAM] Add Flyway instead of `spring.jpa.hibernate.ddl-auto=update`.
 - [ ] [CORE] Add SL4FJ logging in a project.
 - [ ] [API] Add auditable for controllers (save data in database).
-- [ ] [API] Implement stub for ANRE call, using property (for local testing).
 - [ ] [TELEGRAM] Implement exception rethrowing from third-party API.
 - [ ] [TELEGRAM] Generalize fuel prices to avoid `if` and `switch` checks (at converter level).
 

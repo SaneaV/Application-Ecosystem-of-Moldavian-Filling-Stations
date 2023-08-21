@@ -24,7 +24,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
 @Import({AnreApiImpl.class, AnreApiMapperImpl.class, WebClientTestConfiguration.class})
-@TestPropertySource(properties = "anre.api.path=/")
+@TestPropertySource("classpath:application-test.properties")
 public class AnreApiIT {
 
   private static final String PATH = "/";

@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 @Configuration
 @EnableScheduling
 @RequiredArgsConstructor
-@ConditionalOnProperty(value = "app.scheduled-fetching", havingValue = "true")
+@ConditionalOnProperty(value = "app.scheduled-fetching.enabled", havingValue = "true")
 public class ScheduledConfiguration {
 
   private final AnreApi anreApi;
