@@ -1,4 +1,4 @@
-# Moldova Filling Station Rest API
+# Moldova Filling Station REST API
 
 This web service provides the possibility to get different data about filling stations in Moldova in REST-API format.
 
@@ -10,6 +10,7 @@ This web service provides the possibility to get different data about filling st
     - [Reports](#reports)
     - [Dependency Check](#dependency-check)
     - [Checkstyle](#checkstyle)
+    - [SpotBugs](#spotbugs)
 
 # REST API Contracts
 
@@ -92,3 +93,16 @@ In order to check project checkstyle, you can use the following commands:
 2. `mvn checkstyle:checkstyle` - Short command to generate checkstyle.html file.
 
 The end result can be found at: `target/checkstyle/ui/checkstyle.html`
+
+## SpotBugs
+
+If you want to check the project for the following factors:
+
+- Difficult language features
+- Misunderstood API methods
+- Misunderstood invariants when code is modified during maintenance
+- Garden variety mistakes: typos, use of the wrong boolean operator
+
+You can run the SpotBugs plugin to check: `mvn spotbugs:gui`
+
+After that, a convenient GUI screen will appear with a presentation of all bugs, bad practices, etc. in project.

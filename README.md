@@ -52,10 +52,11 @@ To identify the best fuel price, and filling station location was used: [ANRE-AP
 24. [Maven Jacoco Plugin](https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin)
 25. [Maven Dependency Check Plugin](https://mvnrepository.com/artifact/org.owasp/dependency-check-maven)
 26. [Maven Checkstyle Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-checkstyle-plugin)
-27. [Maven OpenAPI Generator](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-maven-plugin)
-28. [Java Ngrok](https://mvnrepository.com/artifact/com.github.alexdlaird/java-ngrok)
-29. [Swagger Core](https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-core)
-30. [Swagger UI](https://mvnrepository.com/artifact/org.webjars/swagger-ui)
+27. [Maven OpenAPI Generator Plugin](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-maven-plugin)
+28. [Maven SpotBugs Plugin](https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-maven-plugin)
+29. [Java Ngrok](https://mvnrepository.com/artifact/com.github.alexdlaird/java-ngrok)
+30. [Swagger Core](https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-core)
+31. [Swagger UI](https://mvnrepository.com/artifact/org.webjars/swagger-ui)
 
 # TODO
 

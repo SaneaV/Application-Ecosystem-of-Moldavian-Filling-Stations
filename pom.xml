@@ -42,6 +42,7 @@
     <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
     <jackson.databind.nullable.version>0.2.6</jackson.databind.nullable.version>
     <java.ngrok.version>2.1.0</java.ngrok.version>
+    <spotbugs.version>4.7.3.5</spotbugs.version>
 
     <!--INTERNAL PROJECTS-->
     <contract.generator.version>1.0.0</contract.generator.version>
@@ -64,6 +65,7 @@
     <builder.helper.maven.plugin.version>3.4.0</builder.helper.maven.plugin.version>
     <jacoco.maven.plugin.version>0.8.10</jacoco.maven.plugin.version>
     <maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
+    <spotbugs.maven.plugin.version>4.7.3.5</spotbugs.maven.plugin.version>
   </properties>
 
   <repositories>
@@ -170,6 +172,11 @@
         <artifactId>contract-generator</artifactId>
         <version>${contract.generator.version}</version>
       </dependency>
+      <dependency>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs</artifactId>
+        <version>${spotbugs.version}</version>
+      </dependency>
 
       <!--DATABASE-->
       <dependency>
@@ -255,6 +262,12 @@
           <groupId>org.openapitools</groupId>
           <artifactId>openapi-generator-maven-plugin</artifactId>
           <version>${openapi.generator.maven.plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>${spotbugs.maven.plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>
