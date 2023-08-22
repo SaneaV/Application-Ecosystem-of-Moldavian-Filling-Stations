@@ -1,6 +1,6 @@
 package md.fuel.api.infrastructure.configuration;
 
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static org.springframework.test.util.TestSocketUtils.findAvailableTcpPort;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -11,8 +11,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebClientTestConfiguration {
 
   @Bean
-  public WireMockServer webServer() {
-    final WireMockServer wireMockServer = new WireMockServer(options().dynamicPort());
+  public Integer getAvailableTcpPort() {
+    return findAvailableTcpPort();
+  }
+
+  @Bean
+  public WireMockServer webServer(Integer availableTcpPort) {
+    final WireMockServer wireMockServer = new WireMockServer(availableTcpPort);
     wireMockServer.start();
     return wireMockServer;
   }

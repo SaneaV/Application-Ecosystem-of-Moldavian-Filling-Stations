@@ -16,6 +16,7 @@ import md.fuel.api.domain.exception.RfcError;
 import md.fuel.api.infrastructure.exception.ErrorDescriptionResponse;
 import md.fuel.api.infrastructure.exception.ErrorWrappingStrategy;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
+import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
@@ -85,6 +86,14 @@ public class Rfc7807ErrorWrappingStrategy implements ErrorWrappingStrategy {
     final RfcErrorDescription error = buildRfcErrorDescription(BAD_REQUEST.value(), ERROR_REASON_CONSTRAINT_ERROR,
         exception.getMessage());
     return buildResponseEntity(BAD_REQUEST, error);
+  }
+
+  @Override
+  public ResponseEntity<ErrorDescriptionResponse> handleInfrastructureException(InfrastructureException exception,
+      WebRequest request) {
+    final RfcErrorDescription error = buildRfcErrorDescription(exception.getStatus().value(), exception.getReasonCode(),
+        exception.getMessage());
+    return buildResponseEntity(exception.getStatus(), error);
   }
 
   private RfcErrorDescription buildRfcErrorDescription(int status, String title, String detail) {

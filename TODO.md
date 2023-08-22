@@ -19,6 +19,7 @@
 - [X] [TELEGRAM] Add @ConfigurationProperties for telegram.-properties.
 - [X] [API] Add an automatic request to ANRE API every `<value>` minutes. Must be optional depending on property (true/false)
 - [X] [API] Implement stub for ANRE call, using property.
+- [X] [CORE] Implement the WebClient configuration in a YAML file.
 
 ## Important Features
 
@@ -41,7 +42,6 @@
 - [ ] [CORE] Add Actuator.
 - [ ] [API] Analyze mapstruct warning "Unmapped target properties."
 - [ ] [TELEGRAM] Implement filling station cache.
-- [ ] [API] Read `filling-station.api-` from YAML file.
 - [ ] [CORE] Add findbugs maven plugin.
 - [ ] [TELEGRAM] Implement request per time unit limiter.
 - [ ] [API] Add sort by proximity to getAllFillingStations.

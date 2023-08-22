@@ -9,6 +9,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.util.List;
 import md.fuel.api.domain.FillingStation;
+import md.fuel.api.infrastructure.configuration.ApiConfigurationTest;
 import md.fuel.api.infrastructure.configuration.WebClientTestConfiguration;
 import md.fuel.api.infrastructure.repository.AnreApi;
 import md.fuel.api.infrastructure.repository.AnreApiImpl;
@@ -23,7 +24,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@Import({AnreApiImpl.class, AnreApiMapperImpl.class, WebClientTestConfiguration.class})
+@Import({AnreApiImpl.class, AnreApiMapperImpl.class, WebClientTestConfiguration.class, ApiConfigurationTest.class})
 @TestPropertySource("classpath:application-test.properties")
 public class AnreApiIT {
 

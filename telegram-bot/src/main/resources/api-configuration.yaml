@@ -1,0 +1,13 @@
+api-configuration:
+  retry-count: 3
+  time-duration: 5000
+  retryable: 404, 429
+
+  base-path: ${filling-station.api-host:http://localhost:8080}
+
+  paths:
+    all-filling-stations-page: /page/filling-station
+    nearest: /filling-station/nearest
+    best-fuel-price-page: /page/filling-station/{fuel-type}
+    last-update: /filling-station/last-update
+    fuel-type: /filling-station/fuel-type

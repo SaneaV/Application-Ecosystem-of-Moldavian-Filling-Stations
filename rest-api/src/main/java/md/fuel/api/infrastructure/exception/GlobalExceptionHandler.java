@@ -3,6 +3,7 @@ package md.fuel.api.infrastructure.exception;
 import javax.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
+import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -42,5 +43,11 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception,
       WebRequest request) {
     return errorWrappingStrategy.handleConstraintViolationException(exception, request);
+  }
+
+  @ExceptionHandler(InfrastructureException.class)
+  public ResponseEntity<ErrorDescriptionResponse> handleInfrastructureException(InfrastructureException exception,
+      WebRequest request) {
+    return errorWrappingStrategy.handleInfrastructureException(exception, request);
   }
 }

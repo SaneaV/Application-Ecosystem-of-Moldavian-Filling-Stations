@@ -14,6 +14,7 @@ import md.fuel.api.domain.exception.GatewayError;
 import md.fuel.api.infrastructure.exception.ErrorDescriptionResponse;
 import md.fuel.api.infrastructure.exception.ErrorWrappingStrategy;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
+import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
@@ -77,6 +78,16 @@ public class XmlGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
     error.getErrors().addError(gatewayError);
 
     return buildResponseEntity(BAD_REQUEST, error);
+  }
+
+  @Override
+  public ResponseEntity<ErrorDescriptionResponse> handleInfrastructureException(InfrastructureException exception,
+      WebRequest request) {
+    final GatewayErrorDescription error = new GatewayErrorDescription();
+    final GatewayError gatewayError = buildGatewayError(exception.getReasonCode(), exception.getMessage());
+    error.getErrors().addError(gatewayError);
+
+    return buildResponseEntity(exception.getStatus(), error);
   }
 
   private GatewayError buildGatewayError(String reasonCode, String description) {

@@ -1,0 +1,10 @@
+api-configuration:
+  retry-count: 3
+  time-duration: 5000
+  retryable: 404, 429
+
+  base-path: ${anre.api.path:https://api.iharta.md/anre/public}
+
+  paths:
+    all-filling-stations: /
+    today-fuel-price: /plafon

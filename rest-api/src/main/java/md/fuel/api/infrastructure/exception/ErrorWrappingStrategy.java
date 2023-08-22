@@ -2,6 +2,7 @@ package md.fuel.api.infrastructure.exception;
 
 import javax.validation.ConstraintViolationException;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
+import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -19,4 +20,6 @@ public interface ErrorWrappingStrategy {
 
   ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception,
       WebRequest request);
+
+  ResponseEntity<ErrorDescriptionResponse> handleInfrastructureException(InfrastructureException exception, WebRequest request);
 }
