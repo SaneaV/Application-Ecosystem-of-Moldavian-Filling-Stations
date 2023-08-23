@@ -20,5 +20,13 @@ public class ApiConfiguration {
   private Duration timeDuration;
   private List<Integer> retryable;
   private String basePath;
-  private Map<String, String> paths;
+  private Map<String, Details> paths;
+
+  @Getter
+  @Setter
+  static class Details {
+
+    private String path;
+    private List<String> parameters;
+  }
 }

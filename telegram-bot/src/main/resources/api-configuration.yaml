@@ -6,8 +6,18 @@ api-configuration:
   base-path: ${filling-station.api-host:http://localhost:8080}
 
   paths:
-    all-filling-stations-page: /page/filling-station
-    nearest: /filling-station/nearest
-    best-fuel-price-page: /page/filling-station/{fuel-type}
-    last-update: /filling-station/last-update
-    fuel-type: /filling-station/fuel-type
+    all-filling-stations-page:
+      path: /page/filling-station
+      parameters: latitude, longitude, radius, limit_in_radius, limit, offset
+    nearest:
+      path: /filling-station/nearest
+      parameters: latitude, longitude, radius
+    best-fuel-price-page:
+      path: /page/filling-station/{fuel-type}
+      parameters: latitude, longitude, radius, limit_in_radius, limit, offset
+    last-update:
+      path: /filling-station/last-update
+      parameters: ~
+    fuel-type:
+      path: /filling-station/fuel-type
+      parameters: ~
