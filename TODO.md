@@ -22,6 +22,7 @@
 - [X] [CORE] Implement the WebClient configuration in a YAML file.
 - [X] [CORE] Add SpotBugs maven plugin.
 - [X] [TELEGRAM] Generalize fuel prices to avoid `if` and `switch` checks (at converter level).
+- [X] [API] Add sort by proximity to getAllFillingStations.
 
 ## Important Features
 
@@ -44,5 +45,5 @@
 - [ ] [API] Analyze mapstruct warning "Unmapped target properties."
 - [ ] [TELEGRAM] Implement filling station cache.
 - [ ] [TELEGRAM] Implement request per time unit limiter.
-- [ ] [API] Add sort by proximity to getAllFillingStations.
 - [ ] [API] Add an endpoint to request the official fuel price from ANRE.
+- [ ] [API] Add sort parameters in request.

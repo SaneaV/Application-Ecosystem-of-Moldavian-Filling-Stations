@@ -9,6 +9,7 @@ import static md.fuel.api.domain.FuelType.PETROL;
 import static md.fuel.api.infrastructure.utils.DistanceCalculator.calculateMeters;
 import static md.fuel.api.infrastructure.utils.DistanceCalculator.isWithinRadius;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -52,6 +53,7 @@ public class FillingStationServiceImpl implements FillingStationService {
     final List<FillingStation> fillingStations = anreApi.getFillingStationsInfo().stream()
         .filter(s -> isWithinRadius(latitude, longitude, s.getLatitude(), s.getLongitude(), radius)
             && (checkCorrectPrice(s.getPetrol()) || checkCorrectPrice(s.getDiesel()) || checkCorrectPrice(s.getGas())))
+        .sorted(getDistanceComparator(latitude, longitude))
         .collect(toList());
 
     checkLimit(fillingStations.size(), limit);
@@ -88,6 +90,7 @@ public class FillingStationServiceImpl implements FillingStationService {
 
     final List<FillingStation> fillingStations = filteredFillingStationsList.stream()
         .filter(station -> fillingStationFunction.apply(station).equals(minimalFuelPrice))
+        .sorted(getDistanceComparator(latitude, longitude))
         .collect(toList());
 
     checkLimit(fillingStations.size(), limit);
@@ -118,5 +121,9 @@ public class FillingStationServiceImpl implements FillingStationService {
 
   private boolean checkCorrectPrice(Double price) {
     return !isNull(price) && price > ZERO_PRICE_PRIMITIVE;
+  }
+
+  private Comparator<FillingStation> getDistanceComparator(double latitude, double longitude) {
+    return Comparator.comparingDouble(s -> calculateMeters(latitude, longitude, s.getLatitude(), s.getLongitude()));
   }
 }
