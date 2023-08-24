@@ -8,6 +8,9 @@ import org.mapstruct.Mapping;
 public interface UserDataMapper {
 
   @Mapping(target = "id", source = "userId")
+  @Mapping(target = "radius", ignore = true)
+  @Mapping(target = "latitude", ignore = true)
+  @Mapping(target = "longitude", ignore = true)
   UserData toEntity(Long userId);
 
   @Mapping(target = "radius", source = "radius")

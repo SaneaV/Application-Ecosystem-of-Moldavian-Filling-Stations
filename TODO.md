@@ -42,7 +42,6 @@
 - [ ] [API] Create WebFlux tests with WebTestClient.
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [CORE] Add Actuator.
-- [ ] [API] Analyze mapstruct warning "Unmapped target properties."
 - [ ] [TELEGRAM] Implement filling station cache.
 - [ ] [TELEGRAM] Implement request per time unit limiter.
 - [ ] [API] Add an endpoint to request the official fuel price from ANRE.

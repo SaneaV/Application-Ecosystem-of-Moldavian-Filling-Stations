@@ -60,12 +60,13 @@
     <openapi.generator.maven.plugin.version>6.6.0</openapi.generator.maven.plugin.version>
     <maven.failsafe.plugin.version>3.1.2</maven.failsafe.plugin.version>
     <build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
-    <dependency.check.maven.version>8.3.1</dependency.check.maven.version>
+    <dependency.check.maven.version>8.4.0</dependency.check.maven.version>
     <maven.checkstyle.plugin.version>3.3.0</maven.checkstyle.plugin.version>
     <builder.helper.maven.plugin.version>3.4.0</builder.helper.maven.plugin.version>
     <jacoco.maven.plugin.version>0.8.10</jacoco.maven.plugin.version>
     <maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
     <spotbugs.maven.plugin.version>4.7.3.5</spotbugs.maven.plugin.version>
+    <maven.site.plugin.version>4.0.0-M9</maven.site.plugin.version>
   </properties>
 
   <repositories>
@@ -268,6 +269,18 @@
           <groupId>com.github.spotbugs</groupId>
           <artifactId>spotbugs-maven-plugin</artifactId>
           <version>${spotbugs.maven.plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.owasp</groupId>
+          <artifactId>dependency-check-maven</artifactId>
+          <version>${dependency.check.maven.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${maven.site.plugin.version}</version>
         </plugin>
       </plugins>
     </pluginManagement>

@@ -17,5 +17,8 @@ public interface UserDataJpaMapper {
 
   UserDataJpa toJpa(UserData userData);
 
+  @Mapping(target = "radius", ignore = true)
+  @Mapping(target = "latitude", ignore = true)
+  @Mapping(target = "longitude", ignore = true)
   UserDataJpa toJpa(Long id);
 }
