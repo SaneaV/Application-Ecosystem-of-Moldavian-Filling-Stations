@@ -36,6 +36,7 @@ public class GetterSetterTest {
     DEFAULT_SUPPLIERS.put(long.class, () -> 0L);
 
     DEFAULT_SUPPLIERS.put(Double.class, () -> 0.0d);
+    DEFAULT_SUPPLIERS.put(Map.class, Collections::emptyMap);
     DEFAULT_SUPPLIERS.put(List.class, Collections::emptyList);
   }
 

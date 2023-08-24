@@ -21,6 +21,7 @@
 - [X] [API] Implement stub for ANRE call, using property.
 - [X] [CORE] Implement the WebClient configuration in a YAML file.
 - [X] [CORE] Add SpotBugs maven plugin.
+- [X] [TELEGRAM] Generalize fuel prices to avoid `if` and `switch` checks (at converter level).
 
 ## Important Features
 
@@ -33,7 +34,6 @@
 - [ ] [CORE] Add SL4FJ logging in a project.
 - [ ] [API] Add auditable for controllers (save data in database).
 - [ ] [TELEGRAM] Implement exception rethrowing from third-party API.
-- [ ] [TELEGRAM] Generalize fuel prices to avoid `if` and `switch` checks (at converter level).
 
 ## Secondary
 

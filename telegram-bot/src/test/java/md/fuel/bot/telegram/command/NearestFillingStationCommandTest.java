@@ -9,7 +9,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
@@ -30,7 +32,7 @@ public class NearestFillingStationCommandTest {
   private static final String FILLING_STATION_MESSAGE = "⛽ Filling station - \"%s\"\n\n"
       + "%s Petrol: %s lei\n"
       + "%s Diesel: %s lei\n"
-      + "%s Gas : %s lei\n\n"
+      + "%s Gas: %s lei\n\n"
       + "📊 Last price update: %s";
   private static final String GREEN_CIRCLE = "🟢";
   private static final String RED_CIRCLE = "🔴";
@@ -58,12 +60,16 @@ public class NearestFillingStationCommandTest {
     final double longitude = 50;
     final double defaultDoubleValue = 0;
     final long defaultLongValue = 0L;
+    final Map<String, Double> priceMap = new LinkedHashMap<>();
+    priceMap.put("Petrol", petrol);
+    priceMap.put("Diesel", diesel);
+    priceMap.put("Gas", gas);
 
     final User user = new User();
     final Update update = new Update();
     final Message message = new Message();
     final Chat chat = new Chat();
-    final FillingStation fillingStationDto = new FillingStation(fuelStationName, petrol, diesel, gas, latitude, longitude);
+    final FillingStation fillingStationDto = new FillingStation(fuelStationName, priceMap, latitude, longitude);
     FillingStation.timestamp = LocalDateTime.now().toString();
     final UserDataDto userDataDto = new UserDataDto(defaultLongValue, defaultDoubleValue, defaultDoubleValue, defaultDoubleValue);
     final String messageText = String.format(FILLING_STATION_MESSAGE, fuelStationName, GREEN_CIRCLE, petrol, RED_CIRCLE, 0.0,

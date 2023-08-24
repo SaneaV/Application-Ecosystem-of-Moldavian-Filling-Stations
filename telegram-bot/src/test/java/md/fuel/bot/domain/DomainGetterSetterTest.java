@@ -1,6 +1,7 @@
 package md.fuel.bot.domain;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptyMap;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
@@ -23,7 +24,7 @@ public class DomainGetterSetterTest extends GetterSetterTest {
         Arguments.of(new UserData()),
         Arguments.of(new FuelType(emptyList())),
         Arguments.of(new Page<>(0, emptyList())),
-        Arguments.of(new FillingStation(EMPTY, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE)));
+        Arguments.of(new FillingStation(EMPTY, emptyMap(), DEFAULT_DOUBLE, DEFAULT_DOUBLE)));
   }
 
   @BeforeAll

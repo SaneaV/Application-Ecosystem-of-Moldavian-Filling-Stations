@@ -3,7 +3,6 @@ package md.fuel.bot.telegram.command;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -14,11 +13,11 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.domain.FuelType;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
-import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.bot.telegram.dto.UserDataDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,7 +40,6 @@ public class BestFuelInRadiusCommandTest {
       + "%s %s: %s lei\n\n"
       + "📊 Last price update: %s";
   private static final String GREEN_CIRCLE = "🟢";
-  private static final String ERROR_NO_FUEL_TYPE_EXIST = "Can't find specified fuel type";
 
   private final BestFuelInRadiusCommand bestFuelInRadiusCommand;
   private final FillingStationFacade fillingStationFacade;
@@ -69,12 +67,13 @@ public class BestFuelInRadiusCommandTest {
     final double longitude = 50;
     final double defaultDoubleValue = 0;
     final long defaultLongValue = 0L;
+    final Map<String, Double> priceMap = Map.of("Petrol", price, "Diesel", price, "Gas", price);
 
     final User user = new User();
     final Update update = new Update();
     final Message message = new Message();
     final Chat chat = new Chat();
-    final FillingStation fillingStation = new FillingStation(fuelStationName, price, price, price, latitude, longitude);
+    final FillingStation fillingStation = new FillingStation(fuelStationName, priceMap, latitude, longitude);
     FillingStation.timestamp = LocalDateTime.now().toString();
     final UserDataDto userDataDto = new UserDataDto(defaultLongValue, defaultDoubleValue, defaultDoubleValue, defaultDoubleValue);
     final String messageText = String.format(SPECIFIC_FILLING_STATION_MESSAGE, fuelStationName, GREEN_CIRCLE, fuelType, price,
@@ -101,45 +100,6 @@ public class BestFuelInRadiusCommandTest {
     assertThat(sendLocation.getChatId()).isEqualTo(Long.toString(chatId));
     assertThat(sendLocation.getLatitude()).isEqualTo(fillingStation.getLatitude());
     assertThat(sendLocation.getLongitude()).isEqualTo(fillingStation.getLongitude());
-
-    verify(userDataFacade).getUserData(anyLong());
-    verify(fillingStationFacade).getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt(), anyString());
-  }
-
-  @Test
-  @DisplayName("Should throw EntityNotFoundException if fuelType not found")
-  void shouldThrowEntityNotFoundExceptionIfFuelTypeNotFound() {
-    final long chatId = 20L;
-    final long userId = 10L;
-    final String fuelStationName = "Filling Station Name";
-    final double price = 10;
-    final double latitude = 40;
-    final double longitude = 50;
-    final double defaultDoubleValue = 0;
-    final long defaultLongValue = 0L;
-
-    final User user = new User();
-    final Update update = new Update();
-    final Message message = new Message();
-    final Chat chat = new Chat();
-    final FillingStation fillingStation = new FillingStation(fuelStationName, price, price, price, latitude, longitude);
-    FillingStation.timestamp = LocalDateTime.now().toString();
-    final UserDataDto userDataDto = new UserDataDto(defaultLongValue, defaultDoubleValue, defaultDoubleValue, defaultDoubleValue);
-
-    user.setId(userId);
-    chat.setId(chatId);
-    message.setFrom(user);
-    message.setText("Invalid Fuel Type");
-    message.setChat(chat);
-    update.setMessage(message);
-
-    when(userDataFacade.getUserData(anyLong())).thenReturn(userDataDto);
-    when(fillingStationFacade.getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt(), anyString()))
-        .thenReturn(singletonList(fillingStation));
-
-    assertThatThrownBy(() -> bestFuelInRadiusCommand.execute(update))
-        .isInstanceOf(EntityNotFoundException.class)
-        .hasMessage(ERROR_NO_FUEL_TYPE_EXIST);
 
     verify(userDataFacade).getUserData(anyLong());
     verify(fillingStationFacade).getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt(), anyString());
