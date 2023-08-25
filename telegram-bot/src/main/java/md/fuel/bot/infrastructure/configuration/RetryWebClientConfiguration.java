@@ -25,7 +25,6 @@ public class RetryWebClientConfiguration {
       final WebClientResponseException responseException = (WebClientResponseException) throwable;
       return configuration.getRetryable().contains(responseException.getRawStatusCode());
     }
-
     return false;
   }
 }

@@ -1,4 +1,4 @@
-package md.fuel.api.infrastructure.api;
+package md.fuel.api.infrastructure.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -7,10 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import md.fuel.api.domain.FillingStation;
 import md.fuel.api.infrastructure.exception.model.InfrastructureException;
-import md.fuel.api.infrastructure.repository.AnreApi;
-import md.fuel.api.infrastructure.repository.AnreApiMapper;
-import md.fuel.api.infrastructure.repository.AnreApiMapperImpl;
-import md.fuel.api.infrastructure.repository.AnreApiStubImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

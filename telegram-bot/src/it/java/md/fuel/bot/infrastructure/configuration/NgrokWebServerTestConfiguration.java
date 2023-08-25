@@ -1,4 +1,4 @@
-package md.fuel.bot.configuration;
+package md.fuel.bot.infrastructure.configuration;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.mockito.Mockito.mock;

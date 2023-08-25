@@ -24,7 +24,7 @@ public class ApiConfiguration {
 
   @Getter
   @Setter
-  static class Details {
+  public static class Details {
 
     private String path;
     private List<String> parameters;

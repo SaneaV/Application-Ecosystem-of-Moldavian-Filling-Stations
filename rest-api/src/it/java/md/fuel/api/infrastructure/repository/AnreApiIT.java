@@ -1,4 +1,4 @@
-package md.fuel.api.infrastructure.api;
+package md.fuel.api.infrastructure.repository;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
@@ -14,10 +14,6 @@ import md.fuel.api.infrastructure.configuration.ApiConfigurationTest;
 import md.fuel.api.infrastructure.configuration.RetryWebClientConfiguration;
 import md.fuel.api.infrastructure.configuration.WebClientTestConfiguration;
 import md.fuel.api.infrastructure.exception.model.InfrastructureException;
-import md.fuel.api.infrastructure.repository.AnreApi;
-import md.fuel.api.infrastructure.repository.AnreApiImpl;
-import md.fuel.api.infrastructure.repository.AnreApiMapper;
-import md.fuel.api.infrastructure.repository.AnreApiMapperImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +21,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.codec.DecodingException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -143,7 +140,7 @@ public class AnreApiIT {
 
   @ParameterizedTest
   @ValueSource(ints = {404, 429})
-  @DisplayName("Should throw timeout exception on retry webclient configuration")
+  @DisplayName("Should throw timeout exception on retry webclient configuration (worthRetrying is true)")
   void shouldThrowTimeoutExceptionOnRetryWebClientConfiguration(int status) {
     wireMock.stubFor(get(urlEqualTo(PATH))
         .willReturn(aResponse().withStatus(status)));
@@ -151,6 +148,21 @@ public class AnreApiIT {
     assertThatThrownBy(() -> anreApi.getFillingStationsInfo())
         .isInstanceOf(InfrastructureException.class)
         .hasMessage("Request timed out.");
+  }
+
+  @Test
+  @DisplayName("Should throw exception on non webclient exception (worthRetrying is false)")
+  void shouldThrowExceptionOnNonWebclientException() {
+    wireMock.stubFor(get(urlEqualTo(PATH))
+        .willReturn(aResponse()
+            .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .withBody("WRONG_RESPONSE")));
+
+    assertThatThrownBy(() -> anreApi.getFillingStationsInfo())
+        .isInstanceOf(DecodingException.class)
+        .hasMessage(
+            "JSON decoding error: Unexpected character ('W' (code 87)): expected a valid value (JSON String, Number, Array, Object or token 'null', 'true' or 'false'); nested exception is com.fasterxml.jackson.core.JsonParseException: Unexpected character ('W' (code 87)): expected a valid value (JSON String, Number, Array, Object or token 'null', 'true' or 'false')\n"
+                + " at [Source: UNKNOWN; line: 1, column: 2]");
   }
 }
 

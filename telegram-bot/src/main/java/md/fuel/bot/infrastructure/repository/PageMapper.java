@@ -3,6 +3,8 @@ package md.fuel.bot.infrastructure.repository;
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
+import static md.fuel.bot.infrastructure.repository.MapperConstants.EXCEPTION_MAPPING_MESSAGE;
+import static md.fuel.bot.infrastructure.repository.MapperConstants.EXCEPTION_METHOD_MESSAGE;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,9 +14,6 @@ import md.fuel.bot.domain.Page;
 import md.fuel.bot.infrastructure.exception.model.ExecutionException;
 
 public interface PageMapper {
-
-  String EXCEPTION_MAPPING_MESSAGE = "Page mapping execution";
-  String EXCEPTION_METHOD_MESSAGE = "Method by signature not found.";
 
   default <T> Page<T> toEntity(Result<?> result, Class<T> tClass) {
     final List<?> sourceData = result.getItems();
