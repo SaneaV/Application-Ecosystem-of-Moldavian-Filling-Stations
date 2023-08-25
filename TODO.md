@@ -39,7 +39,6 @@
 ## Secondary
 
 - [ ] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
-- [ ] [API] Create WebFlux tests with WebTestClient.
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [CORE] Add Actuator.
 - [ ] [TELEGRAM] Implement filling station cache.

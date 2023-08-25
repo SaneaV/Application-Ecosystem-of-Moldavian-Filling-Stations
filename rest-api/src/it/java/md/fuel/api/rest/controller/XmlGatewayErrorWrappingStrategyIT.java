@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.stream.Stream;
 import md.fuel.api.facade.FillingStationFacade;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
+import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import md.fuel.api.rest.exception.XmlGatewayErrorWrappingStrategy;
 import md.fuel.api.rest.wrapper.FillingStationPageWrapper;
@@ -60,6 +61,36 @@ public class XmlGatewayErrorWrappingStrategyIT {
       "        ]\n" +
       "    }\n" +
       "}";
+  private static final String INVALID_LATITUDE_LONGITUDE_MESSAGE = "{\n"
+      + "    \"Errors\": {\n"
+      + "        \"Error\": [\n"
+      + "            {\n"
+      + "                \"source\": \"MD_FUEL_PRICE_APP\",\n"
+      + "                \"reasonCode\": \"BIND_ERROR\",\n"
+      + "                \"description\": \"Longitude value should be between -90 and 90.\",\n"
+      + "                \"recoverable\": false\n"
+      + "            },\n"
+      + "            {\n"
+      + "                \"source\": \"MD_FUEL_PRICE_APP\",\n"
+      + "                \"reasonCode\": \"BIND_ERROR\",\n"
+      + "                \"description\": \"Latitude value should be between -90 and 90.\",\n"
+      + "                \"recoverable\": false\n"
+      + "            }\n"
+      + "        ]\n"
+      + "    }\n"
+      + "}";
+  private static final String CONSTRAINT_EXCEPTION_MESSAGE = "{\n"
+      + "    \"Errors\": {\n"
+      + "        \"Error\": [\n"
+      + "            {\n"
+      + "                \"source\": \"MD_FUEL_PRICE_APP\",\n"
+      + "                \"reasonCode\": \"CONSTRAINT_ERROR\",\n"
+      + "                \"description\": \"getBestFuelPrice.fuelType: The fuel type must be one of the following: Petrol, Diesel, Gas\",\n"
+      + "                \"recoverable\": false\n"
+      + "            }\n"
+      + "        ]\n"
+      + "    }\n"
+      + "}";
 
   @Autowired
   private MockMvc mockMvc;
@@ -108,25 +139,34 @@ public class XmlGatewayErrorWrappingStrategyIT {
   @Test
   @DisplayName("Should throw bind exception in XML format")
   void shouldHandleBindExceptionInXMLFormat() throws Exception {
-    final String response = "{\"Errors\":{\"Error\":[{\"source\":\"MD_FUEL_PRICE_APP\",\"reasonCode\":\"BIND_ERROR\","
-        + "\"description\":\"Failed to convert property value of type 'java.lang.String' to required type 'double' for property"
-        + " 'radius'; nested exception is java.lang.NumberFormatException: For input string: \\\"RADIUS_VALUE\\\"\","
-        + "\"recoverable\":false}]}}\n";
-
     mockMvc.perform(get(PATH)
+            .param(LATITUDE_PARAM, "-99")
+            .param(LONGITUDE_PARAM, "99")
+            .param(LIMIT_IN_RADIUS_PARAM, LIMIT_IN_RADIUS_VALUE)
+            .param(RADIUS_PARAM, RADIUS_VALUE)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().is(BAD_REQUEST.value()))
+        .andExpect(content().json(INVALID_LATITUDE_LONGITUDE_MESSAGE));
+  }
+
+  @Test
+  @DisplayName("Should throw constraint violation exception  in XML format")
+  void shouldHandleConstraintViolationExceptionInXMLFormat() throws Exception {
+    mockMvc.perform(get("/filling-station/tip")
             .param(LATITUDE_PARAM, LATITUDE_VALUE)
             .param(LONGITUDE_PARAM, LONGITUDE_VALUE)
             .param(LIMIT_IN_RADIUS_PARAM, LIMIT_IN_RADIUS_VALUE)
-            .param(RADIUS_PARAM, "RADIUS_VALUE")
+            .param(RADIUS_PARAM, RADIUS_VALUE)
             .contentType(APPLICATION_JSON))
         .andExpect(status().is(BAD_REQUEST.value()))
-        .andExpect(content().json(response));
+        .andExpect(content().json(CONSTRAINT_EXCEPTION_MESSAGE));
   }
 
   private static Stream<Arguments> getExceptions() {
     return Stream.of(
         Arguments.of(new EntityNotFoundException(ERROR_MESSAGE, ERROR_REASON_CODE), NOT_FOUND.value()),
-        Arguments.of(new InvalidRequestException(ERROR_MESSAGE, ERROR_REASON_CODE), BAD_REQUEST.value())
+        Arguments.of(new InvalidRequestException(ERROR_MESSAGE, ERROR_REASON_CODE), BAD_REQUEST.value()),
+        Arguments.of(new InfrastructureException(ERROR_MESSAGE, ERROR_REASON_CODE), BAD_REQUEST.value())
     );
   }
 }

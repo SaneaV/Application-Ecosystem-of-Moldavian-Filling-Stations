@@ -7,9 +7,11 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import md.fuel.api.domain.FillingStation;
+import md.fuel.api.domain.FuelType;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import md.fuel.api.infrastructure.service.FillingStationService;
@@ -65,6 +67,13 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
       throw new EntityNotFoundException(ERROR_UPDATE_MESSAGE, ERROR_UPDATE_REASON_CODE);
     }
     return LocalDateTime.parse(FillingStation.timestamp, FORMATTER).atZone(ZoneId.of(MOLDOVA_ZONE_DATE_TIME));
+  }
+
+  @Override
+  public List<String> getAvailableFuelTypes() {
+    return Arrays.stream(FuelType.values())
+        .map(FuelType::getDescription)
+        .collect(toList());
   }
 
   private void checkLimit(int limit) {

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.14</version>
+    <version>2.7.15</version>
     <relativePath/>
   </parent>
 
@@ -30,7 +30,7 @@
     <skip.integration.tests>false</skip.integration.tests>
 
     <!--SPRING FAMILY-->
-    <spring.boot.parent.version>2.7.14</spring.boot.parent.version>
+    <spring.boot.parent.version>2.7.15</spring.boot.parent.version>
     <telegrambots.spring.boot.starter.version>6.8.0</telegrambots.spring.boot.starter.version>
     <springdoc.openapi.ui.version>1.7.0</springdoc.openapi.ui.version>
 

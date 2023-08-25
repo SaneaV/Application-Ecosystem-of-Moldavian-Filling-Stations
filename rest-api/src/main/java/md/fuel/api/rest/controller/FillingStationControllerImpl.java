@@ -1,12 +1,8 @@
 package md.fuel.api.rest.controller;
 
-import static java.util.stream.Collectors.toList;
-
 import java.time.ZonedDateTime;
-import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import md.fuel.api.domain.FuelType;
 import md.fuel.api.facade.FillingStationFacade;
 import md.fuel.api.rest.dto.FillingStationDto;
 import md.fuel.api.rest.request.BaseFillingStationRequest;
@@ -82,9 +78,6 @@ public class FillingStationControllerImpl implements FillingStationController {
 
   @Override
   public ResponseEntity<List<String>> getAvailableFuelTypes() {
-    final List<String> fuelTypes = Arrays.stream(FuelType.values())
-        .map(FuelType::getDescription)
-        .collect(toList());
-    return ResponseEntity.ok(fuelTypes);
+    return ResponseEntity.ok(fillingStationFacade.getAvailableFuelTypes());
   }
 }

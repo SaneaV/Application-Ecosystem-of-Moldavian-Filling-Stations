@@ -100,14 +100,7 @@ public class FillingStationServiceImpl implements FillingStationService {
 
   private Function<FillingStation, Double> getFuelType(String fuelType) {
     try {
-      final Function<FillingStation, Double> priceFunction = FUEL_TYPE_FUNCTION_HASH_MAP.get(
-          FuelType.valueOf(fuelType.toUpperCase()));
-
-      if (isNull(priceFunction)) {
-        throw new EntityNotFoundException(ERROR_INVALID_FUEL_TYPE, ERROR_NOT_FOUND_REASON_CODE);
-      }
-
-      return priceFunction;
+      return FUEL_TYPE_FUNCTION_HASH_MAP.get(FuelType.valueOf(fuelType.toUpperCase()));
     } catch (IllegalArgumentException e) {
       throw new EntityNotFoundException(ERROR_INVALID_FUEL_TYPE, ERROR_NOT_FOUND_REASON_CODE);
     }

@@ -22,10 +22,7 @@ public class RetryWebClientConfiguration {
   }
 
   private boolean worthRetrying(Throwable throwable) {
-    if (throwable instanceof WebClientResponseException) {
-      final WebClientResponseException responseException = (WebClientResponseException) throwable;
-      return configuration.getRetryable().contains(responseException.getRawStatusCode());
-    }
-    return false;
+    final WebClientResponseException responseException = (WebClientResponseException) throwable;
+    return configuration.getRetryable().contains(responseException.getRawStatusCode());
   }
 }

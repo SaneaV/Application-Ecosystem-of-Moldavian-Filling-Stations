@@ -9,6 +9,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import md.fuel.api.domain.FillingStation;
 import md.fuel.api.infrastructure.configuration.ApiConfiguration;
+import md.fuel.api.infrastructure.configuration.RetryWebClientConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,7 @@ public class AnreApiImpl implements AnreApi {
   private final WebClient webClient;
   private final AnreApiMapper mapper;
   private final ApiConfiguration apiConfiguration;
+  private final RetryWebClientConfiguration retryWebClientConfiguration;
 
   @Override
   @Cacheable(value = ANRE_CACHE, cacheManager = "jCacheCacheManager")
@@ -32,6 +34,7 @@ public class AnreApiImpl implements AnreApi {
         .uri(uri)
         .retrieve()
         .bodyToFlux(FillingStationApi.class)
+        .retryWhen(retryWebClientConfiguration.fixedRetry())
         .map(mapper::toEntity)
         .collectList()
         .block();

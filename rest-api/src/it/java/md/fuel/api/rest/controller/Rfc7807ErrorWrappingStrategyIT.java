@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.stream.Stream;
 import md.fuel.api.facade.FillingStationFacade;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
+import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import md.fuel.api.rest.exception.Rfc7807ErrorWrappingStrategy;
 import md.fuel.api.rest.wrapper.FillingStationPageWrapper;
@@ -53,6 +54,23 @@ public class Rfc7807ErrorWrappingStrategyIT {
       "    \"detail\": \"%s\",\n" +
       "    \"title\": \"%s\"\n" +
       "}";
+  private static final String NUMBER_FORMAT_EXCEPTION_MESSAGE = "{\n"
+      + "    \"status\": 400,\n"
+      + "    \"title\": \"BIND_ERROR\",\n"
+      + "    \"errorDetails\": [\n"
+      + "        {\n"
+      + "            \"source\": \"MD_FUEL_PRICE_APP\",\n"
+      + "            \"reason\": \"BIND_ERROR\",\n"
+      + "            \"message\": \"Failed to convert property value of type 'java.lang.String' to required type 'double' for property 'radius'; nested exception is java.lang.NumberFormatException: For input string: \\\"RADIUS_VALUE\\\"\",\n"
+      + "            \"recoverable\": false\n"
+      + "        }\n"
+      + "    ]\n"
+      + "}";
+  private static final String CONSTRAINT_EXCEPTION_MESSAGE = "{\n"
+      + "    \"status\": 400,\n"
+      + "    \"detail\": \"getBestFuelPrice.fuelType: The fuel type must be one of the following: Petrol, Diesel, Gas\",\n"
+      + "    \"title\": \"CONSTRAINT_ERROR\"\n"
+      + "}";
 
   @Autowired
   private MockMvc mockMvc;
@@ -103,11 +121,6 @@ public class Rfc7807ErrorWrappingStrategyIT {
   @Test
   @DisplayName("Should throw bind exception in RFC7807 format")
   void shouldHandleBindExceptionInRFC7807Format() throws Exception {
-    final String response = "{\"status\":400,\"title\":\"BIND_ERROR\",\"errorDetails\":[{\"source\":\"MD_FUEL_PRICE_APP\","
-        + "\"reason\":\"BIND_ERROR\",\"message\":\"Failed to convert property value of type 'java.lang.String' to required type"
-        + " 'double' for property 'radius'; nested exception is java.lang.NumberFormatException: For input string: "
-        + "\\\"RADIUS_VALUE\\\"\",\"recoverable\":false}]}\n";
-
     mockMvc.perform(get(PATH)
             .param(LATITUDE_PARAM, LATITUDE_VALUE)
             .param(LONGITUDE_PARAM, LONGITUDE_VALUE)
@@ -115,7 +128,20 @@ public class Rfc7807ErrorWrappingStrategyIT {
             .param(RADIUS_PARAM, "RADIUS_VALUE")
             .contentType(APPLICATION_JSON))
         .andExpect(status().is(BAD_REQUEST.value()))
-        .andExpect(content().json(response));
+        .andExpect(content().json(NUMBER_FORMAT_EXCEPTION_MESSAGE));
+  }
+
+  @Test
+  @DisplayName("Should throw constraint violation exception in RFC7807 format")
+  void shouldHandleConstraintViolationExceptionInRFC7807Format() throws Exception {
+    mockMvc.perform(get("/filling-station/tip")
+            .param(LATITUDE_PARAM, LATITUDE_VALUE)
+            .param(LONGITUDE_PARAM, LONGITUDE_VALUE)
+            .param(LIMIT_IN_RADIUS_PARAM, LIMIT_IN_RADIUS_VALUE)
+            .param(RADIUS_PARAM, RADIUS_VALUE)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().is(BAD_REQUEST.value()))
+        .andExpect(content().json(CONSTRAINT_EXCEPTION_MESSAGE));
   }
 
   private static Stream<Arguments> getExceptions() {
@@ -123,6 +149,8 @@ public class Rfc7807ErrorWrappingStrategyIT {
         Arguments.of(new EntityNotFoundException(ERROR_MESSAGE, ERROR_REASON_CODE), ERROR_MESSAGE, NOT_FOUND.value(),
             ERROR_REASON_CODE),
         Arguments.of(new InvalidRequestException(ERROR_MESSAGE, ERROR_REASON_CODE), ERROR_MESSAGE, BAD_REQUEST.value(),
+            ERROR_REASON_CODE),
+        Arguments.of(new InfrastructureException(ERROR_MESSAGE, ERROR_REASON_CODE), ERROR_MESSAGE, BAD_REQUEST.value(),
             ERROR_REASON_CODE)
     );
   }

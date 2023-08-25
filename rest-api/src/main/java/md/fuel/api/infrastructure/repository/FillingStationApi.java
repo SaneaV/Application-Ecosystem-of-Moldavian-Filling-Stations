@@ -4,11 +4,13 @@ package md.fuel.api.infrastructure.repository;
 import static md.fuel.api.infrastructure.utils.CoordinatesConverter.convertWgs84ToUtm;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import org.locationtech.proj4j.util.Pair;
 
 @Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FillingStationApi {
 
   private final String name;

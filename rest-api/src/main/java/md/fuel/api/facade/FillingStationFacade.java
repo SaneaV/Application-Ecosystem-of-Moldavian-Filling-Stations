@@ -13,4 +13,6 @@ public interface FillingStationFacade {
   List<FillingStationDto> getBestFuelPrice(double latitude, double longitude, double radius, String fuelType, int limit);
 
   ZonedDateTime getLastUpdateTimestamp();
+
+  List<String> getAvailableFuelTypes();
 }

@@ -1,6 +1,7 @@
 package md.fuel.api.facade;
 
 import static java.util.Arrays.asList;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,9 +13,16 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import md.fuel.api.domain.FillingStation;
+import md.fuel.api.domain.FuelType;
+import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import md.fuel.api.infrastructure.service.FillingStationService;
 import md.fuel.api.rest.dto.FillingStationDto;
@@ -72,12 +80,15 @@ public class FillingStationFacadeImplTest {
     final FillingStation fillingStation = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
     final FillingStation fillingStation2 = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
     final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation2));
-    final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
+    final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
+        LONGITUDE);
 
-    when(fillingStationService.getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt())).thenReturn(fillingStations);
+    when(fillingStationService.getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt())).thenReturn(
+        fillingStations);
     when(fillingStationDtoMapper.toDto(any())).thenReturn(fillingStationDto);
 
-    final List<FillingStationDto> allFillingStations = fillingStationFacade.getAllFillingStations(LATITUDE, LONGITUDE, RADIUS, VALID_LIMIT);
+    final List<FillingStationDto> allFillingStations = fillingStationFacade.getAllFillingStations(LATITUDE, LONGITUDE, RADIUS,
+        VALID_LIMIT);
 
     verify(fillingStationService).getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt());
     verify(fillingStationDtoMapper, times(2)).toDto(any());
@@ -89,7 +100,8 @@ public class FillingStationFacadeImplTest {
   @DisplayName("Should return nearest filling station")
   void shouldReturnNearestFillingStation() {
     final FillingStation fillingStation = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
-    final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
+    final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
+        LONGITUDE);
 
     when(fillingStationService.getNearestFillingStation(anyDouble(), anyDouble(), anyDouble())).thenReturn(fillingStation);
     when(fillingStationDtoMapper.toDto(any())).thenReturn(fillingStationDto);
@@ -108,17 +120,56 @@ public class FillingStationFacadeImplTest {
     final FillingStation fillingStation = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
     final FillingStation fillingStation2 = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
     final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation2));
-    final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
+    final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
+        LONGITUDE);
 
-    when(fillingStationService.getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), any(), anyInt())).thenReturn(fillingStations);
+    when(fillingStationService.getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), any(), anyInt())).thenReturn(
+        fillingStations);
     when(fillingStationDtoMapper.toDto(any())).thenReturn(fillingStationDto);
 
-    final List<FillingStationDto> bestFuelPriceStation = fillingStationFacade.getBestFuelPrice(LATITUDE, LONGITUDE, RADIUS, FUEL_TYPE,
+    final List<FillingStationDto> bestFuelPriceStation = fillingStationFacade.getBestFuelPrice(LATITUDE, LONGITUDE, RADIUS,
+        FUEL_TYPE,
         VALID_LIMIT);
 
     verify(fillingStationService).getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), any(), anyInt());
     verify(fillingStationDtoMapper, times(2)).toDto(any());
 
     assertThat(bestFuelPriceStation).containsExactly(fillingStationDto, fillingStationDto);
+  }
+
+  @Test
+  @DisplayName("Should return timestamp of filling station data update")
+  void shouldReturnTimestampOfFillingStationDataUpdate() {
+    final String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
+    final String MOLDOVA_ZONE_DATE_TIME = "Europe/Chisinau";
+    final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+
+    FillingStation.timestamp = ZonedDateTime.now().format(FORMATTER);
+
+    final ZonedDateTime expected = LocalDateTime.parse(FillingStation.timestamp, FORMATTER)
+        .atZone(ZoneId.of(MOLDOVA_ZONE_DATE_TIME));
+    final ZonedDateTime result = fillingStationFacade.getLastUpdateTimestamp();
+
+    assertThat(result).isEqualTo(expected);
+  }
+
+  @Test
+  @DisplayName("Should throw exception if no filling station was fetched")
+  void shouldThrowExceptionIfNoFillingStationWasFetched() {
+    assertThatThrownBy(fillingStationFacade::getLastUpdateTimestamp)
+        .isInstanceOf(EntityNotFoundException.class)
+        .hasMessage("There is no data to retrieve. Made any request to update the timestamp.");
+  }
+
+  @Test
+  @DisplayName("Should return list of fuel types")
+  void shouldReturnListOfFuelTypes() {
+    final List<String> expected = Arrays.stream(FuelType.values())
+        .map(FuelType::getDescription)
+        .collect(toList());
+
+    final List<String> result = fillingStationFacade.getAvailableFuelTypes();
+
+    assertThat(result).containsExactlyElementsOf(expected);
   }
 }

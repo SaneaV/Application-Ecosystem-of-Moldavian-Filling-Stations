@@ -1,6 +1,7 @@
 package md.fuel.api.rest.controller;
 
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -10,7 +11,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.util.List;
+import md.fuel.api.domain.FuelType;
 import md.fuel.api.facade.FillingStationFacade;
 import md.fuel.api.rest.dto.FillingStationDto;
 import md.fuel.api.rest.exception.XmlGatewayErrorWrappingStrategy;
@@ -79,6 +83,7 @@ public class FillingStationControllerImplIT {
       "    \"latitude\": 46.34746746138542,\n" +
       "    \"longitude\": 28.947447953963454\n" +
       "}";
+  private static final String FUEL_TYPES_RESPONSE = "[\"Petrol\",\"Diesel\",\"Gas\"]";
 
   @Autowired
   private MockMvc mockMvc;
@@ -177,5 +182,34 @@ public class FillingStationControllerImplIT {
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().json(PAGE_FILLING_STATIONS_RESPONSE));
+  }
+
+  @Test
+  @DisplayName("Should return last update timestamp")
+  void shouldReturnLastUpdateTimestamp() throws Exception {
+    final String timestampString = "2023-08-25T13:32:03.1907587+03:00";
+    final ZonedDateTime timestamp = ZonedDateTime.parse(timestampString);
+
+    when(fillingStationFacade.getLastUpdateTimestamp()).thenReturn(timestamp);
+
+    mockMvc.perform(get("/filling-station/last-update")
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().string("\"" + timestampString + "\""));
+  }
+
+  @Test
+  @DisplayName("Should return list of fuel types")
+  void shouldReturnListOfFuelTypes() throws Exception {
+    final List<String> fuelTypes = Arrays.stream(FuelType.values())
+        .map(FuelType::getDescription)
+        .collect(toList());
+
+    when(fillingStationFacade.getAvailableFuelTypes()).thenReturn(fuelTypes);
+
+    mockMvc.perform(get("/filling-station/fuel-type")
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().string(FUEL_TYPES_RESPONSE));
   }
 }

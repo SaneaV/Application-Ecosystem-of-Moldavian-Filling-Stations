@@ -4,13 +4,16 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.util.List;
 import md.fuel.api.domain.FillingStation;
 import md.fuel.api.infrastructure.configuration.ApiConfigurationTest;
+import md.fuel.api.infrastructure.configuration.RetryWebClientConfiguration;
 import md.fuel.api.infrastructure.configuration.WebClientTestConfiguration;
+import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.repository.AnreApi;
 import md.fuel.api.infrastructure.repository.AnreApiImpl;
 import md.fuel.api.infrastructure.repository.AnreApiMapper;
@@ -18,13 +21,16 @@ import md.fuel.api.infrastructure.repository.AnreApiMapperImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@Import({AnreApiImpl.class, AnreApiMapperImpl.class, WebClientTestConfiguration.class, ApiConfigurationTest.class})
+@Import({AnreApiImpl.class, AnreApiMapperImpl.class, WebClientTestConfiguration.class, ApiConfigurationTest.class,
+    RetryWebClientConfiguration.class})
 @TestPropertySource("classpath:application-test.properties")
 public class AnreApiIT {
 
@@ -133,6 +139,18 @@ public class AnreApiIT {
     assertThat(fillingStationsInfo).hasSize(2);
     assertThat(fillingStationsInfo.get(0)).usingRecursiveComparison().isEqualTo(fillingStation1);
     assertThat(fillingStationsInfo.get(1)).usingRecursiveComparison().isEqualTo(fillingStation2);
+  }
+
+  @ParameterizedTest
+  @ValueSource(ints = {404, 429})
+  @DisplayName("Should throw timeout exception on retry webclient configuration")
+  void shouldThrowTimeoutExceptionOnRetryWebClientConfiguration(int status) {
+    wireMock.stubFor(get(urlEqualTo(PATH))
+        .willReturn(aResponse().withStatus(status)));
+
+    assertThatThrownBy(() -> anreApi.getFillingStationsInfo())
+        .isInstanceOf(InfrastructureException.class)
+        .hasMessage("Request timed out.");
   }
 }
 
