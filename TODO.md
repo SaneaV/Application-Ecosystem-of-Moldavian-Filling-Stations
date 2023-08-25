@@ -23,6 +23,7 @@
 - [X] [CORE] Add SpotBugs maven plugin.
 - [X] [TELEGRAM] Generalize fuel prices to avoid `if` and `switch` checks (at converter level).
 - [X] [API] Add sort by proximity to getAllFillingStations.
+- [X] [TELEGRAM] Implement filling station cache.
 
 ## Important Features
 
@@ -41,7 +42,6 @@
 - [ ] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [CORE] Add Actuator.
-- [ ] [TELEGRAM] Implement filling station cache.
 - [ ] [TELEGRAM] Implement request per time unit limiter.
 - [ ] [API] Add an endpoint to request the official fuel price from ANRE.
 - [ ] [API] Add sort parameters in request.
