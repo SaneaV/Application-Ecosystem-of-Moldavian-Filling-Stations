@@ -6,7 +6,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.when;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import md.fuel.bot.domain.FuelType;
 import md.fuel.bot.infrastructure.repository.FillingStationRepository;

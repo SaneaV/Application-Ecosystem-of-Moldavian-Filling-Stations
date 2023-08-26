@@ -1,7 +1,6 @@
 package md.fuel.api.rest.controller;
 
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -52,37 +51,40 @@ public class FillingStationControllerImplIT {
   private static final String LIMIT_VALUE = "20";
   private static final String OFFSET_VALUE = "0";
 
-  private static final String FILLING_STATIONS_RESPONSE = "[\n" +
-      "    {\n" +
-      "        \"name\": \"Fortress\",\n" +
-      "        \"petrol\": 25.75,\n" +
-      "        \"diesel\": 22.3,\n" +
-      "        \"gas\": 13.45,\n" +
-      "        \"latitude\": 46.34746746138542,\n" +
-      "        \"longitude\": 28.947447953963454\n" +
-      "    }\n" +
-      "]";
-  private static final String PAGE_FILLING_STATIONS_RESPONSE = "{\n" +
-      "    \"totalResults\": 1,\n" +
-      "    \"items\": [\n" +
-      "        {\n" +
-      "            \"name\": \"Fortress\",\n" +
-      "            \"petrol\": 25.75,\n" +
-      "            \"diesel\": 22.3,\n" +
-      "            \"gas\": 13.45,\n" +
-      "            \"latitude\": 46.34746746138542,\n" +
-      "            \"longitude\": 28.947447953963454\n" +
-      "        }\n" +
-      "    ]\n" +
-      "}";
-  private static final String NEAREST_FILLING_STATION_RESPONSE = "{\n" +
-      "    \"name\": \"Fortress\",\n" +
-      "    \"petrol\": 25.75,\n" +
-      "    \"diesel\": 22.3,\n" +
-      "    \"gas\": 13.45,\n" +
-      "    \"latitude\": 46.34746746138542,\n" +
-      "    \"longitude\": 28.947447953963454\n" +
-      "}";
+  private static final String FILLING_STATIONS_RESPONSE = """
+      [
+          {
+              "name": "Fortress",
+              "petrol": 25.75,
+              "diesel": 22.3,
+              "gas": 13.45,
+              "latitude": 46.34746746138542,
+              "longitude": 28.947447953963454
+          }
+      ]""";
+  private static final String PAGE_FILLING_STATIONS_RESPONSE = """
+      {
+          "totalResults": 1,
+          "items": [
+              {
+                  "name": "Fortress",
+                  "petrol": 25.75,
+                  "diesel": 22.3,
+                  "gas": 13.45,
+                  "latitude": 46.34746746138542,
+                  "longitude": 28.947447953963454
+              }
+          ]
+      }""";
+  private static final String NEAREST_FILLING_STATION_RESPONSE = """
+      {
+          "name": "Fortress",
+          "petrol": 25.75,
+          "diesel": 22.3,
+          "gas": 13.45,
+          "latitude": 46.34746746138542,
+          "longitude": 28.947447953963454
+      }""";
   private static final String FUEL_TYPES_RESPONSE = "[\"Petrol\",\"Diesel\",\"Gas\"]";
 
   @Autowired
@@ -203,7 +205,7 @@ public class FillingStationControllerImplIT {
   void shouldReturnListOfFuelTypes() throws Exception {
     final List<String> fuelTypes = Arrays.stream(FuelType.values())
         .map(FuelType::getDescription)
-        .collect(toList());
+        .toList();
 
     when(fillingStationFacade.getAvailableFuelTypes()).thenReturn(fuelTypes);
 

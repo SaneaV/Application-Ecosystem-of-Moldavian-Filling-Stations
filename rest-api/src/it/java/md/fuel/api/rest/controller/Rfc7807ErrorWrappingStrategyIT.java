@@ -49,28 +49,31 @@ public class Rfc7807ErrorWrappingStrategyIT {
 
   private static final String ERROR_MESSAGE = "Error message";
   private static final String ERROR_REASON_CODE = "Error reason code";
-  private static final String RFC7807_RESPONSE = "{\n" +
-      "    \"status\": %s,\n" +
-      "    \"detail\": \"%s\",\n" +
-      "    \"title\": \"%s\"\n" +
-      "}";
-  private static final String NUMBER_FORMAT_EXCEPTION_MESSAGE = "{\n"
-      + "    \"status\": 400,\n"
-      + "    \"title\": \"BIND_ERROR\",\n"
-      + "    \"errorDetails\": [\n"
-      + "        {\n"
-      + "            \"source\": \"MD_FUEL_PRICE_APP\",\n"
-      + "            \"reason\": \"BIND_ERROR\",\n"
-      + "            \"message\": \"Failed to convert property value of type 'java.lang.String' to required type 'double' for property 'radius'; nested exception is java.lang.NumberFormatException: For input string: \\\"RADIUS_VALUE\\\"\",\n"
-      + "            \"recoverable\": false\n"
-      + "        }\n"
-      + "    ]\n"
-      + "}";
-  private static final String CONSTRAINT_EXCEPTION_MESSAGE = "{\n"
-      + "    \"status\": 400,\n"
-      + "    \"detail\": \"getBestFuelPrice.fuelType: The fuel type must be one of the following: Petrol, Diesel, Gas\",\n"
-      + "    \"title\": \"CONSTRAINT_ERROR\"\n"
-      + "}";
+  private static final String RFC7807_RESPONSE = """
+      {
+          "status": %s,
+          "detail": "%s",
+          "title": "%s"
+      }""";
+  private static final String NUMBER_FORMAT_EXCEPTION_MESSAGE = """
+      {
+          "status": 400,
+          "title": "METHOD_ARGUMENT_NOT_VALID",
+          "errorDetails": [
+              {
+                  "source": "MD_FUEL_PRICE_APP",
+                  "reason": "METHOD_ARGUMENT_NOT_VALID",
+                  "message": "Failed to convert property value of type 'java.lang.String' to required type 'double' for property 'radius'; For input string: \\"RADIUS_VALUE\\"",
+                  "recoverable": false
+              }
+          ]
+      }""";
+  private static final String CONSTRAINT_EXCEPTION_MESSAGE = """
+      {
+          "status": 400,
+          "detail": "getBestFuelPrice.fuelType: The fuel type must be one of the following: Petrol, Diesel, Gas",
+          "title": "CONSTRAINT_ERROR"
+      }""";
 
   @Autowired
   private MockMvc mockMvc;
@@ -119,8 +122,8 @@ public class Rfc7807ErrorWrappingStrategyIT {
   }
 
   @Test
-  @DisplayName("Should throw bind exception in RFC7807 format")
-  void shouldHandleBindExceptionInRFC7807Format() throws Exception {
+  @DisplayName("Should throw method argument not valid exception in RFC7807 format")
+  void shouldHandleMethodArgumentNotValidExceptionInRFC7807Format() throws Exception {
     mockMvc.perform(get(PATH)
             .param(LATITUDE_PARAM, LATITUDE_VALUE)
             .param(LONGITUDE_PARAM, LONGITUDE_VALUE)

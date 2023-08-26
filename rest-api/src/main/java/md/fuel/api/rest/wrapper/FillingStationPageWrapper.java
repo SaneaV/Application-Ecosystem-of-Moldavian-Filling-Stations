@@ -1,7 +1,5 @@
 package md.fuel.api.rest.wrapper;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import md.fuel.api.facade.FillingStationFacade;
@@ -34,6 +32,6 @@ public class FillingStationPageWrapper {
     return fillingStationDtos.stream()
         .skip(offset)
         .limit(pageLimit)
-        .collect(toList());
+        .toList();
   }
 }

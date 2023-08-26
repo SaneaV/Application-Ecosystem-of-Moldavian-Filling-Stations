@@ -16,10 +16,11 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
   private final FillingStationRepository fillingStationRepository;
 
   @Override
-  public List<FillingStation> getAllFillingStations(double latitude, double longitude, double radius, int limitInRadius, int limit) {
+  public List<FillingStation> getAllFillingStations(double latitude, double longitude, double radius, int limitInRadius,
+      int limit) {
     updateTimeStamp();
     return fillingStationRepository.getAllFillingStation(latitude, longitude, radius, limitInRadius, limit, STANDARD_OFFSET)
-        .getItems();
+        .items();
   }
 
   @Override
@@ -33,7 +34,7 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
       int limit, String fuelType) {
     updateTimeStamp();
     return fillingStationRepository.getBestFuelPriceStation(latitude, longitude, radius, limitInRadius, limit, STANDARD_OFFSET,
-        fuelType).getItems();
+        fuelType).items();
   }
 
   @Override

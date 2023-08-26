@@ -42,8 +42,7 @@ public class UserDataFacadeImplTest {
   @Test
   @DisplayName("Should throw EntityNotFoundException when getUserData from service is null")
   void shouldThrowEntityNotFoundExceptionOnNullUserData() {
-    final UserData userData = null;
-    when(userDataService.getUserData(USER_ID)).thenReturn(userData);
+    when(userDataService.getUserData(USER_ID)).thenReturn(null);
 
     assertThatThrownBy(() -> userDataFacade.getUserData(USER_ID))
         .isInstanceOf(EntityNotFoundException.class)
@@ -110,10 +109,10 @@ public class UserDataFacadeImplTest {
 
     verify(userDataService).getUserData(anyLong());
     verify(userDataDtoMapper).toDto(any());
-    assertThat(result.getId()).isEqualTo(userData.getId());
-    assertThat(result.getLatitude()).isEqualTo(userData.getLatitude());
-    assertThat(result.getLongitude()).isEqualTo(userData.getLongitude());
-    assertThat(result.getRadius()).isEqualTo(userData.getRadius());
+    assertThat(result.id()).isEqualTo(userData.getId());
+    assertThat(result.latitude()).isEqualTo(userData.getLatitude());
+    assertThat(result.longitude()).isEqualTo(userData.getLongitude());
+    assertThat(result.radius()).isEqualTo(userData.getRadius());
   }
 
   @Test

@@ -29,20 +29,18 @@ public class FillingStationDtoMapperTest {
 
     final FillingStationDto result = FillingStationDtoMapper.toDto(FillingStation);
 
-    assertThat(result.getName()).isEqualTo(FillingStation.getName());
-    assertThat(result.getPetrol()).isEqualTo(FillingStation.getPetrol());
-    assertThat(result.getDiesel()).isEqualTo(FillingStation.getDiesel());
-    assertThat(result.getGas()).isEqualTo(FillingStation.getGas());
-    assertThat(result.getLatitude()).isEqualTo(FillingStation.getLatitude());
-    assertThat(result.getLongitude()).isEqualTo(FillingStation.getLongitude());
+    assertThat(result.name()).isEqualTo(FillingStation.name());
+    assertThat(result.petrol()).isEqualTo(FillingStation.petrol());
+    assertThat(result.diesel()).isEqualTo(FillingStation.diesel());
+    assertThat(result.gas()).isEqualTo(FillingStation.gas());
+    assertThat(result.latitude()).isEqualTo(FillingStation.latitude());
+    assertThat(result.longitude()).isEqualTo(FillingStation.longitude());
   }
 
   @Test
   @DisplayName("Should map FillingStationDto to null on null FillingStation")
   void shouldMapFillingStationDtoToNullOnNullFillingStation() {
-    final FillingStation fillingStation = null;
-
-    final FillingStationDto result = FillingStationDtoMapper.toDto(fillingStation);
+    final FillingStationDto result = FillingStationDtoMapper.toDto(null);
 
     assertThat(result).isNull();
   }

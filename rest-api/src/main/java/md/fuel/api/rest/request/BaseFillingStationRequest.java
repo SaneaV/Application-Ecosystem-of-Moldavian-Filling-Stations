@@ -1,12 +1,12 @@
 package md.fuel.api.rest.request;
 
 import io.swagger.v3.oas.annotations.Parameter;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import java.io.Serializable;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
 import lombok.Getter;
 import lombok.Setter;
-import org.springdoc.api.annotations.ParameterObject;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 
 @Getter

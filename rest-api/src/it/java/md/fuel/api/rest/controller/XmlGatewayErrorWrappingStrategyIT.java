@@ -49,48 +49,51 @@ public class XmlGatewayErrorWrappingStrategyIT {
 
   private static final String ERROR_MESSAGE = "Error message";
   private static final String ERROR_REASON_CODE = "Error reason code";
-  private static final String RFC7807_RESPONSE = "{\n" +
-      "    \"Errors\": {\n" +
-      "        \"Error\": [\n" +
-      "            {\n" +
-      "                \"source\": \"MD_FUEL_PRICE_APP\",\n" +
-      "                \"reasonCode\": \"Error reason code\",\n" +
-      "                \"description\": \"Error message\",\n" +
-      "                \"recoverable\": false\n" +
-      "            }\n" +
-      "        ]\n" +
-      "    }\n" +
-      "}";
-  private static final String INVALID_LATITUDE_LONGITUDE_MESSAGE = "{\n"
-      + "    \"Errors\": {\n"
-      + "        \"Error\": [\n"
-      + "            {\n"
-      + "                \"source\": \"MD_FUEL_PRICE_APP\",\n"
-      + "                \"reasonCode\": \"BIND_ERROR\",\n"
-      + "                \"description\": \"Longitude value should be between -90 and 90.\",\n"
-      + "                \"recoverable\": false\n"
-      + "            },\n"
-      + "            {\n"
-      + "                \"source\": \"MD_FUEL_PRICE_APP\",\n"
-      + "                \"reasonCode\": \"BIND_ERROR\",\n"
-      + "                \"description\": \"Latitude value should be between -90 and 90.\",\n"
-      + "                \"recoverable\": false\n"
-      + "            }\n"
-      + "        ]\n"
-      + "    }\n"
-      + "}";
-  private static final String CONSTRAINT_EXCEPTION_MESSAGE = "{\n"
-      + "    \"Errors\": {\n"
-      + "        \"Error\": [\n"
-      + "            {\n"
-      + "                \"source\": \"MD_FUEL_PRICE_APP\",\n"
-      + "                \"reasonCode\": \"CONSTRAINT_ERROR\",\n"
-      + "                \"description\": \"getBestFuelPrice.fuelType: The fuel type must be one of the following: Petrol, Diesel, Gas\",\n"
-      + "                \"recoverable\": false\n"
-      + "            }\n"
-      + "        ]\n"
-      + "    }\n"
-      + "}";
+  private static final String RFC7807_RESPONSE = """
+      {
+          "Errors": {
+              "Error": [
+                  {
+                      "source": "MD_FUEL_PRICE_APP",
+                      "reasonCode": "Error reason code",
+                      "description": "Error message",
+                      "recoverable": false
+                  }
+              ]
+          }
+      }""";
+  private static final String INVALID_LATITUDE_LONGITUDE_MESSAGE = """
+      {
+          "Errors": {
+              "Error": [
+                  {
+                      "source": "MD_FUEL_PRICE_APP",
+                      "reasonCode": "METHOD_ARGUMENT_NOT_VALID",
+                      "description": "Longitude value should be between -90 and 90.",
+                      "recoverable": false
+                  },
+                  {
+                      "source": "MD_FUEL_PRICE_APP",
+                      "reasonCode": "METHOD_ARGUMENT_NOT_VALID",
+                      "description": "Latitude value should be between -90 and 90.",
+                      "recoverable": false
+                  }
+              ]
+          }
+      }""";
+  private static final String CONSTRAINT_EXCEPTION_MESSAGE = """
+      {
+          "Errors": {
+              "Error": [
+                  {
+                      "source": "MD_FUEL_PRICE_APP",
+                      "reasonCode": "CONSTRAINT_ERROR",
+                      "description": "getBestFuelPrice.fuelType: The fuel type must be one of the following: Petrol, Diesel, Gas",
+                      "recoverable": false
+                  }
+              ]
+          }
+      }""";
 
   @Autowired
   private MockMvc mockMvc;
@@ -137,8 +140,8 @@ public class XmlGatewayErrorWrappingStrategyIT {
   }
 
   @Test
-  @DisplayName("Should throw bind exception in XML format")
-  void shouldHandleBindExceptionInXMLFormat() throws Exception {
+  @DisplayName("Should throw method argument not valid exception in XML format")
+  void shouldHandleMethodArgumentNotValidExceptionInXMLFormat() throws Exception {
     mockMvc.perform(get(PATH)
             .param(LATITUDE_PARAM, "-99")
             .param(LONGITUDE_PARAM, "99")

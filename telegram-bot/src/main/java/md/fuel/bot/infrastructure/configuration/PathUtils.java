@@ -23,10 +23,10 @@ public class PathUtils {
         .build((Object[]) params);
   }
 
-  private static UriComponentsBuilder addParameters(UriComponentsBuilder uriComponentsBuilder, List<String> parametersName,
-      List<Object> parametersValue) {
-    IntStream.range(0, parametersName.size())
-        .forEach(i -> uriComponentsBuilder.queryParam(parametersName.get(i), parametersValue.get(i)));
+  private static UriComponentsBuilder addParameters(UriComponentsBuilder uriComponentsBuilder, List<String> parameterName,
+      List<Object> parameterValue) {
+    IntStream.range(0, parameterName.size())
+        .forEach(i -> uriComponentsBuilder.queryParam(parameterName.get(i), parameterValue.get(i)));
     return uriComponentsBuilder;
   }
 }

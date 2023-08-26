@@ -30,11 +30,14 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class AllFillingStationInRadiusCommandTest {
 
   private static final String COMMAND = "All filling stations";
-  private static final String FILLING_STATION_MESSAGE = "⛽ Filling station - \"%s\"\n\n"
-      + "%s Petrol: %s lei\n"
-      + "%s Diesel: %s lei\n"
-      + "%s Gas: %s lei\n\n"
-      + "📊 Last price update: %s";
+  private static final String FILLING_STATION_MESSAGE = """
+      ⛽ Filling station - "%s"
+
+      %s Petrol: %s lei
+      %s Diesel: %s lei
+      %s Gas: %s lei
+
+      📊 Last price update: %s""";
   private static final String GREEN_CIRCLE = "🟢";
   private static final String RED_CIRCLE = "🔴";
 
@@ -56,7 +59,6 @@ public class AllFillingStationInRadiusCommandTest {
     final String fuelStationName = "Filling Station Name";
     final double petrol = 10;
     final double diesel = 20;
-    final Double gas = null;
     final double latitude = 40;
     final double longitude = 50;
     final double defaultDoubleValue = 0;
@@ -64,7 +66,7 @@ public class AllFillingStationInRadiusCommandTest {
     final Map<String, Double> priceMap = new LinkedHashMap<>();
     priceMap.put("Petrol", petrol);
     priceMap.put("Diesel", diesel);
-    priceMap.put("Gas", gas);
+    priceMap.put("Gas", null);
 
     final User user = new User();
     final Update update = new Update();
@@ -94,8 +96,8 @@ public class AllFillingStationInRadiusCommandTest {
     assertThat(sendMessage.getText()).isEqualTo(messageText);
     assertThat(sendMessage.getChatId()).isEqualTo(Long.toString(chatId));
     assertThat(sendLocation.getChatId()).isEqualTo(Long.toString(chatId));
-    assertThat(sendLocation.getLatitude()).isEqualTo(fillingStation.getLatitude());
-    assertThat(sendLocation.getLongitude()).isEqualTo(fillingStation.getLongitude());
+    assertThat(sendLocation.getLatitude()).isEqualTo(fillingStation.latitude());
+    assertThat(sendLocation.getLongitude()).isEqualTo(fillingStation.longitude());
 
     verify(userDataFacade).getUserData(anyLong());
     verify(fillingStationFacade).getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt());

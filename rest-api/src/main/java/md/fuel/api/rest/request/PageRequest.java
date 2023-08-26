@@ -1,10 +1,10 @@
 package md.fuel.api.rest.request;
 
 import io.swagger.v3.oas.annotations.Parameter;
-import javax.validation.constraints.Min;
+import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
-import org.springdoc.api.annotations.ParameterObject;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 
 @Getter

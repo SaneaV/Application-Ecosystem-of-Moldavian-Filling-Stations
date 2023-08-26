@@ -36,9 +36,7 @@ public class UserDataJpaMapperTest {
   @Test
   @DisplayName("Should map userData to null if userDataJpa is null")
   void shouldMapUserDataJpaToNull() {
-    final UserDataJpa userDataJpa = null;
-
-    final UserData result = userDataJpaMapper.toEntity(userDataJpa);
+    final UserData result = userDataJpaMapper.toEntity(null);
 
     assertThat(result).isNull();
   }
@@ -65,10 +63,7 @@ public class UserDataJpaMapperTest {
   @Test
   @DisplayName("Should return null on empty userData and userDataJpa")
   void shouldReturnNullOnEmptyUserDataAndUserDataJpa() {
-    final UserData userData = null;
-    final UserDataJpa userDataJpa = null;
-
-    final UserDataJpa result = userDataJpaMapper.update(userDataJpa, userData);
+    final UserDataJpa result = userDataJpaMapper.update(null, null);
 
     assertThat(result).isNull();
   }
@@ -81,9 +76,8 @@ public class UserDataJpaMapperTest {
     userData.setRadius(DEFAULT_DOUBLE_VALUE);
     userData.setLatitude(DEFAULT_DOUBLE_VALUE);
     userData.setLongitude(DEFAULT_DOUBLE_VALUE);
-    final UserDataJpa userDataJpa = null;
 
-    final UserDataJpa result = userDataJpaMapper.update(userDataJpa, userData);
+    final UserDataJpa result = userDataJpaMapper.update(null, userData);
 
     assertThat(result.getId()).isEqualTo(DEFAULT_LONG_VALUE);
     assertThat(result.getRadius()).isEqualTo(DEFAULT_DOUBLE_VALUE);
@@ -94,10 +88,9 @@ public class UserDataJpaMapperTest {
   @Test
   @DisplayName("Shouldn't change radius and coordinates in userDataJpa if userData is null")
   void shouldNotChangeRadiusAndCoordinatesIfUserDataIsNull() {
-    final UserData userData = null;
     final UserDataJpa userDataJpa = new UserDataJpa(USER_ID, RADIUS, COORDINATES, COORDINATES);
 
-    final UserDataJpa result = userDataJpaMapper.update(userDataJpa, userData);
+    final UserDataJpa result = userDataJpaMapper.update(userDataJpa, null);
 
     assertThat(result.getId()).isEqualTo(USER_ID);
     assertThat(result.getRadius()).isEqualTo(DEFAULT_DOUBLE_VALUE);
@@ -125,9 +118,7 @@ public class UserDataJpaMapperTest {
   @Test
   @DisplayName("Should map userDataJpa to null if userData is null")
   void shouldMapUserDataJpaToNullIfUserDataIsNull() {
-    final UserData userData = null;
-
-    final UserDataJpa result = userDataJpaMapper.toJpa(userData);
+    final UserDataJpa result = userDataJpaMapper.toJpa((UserData) null);
 
     assertThat(result).isNull();
   }
@@ -146,9 +137,7 @@ public class UserDataJpaMapperTest {
   @Test
   @DisplayName("Should return null userDataJpa if userId is null")
   void shouldReturnNullUserDataJpaIfUserIdIsNull() {
-    final Long userId = null;
-
-    final UserDataJpa result = userDataJpaMapper.toJpa(userId);
+    final UserDataJpa result = userDataJpaMapper.toJpa((Long) null);
 
     assertThat(result).isNull();
   }

@@ -17,7 +17,7 @@ This bot uses telegram messenger for convenient interaction with filling station
 
 The User is able to specify a certain search radius and coordinates to execute the following functions:
 
-1. Display all filling stations (coordinates on map + all available fuel prices).
+1. Display all filling stations (coordinates on the map + all available fuel prices).
 2. Display the nearest filling station (coordinates on map + all available fuel prices).
 3. Display filling station with the best \<fuel\> price (coordinates on map + \<fuel\> price).
 

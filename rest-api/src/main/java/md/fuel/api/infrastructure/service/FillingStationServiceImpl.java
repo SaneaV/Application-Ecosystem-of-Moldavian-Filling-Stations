@@ -2,7 +2,6 @@ package md.fuel.api.infrastructure.service;
 
 import static java.util.Comparator.comparing;
 import static java.util.Objects.isNull;
-import static java.util.stream.Collectors.toList;
 import static md.fuel.api.domain.FuelType.DIESEL;
 import static md.fuel.api.domain.FuelType.GAS;
 import static md.fuel.api.domain.FuelType.PETROL;
@@ -41,9 +40,9 @@ public class FillingStationServiceImpl implements FillingStationService {
   private static final HashMap<FuelType, Function<FillingStation, Double>> FUEL_TYPE_FUNCTION_HASH_MAP = new HashMap<>();
 
   static {
-    FUEL_TYPE_FUNCTION_HASH_MAP.put(PETROL, FillingStation::getPetrol);
-    FUEL_TYPE_FUNCTION_HASH_MAP.put(DIESEL, FillingStation::getDiesel);
-    FUEL_TYPE_FUNCTION_HASH_MAP.put(GAS, FillingStation::getGas);
+    FUEL_TYPE_FUNCTION_HASH_MAP.put(PETROL, FillingStation::petrol);
+    FUEL_TYPE_FUNCTION_HASH_MAP.put(DIESEL, FillingStation::diesel);
+    FUEL_TYPE_FUNCTION_HASH_MAP.put(GAS, FillingStation::gas);
   }
 
   private final AnreApi anreApi;
@@ -51,10 +50,10 @@ public class FillingStationServiceImpl implements FillingStationService {
   @Override
   public List<FillingStation> getAllFillingStations(double latitude, double longitude, double radius, int limit) {
     final List<FillingStation> fillingStations = anreApi.getFillingStationsInfo().stream()
-        .filter(s -> isWithinRadius(latitude, longitude, s.getLatitude(), s.getLongitude(), radius)
-            && (checkCorrectPrice(s.getPetrol()) || checkCorrectPrice(s.getDiesel()) || checkCorrectPrice(s.getGas())))
+        .filter(s -> isWithinRadius(latitude, longitude, s.latitude(), s.longitude(), radius)
+            && (checkCorrectPrice(s.petrol()) || checkCorrectPrice(s.diesel()) || checkCorrectPrice(s.gas())))
         .sorted(getDistanceComparator(latitude, longitude))
-        .collect(toList());
+        .toList();
 
     checkLimit(fillingStations.size(), limit);
     if (fillingStations.isEmpty()) {
@@ -66,9 +65,9 @@ public class FillingStationServiceImpl implements FillingStationService {
   @Override
   public FillingStation getNearestFillingStation(double latitude, double longitude, double radius) {
     return anreApi.getFillingStationsInfo().stream()
-        .filter(s -> (checkCorrectPrice(s.getPetrol()) || checkCorrectPrice(s.getDiesel())
-            || checkCorrectPrice(s.getGas())))
-        .min(comparing(s -> calculateMeters(latitude, longitude, s.getLatitude(), s.getLongitude())))
+        .filter(s -> (checkCorrectPrice(s.petrol()) || checkCorrectPrice(s.diesel())
+            || checkCorrectPrice(s.gas())))
+        .min(comparing(s -> calculateMeters(latitude, longitude, s.latitude(), s.longitude())))
         .orElseThrow(() -> new EntityNotFoundException(ERROR_NO_FILLING_STATION_NEAR_YOU, ERROR_NOT_FOUND_REASON_CODE));
   }
 
@@ -77,10 +76,10 @@ public class FillingStationServiceImpl implements FillingStationService {
     final Function<FillingStation, Double> fillingStationFunction = getFuelType(fuelType);
 
     final List<FillingStation> filteredFillingStationsList = anreApi.getFillingStationsInfo().stream()
-        .filter(s -> isWithinRadius(latitude, longitude, s.getLatitude(), s.getLongitude(), radius)
+        .filter(s -> isWithinRadius(latitude, longitude, s.latitude(), s.longitude(), radius)
             && !isNull(fillingStationFunction.apply(s))
             && !Objects.equals(fillingStationFunction.apply(s), ZERO_PRICE))
-        .collect(toList());
+        .toList();
 
     final double minimalFuelPrice = filteredFillingStationsList.stream()
         .mapToDouble(fillingStationFunction::apply)
@@ -91,7 +90,7 @@ public class FillingStationServiceImpl implements FillingStationService {
     final List<FillingStation> fillingStations = filteredFillingStationsList.stream()
         .filter(station -> fillingStationFunction.apply(station).equals(minimalFuelPrice))
         .sorted(getDistanceComparator(latitude, longitude))
-        .collect(toList());
+        .toList();
 
     checkLimit(fillingStations.size(), limit);
 
@@ -117,6 +116,6 @@ public class FillingStationServiceImpl implements FillingStationService {
   }
 
   private Comparator<FillingStation> getDistanceComparator(double latitude, double longitude) {
-    return Comparator.comparingDouble(s -> calculateMeters(latitude, longitude, s.getLatitude(), s.getLongitude()));
+    return Comparator.comparingDouble(s -> calculateMeters(latitude, longitude, s.latitude(), s.longitude()));
   }
 }

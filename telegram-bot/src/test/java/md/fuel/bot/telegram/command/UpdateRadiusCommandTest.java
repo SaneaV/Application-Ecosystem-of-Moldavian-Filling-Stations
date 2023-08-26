@@ -1,6 +1,5 @@
 package md.fuel.bot.telegram.command;
 
-import static java.util.stream.Collectors.toList;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -49,7 +48,7 @@ public class UpdateRadiusCommandTest {
 
     final List<SendMessage> messages = updateRadiusCommand.execute(update).stream()
         .map(m -> (SendMessage) m)
-        .collect(toList());
+        .toList();
 
     assertThat(messages).hasSize(1);
     final SendMessage sendMessage = messages.get(0);

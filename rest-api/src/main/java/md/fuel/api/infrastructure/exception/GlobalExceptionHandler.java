@@ -1,12 +1,12 @@
 package md.fuel.api.infrastructure.exception;
 
-import javax.validation.ConstraintViolationException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -34,9 +34,10 @@ public class GlobalExceptionHandler {
     return errorWrappingStrategy.handleInvalidRequestException(exception, request);
   }
 
-  @ExceptionHandler(BindException.class)
-  public ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request) {
-    return errorWrappingStrategy.handleBindException(exception, request);
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ErrorDescriptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception,
+      WebRequest request) {
+    return errorWrappingStrategy.handleMethodArgumentNotValidException(exception, request);
   }
 
   @ExceptionHandler(ConstraintViolationException.class)

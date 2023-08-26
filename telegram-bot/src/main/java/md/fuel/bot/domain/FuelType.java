@@ -1,12 +1,7 @@
 package md.fuel.bot.domain;
 
 import java.util.List;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@Getter
-@RequiredArgsConstructor
-public class FuelType {
+public record FuelType(List<String> fuelTypes) {
 
-  private final List<String> fuelTypes;
 }

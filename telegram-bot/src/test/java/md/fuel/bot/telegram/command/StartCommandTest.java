@@ -1,7 +1,6 @@
 package md.fuel.bot.telegram.command;
 
 import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -20,10 +19,13 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class StartCommandTest {
 
   private static final String COMMAND = "/start";
-  private static final String MESSAGE = "Welcome!\n"
-      + "To start working with bot, you can select any element from the menu.\n\n"
-      + "If you want to change the search radius, just send it to me (in kilometres, e.g. 0.5 (500 metres), 1 (1000 metres)).\n\n"
-      + "If you want to change your coordinates, just send your location.";
+  private static final String MESSAGE = """
+      Welcome!
+      To start working with bot, you can select any element from the menu.
+
+      If you want to change the search radius, just send it to me (in kilometres, e.g. 0.5 (500 metres), 1 (1000 metres)).
+
+      If you want to change your coordinates, just send your location.""";
 
   private final UserDataFacade userDataFacade;
   private final StartCommand startCommand;
@@ -54,7 +56,7 @@ public class StartCommandTest {
 
     final List<SendMessage> messages = startCommand.execute(update).stream()
         .map(m -> (SendMessage) m)
-        .collect(toList());
+        .toList();
 
     assertThat(messages).hasSize(1);
     final SendMessage sendMessage = messages.get(0);

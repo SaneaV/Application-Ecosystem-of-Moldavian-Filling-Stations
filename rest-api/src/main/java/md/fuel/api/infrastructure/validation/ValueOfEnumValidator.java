@@ -1,11 +1,9 @@
 package md.fuel.api.infrastructure.validation;
 
-import static java.util.stream.Collectors.toList;
-
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.List;
 import java.util.stream.Stream;
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
 
 public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, CharSequence> {
 
@@ -15,7 +13,7 @@ public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, Ch
   public void initialize(ValueOfEnum annotation) {
     acceptedValues = Stream.of(annotation.enumClass().getEnumConstants())
         .map(e -> e.name().toLowerCase())
-        .collect(toList());
+        .toList();
   }
 
   @Override

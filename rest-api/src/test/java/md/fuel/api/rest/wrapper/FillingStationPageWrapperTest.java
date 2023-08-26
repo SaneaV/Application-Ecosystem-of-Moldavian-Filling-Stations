@@ -49,9 +49,9 @@ public class FillingStationPageWrapperTest {
     final PageDto<FillingStationDto> result = fillingStationPageWrapper.wrapAllFillingStationsList(LATITUDE, LONGITUDE, RADIUS,
         LIMIT, pageLimit, offset);
 
-    assertThat(result.getTotalResults()).isEqualTo(2);
-    assertThat(result.getItems()).hasSize(finalSize);
-    assertThat(result.getItems()).hasSameElementsAs(finalList);
+    assertThat(result.totalResults()).isEqualTo(2);
+    assertThat(result.items()).hasSize(finalSize);
+    assertThat(result.items()).hasSameElementsAs(finalList);
   }
 
   @ParameterizedTest
@@ -64,9 +64,9 @@ public class FillingStationPageWrapperTest {
     final PageDto<FillingStationDto> result = fillingStationPageWrapper.wrapBestFuelPriceStation(LATITUDE, LONGITUDE, RADIUS,
         FUEL_TYPE, LIMIT, pageLimit, offset);
 
-    assertThat(result.getTotalResults()).isEqualTo(2);
-    assertThat(result.getItems()).hasSize(finalSize);
-    assertThat(result.getItems()).hasSameElementsAs(finalList);
+    assertThat(result.totalResults()).isEqualTo(2);
+    assertThat(result.items()).hasSize(finalSize);
+    assertThat(result.items()).hasSameElementsAs(finalList);
   }
 
   private static Stream<Arguments> getData() {

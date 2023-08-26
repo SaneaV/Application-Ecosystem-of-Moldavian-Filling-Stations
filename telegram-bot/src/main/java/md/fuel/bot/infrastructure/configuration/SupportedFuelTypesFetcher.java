@@ -1,6 +1,6 @@
 package md.fuel.bot.infrastructure.configuration;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import md.fuel.bot.infrastructure.repository.FillingStationRepository;
 import org.springframework.stereotype.Component;

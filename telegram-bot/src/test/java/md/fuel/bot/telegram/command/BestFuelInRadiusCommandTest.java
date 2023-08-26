@@ -36,9 +36,12 @@ public class BestFuelInRadiusCommandTest {
   public static final String PETROL = "Petrol";
   public static final String DIESEL = "Diesel";
   public static final String GAS = "Gas";
-  private static final String SPECIFIC_FILLING_STATION_MESSAGE = "⛽ Filling station - \"%s\"\n\n"
-      + "%s %s: %s lei\n\n"
-      + "📊 Last price update: %s";
+  private static final String SPECIFIC_FILLING_STATION_MESSAGE = """
+      ⛽ Filling station - "%s"
+
+      %s %s: %s lei
+
+      📊 Last price update: %s""";
   private static final String GREEN_CIRCLE = "🟢";
 
   private final BestFuelInRadiusCommand bestFuelInRadiusCommand;
@@ -98,8 +101,8 @@ public class BestFuelInRadiusCommandTest {
     assertThat(sendMessage.getText()).isEqualTo(messageText);
     assertThat(sendMessage.getChatId()).isEqualTo(Long.toString(chatId));
     assertThat(sendLocation.getChatId()).isEqualTo(Long.toString(chatId));
-    assertThat(sendLocation.getLatitude()).isEqualTo(fillingStation.getLatitude());
-    assertThat(sendLocation.getLongitude()).isEqualTo(fillingStation.getLongitude());
+    assertThat(sendLocation.getLatitude()).isEqualTo(fillingStation.latitude());
+    assertThat(sendLocation.getLongitude()).isEqualTo(fillingStation.longitude());
 
     verify(userDataFacade).getUserData(anyLong());
     verify(fillingStationFacade).getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt(), anyString());

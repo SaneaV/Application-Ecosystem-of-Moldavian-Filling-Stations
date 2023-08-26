@@ -14,8 +14,7 @@ public class FillingStationMapperImplTest {
   @Test
   @DisplayName("Should return null on null FillingStationDto")
   void shouldReturnNullOnNullFillingStationDto() {
-    final FillingStationDto fillingStationDto = null;
-    final FillingStation result = mapper.toEntity(fillingStationDto);
+    final FillingStation result = mapper.toEntity((FillingStationDto) null);
     assertThat(result).isNull();
   }
 
@@ -24,7 +23,7 @@ public class FillingStationMapperImplTest {
   void shouldReturnDefaultDoublesOnNullsFromFillingStationDto() {
     final FillingStationDto fillingStationDto = new FillingStationDto(EMPTY, null, null, null, null, null);
     final FillingStation result = mapper.toEntity(fillingStationDto);
-    assertThat(result.getLatitude()).isEqualTo(0.0d);
-    assertThat(result.getLongitude()).isEqualTo(0.0d);
+    assertThat(result.latitude()).isEqualTo(0.0d);
+    assertThat(result.longitude()).isEqualTo(0.0d);
   }
 }

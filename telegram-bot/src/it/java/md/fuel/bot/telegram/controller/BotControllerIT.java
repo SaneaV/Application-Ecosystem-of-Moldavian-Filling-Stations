@@ -21,6 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 @ExtendWith(SpringExtension.class)
 @Import({TelegramExceptionWrappingStrategy.class})
@@ -29,13 +30,14 @@ public class BotControllerIT {
 
   private static final String BOT_PATH = "/callback/%s";
 
-  private static final String REQUEST_BODY = "{\n" +
-      "    \"message\": {\n" +
-      "        \"chat\": {\n" +
-      "            \"id\": 12345\n" +
-      "        }\n" +
-      "    }\n" +
-      "}";
+  private static final String REQUEST_BODY = """
+      {
+          "message": {
+              "chat": {
+                  "id": 12345
+              }
+          }
+      }""";
   private static final String RESPONSE_BODY = "{\"method\":\"sendmessage\"}";
 
   @Value("${telegram.bot-token")
@@ -49,9 +51,9 @@ public class BotControllerIT {
   @Test
   @DisplayName("Should handle telegram request")
   void shouldHandleTelegramRequest() throws Exception {
-    final BotApiMethod message = new SendMessage();
+    final BotApiMethod<Message> message = new SendMessage();
 
-    when(fillingStationTelegramBot.onWebhookUpdateReceived(any())).thenReturn(message);
+    when(fillingStationTelegramBot.onWebhookUpdateReceived(any())).thenReturn((BotApiMethod) message);
 
     final String uri = String.format(BOT_PATH, botToken);
 

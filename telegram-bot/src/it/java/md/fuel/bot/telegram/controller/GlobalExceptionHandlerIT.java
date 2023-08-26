@@ -36,38 +36,40 @@ public class GlobalExceptionHandlerIT {
   private static final String ERROR_MESSAGE = "Standard error message";
   private static final String STANDARD_RUNTIME_EXCEPTION_MESSAGE = "Unknown error. Please contact bot administrator";
 
-  private static final String REQUEST_BODY = "{\n" +
-      "    \"message\": {\n" +
-      "        \"chat\": {\n" +
-      "            \"id\": 12345\n" +
-      "        }\n" +
-      "    }\n" +
-      "}";
-  private static final String ERROR_RESPONSE = "{\n" +
-      "    \"chat_id\": \"12345\",\n" +
-      "    \"text\": \"%s\",\n" +
-      "    \"reply_markup\": {\n" +
-      "        \"keyboard\": [\n" +
-      "            [\n" +
-      "                {\n" +
-      "                    \"text\": \"All filling stations\"\n" +
-      "                }\n" +
-      "            ],\n" +
-      "            [\n" +
-      "                {\n" +
-      "                    \"text\": \"Nearest filling station\"\n" +
-      "                }\n" +
-      "            ],\n" +
-      "            [\n" +
-      "                {\n" +
-      "                    \"text\": \"Best fuel price\"\n" +
-      "                }\n" +
-      "            ]\n" +
-      "        ],\n" +
-      "        \"resize_keyboard\": true\n" +
-      "    },\n" +
-      "    \"method\": \"sendmessage\"\n" +
-      "}";
+  private static final String REQUEST_BODY = """
+      {
+          "message": {
+              "chat": {
+                  "id": 12345
+              }
+          }
+      }""";
+  private static final String ERROR_RESPONSE = """
+      {
+          "chat_id": "12345",
+          "text": "%s",
+          "reply_markup": {
+              "keyboard": [
+                  [
+                      {
+                          "text": "All filling stations"
+                      }
+                  ],
+                  [
+                      {
+                          "text": "Nearest filling station"
+                      }
+                  ],
+                  [
+                      {
+                          "text": "Best fuel price"
+                      }
+                  ]
+              ],
+              "resize_keyboard": true
+          },
+          "method": "sendmessage"
+      }""";
 
   @Value("${telegram.bot-token")
   private String botToken;

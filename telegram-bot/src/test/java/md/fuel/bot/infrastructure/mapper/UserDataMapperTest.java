@@ -33,9 +33,7 @@ public class UserDataMapperTest {
   @Test
   @DisplayName("Should map user data to null if userId is null")
   void shouldMapUserDataToNull() {
-    final Long userId = null;
-
-    final UserData result = userDataMapper.toEntity(userId);
+    final UserData result = userDataMapper.toEntity(null);
 
     assertThat(result).isNull();
   }
@@ -60,8 +58,7 @@ public class UserDataMapperTest {
   @Test
   @DisplayName("Should map user data to null if userData parameter is null on radius update")
   void shouldMapUserDataToNullOnNullUserDataParameterOnRadiusUpdate() {
-    final UserData userData = null;
-    final UserData result = userDataMapper.update(userData, RADIUS);
+    final UserData result = userDataMapper.update(null, RADIUS);
 
     assertThat(result).isNull();
   }
@@ -85,9 +82,8 @@ public class UserDataMapperTest {
 
   @Test
   @DisplayName("Should map user data to null if userData parameter is null on coordinates update")
-  void shouldMapUserDataToNullOnNullUserDataParameterOnCoordinatesUpdate() {
-    final UserData userData = null;
-    final UserData result = userDataMapper.update(userData, COORDINATES, COORDINATES);
+  void shouldMapUserDataToNullOnNullUserDataParameterOnCoordinateUpdate() {
+    final UserData result = userDataMapper.update(null, COORDINATES, COORDINATES);
 
     assertThat(result).isNull();
   }

@@ -29,20 +29,18 @@ public class AnreApiMapperTest {
 
     final FillingStation result = anreApiMapper.toEntity(fillingStationApi);
 
-    assertThat(result.getName()).isEqualTo(fillingStationApi.getName());
-    assertThat(result.getPetrol()).isEqualTo(fillingStationApi.getPetrol());
-    assertThat(result.getDiesel()).isEqualTo(fillingStationApi.getDiesel());
-    assertThat(result.getGas()).isEqualTo(fillingStationApi.getGas());
-    assertThat(result.getLongitude()).isEqualTo(fillingStationApi.getCoordinates().fst());
-    assertThat(result.getLatitude()).isEqualTo(fillingStationApi.getCoordinates().snd());
+    assertThat(result.name()).isEqualTo(fillingStationApi.getName());
+    assertThat(result.petrol()).isEqualTo(fillingStationApi.getPetrol());
+    assertThat(result.diesel()).isEqualTo(fillingStationApi.getDiesel());
+    assertThat(result.gas()).isEqualTo(fillingStationApi.getGas());
+    assertThat(result.longitude()).isEqualTo(fillingStationApi.getCoordinates().fst());
+    assertThat(result.latitude()).isEqualTo(fillingStationApi.getCoordinates().snd());
   }
 
   @Test
   @DisplayName("Should return null on null fillingStationApi")
   void shouldReturnNullOnNullFillingStationApi() {
-    final FillingStationApi fillingStationApi = null;
-
-    final FillingStation result = anreApiMapper.toEntity(fillingStationApi);
+    final FillingStation result = anreApiMapper.toEntity(null);
 
     assertThat(result).isNull();
   }
@@ -54,11 +52,11 @@ public class AnreApiMapperTest {
 
     final FillingStation result = anreApiMapper.toEntity(fillingStationApi);
 
-    assertThat(result.getName()).isEqualTo(fillingStationApi.getName());
-    assertThat(result.getPetrol()).isNull();
-    assertThat(result.getDiesel()).isNull();
-    assertThat(result.getGas()).isNull();
-    assertThat(result.getLongitude()).isEqualTo(fillingStationApi.getCoordinates().fst());
-    assertThat(result.getLatitude()).isEqualTo(fillingStationApi.getCoordinates().snd());
+    assertThat(result.name()).isEqualTo(fillingStationApi.getName());
+    assertThat(result.petrol()).isNull();
+    assertThat(result.diesel()).isNull();
+    assertThat(result.gas()).isNull();
+    assertThat(result.longitude()).isEqualTo(fillingStationApi.getCoordinates().fst());
+    assertThat(result.latitude()).isEqualTo(fillingStationApi.getCoordinates().snd());
   }
 }

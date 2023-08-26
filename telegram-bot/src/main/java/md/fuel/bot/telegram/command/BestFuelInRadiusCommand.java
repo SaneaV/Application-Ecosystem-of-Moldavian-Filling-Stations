@@ -29,7 +29,7 @@ public class BestFuelInRadiusCommand implements Command {
   public BestFuelInRadiusCommand(FillingStationFacade fillingStationFacade, UserDataFacade userDataFacade) {
     this.fillingStationFacade = fillingStationFacade;
     this.userDataFacade = userDataFacade;
-    COMMAND = fillingStationFacade.getSupportedFuelTypes().getFuelTypes();
+    COMMAND = fillingStationFacade.getSupportedFuelTypes().fuelTypes();
   }
 
   @Override
@@ -39,8 +39,8 @@ public class BestFuelInRadiusCommand implements Command {
     final long chatId = message.getChatId();
     final String fuelType = message.getText();
     final UserDataDto userData = userDataFacade.getUserData(userId);
-    final List<FillingStation> bestPriceFillingStations = fillingStationFacade.getBestFuelPrice(userData.getLatitude(),
-        userData.getLongitude(), userData.getRadius(), FILLING_STATIONS_LIMIT, FILLING_STATIONS_LIMIT, fuelType);
+    final List<FillingStation> bestPriceFillingStations = fillingStationFacade.getBestFuelPrice(userData.latitude(),
+        userData.longitude(), userData.radius(), FILLING_STATIONS_LIMIT, FILLING_STATIONS_LIMIT, fuelType);
 
     final List<? super PartialBotApiMethod<?>> messages = populateMessageMap(bestPriceFillingStations, fuelType, chatId);
     setReplyKeyboard(messages);
@@ -53,7 +53,7 @@ public class BestFuelInRadiusCommand implements Command {
     bestPriceFillingStations.forEach(fuelStation -> {
       final String messageText = toMessage(fuelStation, fuelType);
       final SendMessage fuelStationMessage = sendMessage(chatId, messageText);
-      final SendLocation fuelStationLocation = sendLocation(chatId, fuelStation.getLatitude(), fuelStation.getLongitude());
+      final SendLocation fuelStationLocation = sendLocation(chatId, fuelStation.latitude(), fuelStation.longitude());
       messages.add(fuelStationMessage);
       messages.add(fuelStationLocation);
     });

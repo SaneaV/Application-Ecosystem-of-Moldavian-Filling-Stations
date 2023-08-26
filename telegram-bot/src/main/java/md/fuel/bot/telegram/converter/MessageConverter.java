@@ -19,9 +19,9 @@ public class MessageConverter {
 
   public static String toMessage(FillingStation fillingStation) {
     final StringBuilder message = new StringBuilder()
-        .append(String.format(START_PART_MESSAGE, fillingStation.getName()));
+        .append(String.format(START_PART_MESSAGE, fillingStation.name()));
 
-    fillingStation.getPrices().forEach((fuelName, fuelPrice) -> {
+    fillingStation.prices().forEach((fuelName, fuelPrice) -> {
       final Pair<String, Double> priceIndicator = getPriceIndicator(fuelPrice);
       final String priceMessage = String.format(FUEL_PART_MESSAGE, priceIndicator.getFirst(), fuelName,
           priceIndicator.getSecond());
@@ -35,7 +35,7 @@ public class MessageConverter {
 
   public static String toMessage(FillingStation fillingStation, String fuelType) {
     final Pair<String, Double> priceIndicator = getSpecificFuelTypePriceIndicator(fillingStation, fuelType);
-    return String.format(START_PART_MESSAGE, fillingStation.getName())
+    return String.format(START_PART_MESSAGE, fillingStation.name())
         + String.format(FUEL_PART_MESSAGE, priceIndicator.getFirst(), fuelType, priceIndicator.getSecond())
         + String.format(LAST_PART_MESSAGE, FillingStation.timestamp);
   }
@@ -45,6 +45,6 @@ public class MessageConverter {
   }
 
   private static Pair<String, Double> getSpecificFuelTypePriceIndicator(FillingStation fillingStation, String fuelType) {
-    return getPriceIndicator(fillingStation.getPrices().get(fuelType));
+    return getPriceIndicator(fillingStation.prices().get(fuelType));
   }
 }

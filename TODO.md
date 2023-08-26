@@ -22,8 +22,9 @@
 - [X] [CORE] Implement the WebClient configuration in a YAML file.
 - [X] [CORE] Add SpotBugs maven plugin.
 - [X] [TELEGRAM] Generalize fuel prices to avoid `if` and `switch` checks (at converter level).
-- [X] [API] Add sort by proximity to getAllFillingStations.
+- [X] [API] Add sorting by proximity to getAllFillingStations.
 - [X] [TELEGRAM] Implement filling station cache.
+- [X] [CORE] Migrate to Java 20 and Spring Boot 3.
 
 ## Important Features
 
@@ -45,3 +46,4 @@
 - [ ] [TELEGRAM] Implement request per time unit limiter.
 - [ ] [API] Add an endpoint to request the official fuel price from ANRE.
 - [ ] [API] Add sort parameters in request.
+- [ ] [CORE] Add SonarQube.

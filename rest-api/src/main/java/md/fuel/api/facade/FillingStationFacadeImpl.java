@@ -1,7 +1,6 @@
 package md.fuel.api.facade;
 
 import static java.util.Objects.isNull;
-import static java.util.stream.Collectors.toList;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -41,7 +40,7 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
     return fillingStations.stream()
         .map(fillingStationDtoMapper::toDto)
-        .collect(toList());
+        .toList();
   }
 
   @Override
@@ -58,7 +57,7 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
     return fillingStations.stream()
         .map(fillingStationDtoMapper::toDto)
-        .collect(toList());
+        .toList();
   }
 
   @Override
@@ -73,7 +72,7 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
   public List<String> getAvailableFuelTypes() {
     return Arrays.stream(FuelType.values())
         .map(FuelType::getDescription)
-        .collect(toList());
+        .toList();
   }
 
   private void checkLimit(int limit) {

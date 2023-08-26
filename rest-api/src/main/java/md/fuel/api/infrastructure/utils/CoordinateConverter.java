@@ -11,7 +11,7 @@ import org.locationtech.proj4j.ProjCoordinate;
 import org.locationtech.proj4j.util.Pair;
 
 @NoArgsConstructor(access = PRIVATE)
-public class CoordinatesConverter {
+public class CoordinateConverter {
 
   private static final String WGS84_EPSG = "epsg:3857";
   private static final String UTM_EPSG = "epsg:4326";

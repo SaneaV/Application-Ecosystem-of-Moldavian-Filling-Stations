@@ -1,7 +1,6 @@
 package md.fuel.api.infrastructure.service;
 
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.mock;
@@ -94,8 +93,8 @@ public class FillingStationServiceImplTest {
     assertThat(allFillingStations.size()).isEqualTo(10);
 
     final List<String> fillingStationsName = allFillingStations.stream()
-        .map(FillingStation::getName)
-        .collect(toList());
+        .map(FillingStation::name)
+        .toList();
     assertThat(fillingStationsName).doesNotContain(FILLING_STATION_IN_ANOTHER_LOCATION);
 
     verify(anreApi).getFillingStationsInfo();
@@ -108,7 +107,7 @@ public class FillingStationServiceImplTest {
     when(anreApi.getFillingStationsInfo()).thenReturn(fillingStations);
 
     final FillingStation nearestFillingStation = fillingStationService.getNearestFillingStation(46.970797, 28.727367, 7000);
-    assertThat(nearestFillingStation.getName()).isEqualTo(FILLING_STATION_IN_ANOTHER_LOCATION);
+    assertThat(nearestFillingStation.name()).isEqualTo(FILLING_STATION_IN_ANOTHER_LOCATION);
 
     verify(anreApi).getFillingStationsInfo();
   }
@@ -124,8 +123,9 @@ public class FillingStationServiceImplTest {
         LIMIT);
 
     final List<String> fillingStationsName = bestFuelPrice.stream()
-        .map(FillingStation::getName)
-        .collect(toList());
+        .map(FillingStation::name)
+        .toList();
+
     assertThat(bestFuelPrice.size()).isEqualTo(2);
     assertThat(fillingStationsName).containsAll(asList(FILLING_STATION_WITH_BEST_FUEL_PRICE_1,
         FILLING_STATION_WITH_BEST_FUEL_PRICE_2));

@@ -35,13 +35,12 @@ public class NearestFillingStationCommand implements Command {
     final long userId = message.getFrom().getId();
     final long chatId = message.getChatId();
     final UserDataDto userData = userDataFacade.getUserData(userId);
-    final FillingStation nearestFuelStation = fillingStationFacade.getNearestFillingStation(userData.getLatitude(),
-        userData.getLongitude(), userData.getRadius());
+    final FillingStation nearestFuelStation = fillingStationFacade.getNearestFillingStation(userData.latitude(),
+        userData.longitude(), userData.radius());
 
     final String fuelStationTextMessage = toMessage(nearestFuelStation);
     final SendMessage fuelStationMessage = sendMessage(chatId, fuelStationTextMessage, getMainMenuKeyboard());
-    final SendLocation fuelStationLocation = sendLocation(chatId, nearestFuelStation.getLatitude(),
-        nearestFuelStation.getLongitude());
+    final SendLocation fuelStationLocation = sendLocation(chatId, nearestFuelStation.latitude(), nearestFuelStation.longitude());
 
     return asList(fuelStationMessage, fuelStationLocation);
   }

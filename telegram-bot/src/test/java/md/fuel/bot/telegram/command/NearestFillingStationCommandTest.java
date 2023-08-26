@@ -29,11 +29,14 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class NearestFillingStationCommandTest {
 
   public static final String COMMAND = "Nearest filling station";
-  private static final String FILLING_STATION_MESSAGE = "⛽ Filling station - \"%s\"\n\n"
-      + "%s Petrol: %s lei\n"
-      + "%s Diesel: %s lei\n"
-      + "%s Gas: %s lei\n\n"
-      + "📊 Last price update: %s";
+  private static final String FILLING_STATION_MESSAGE = """
+      ⛽ Filling station - "%s"
+
+      %s Petrol: %s lei
+      %s Diesel: %s lei
+      %s Gas: %s lei
+
+      📊 Last price update: %s""";
   private static final String GREEN_CIRCLE = "🟢";
   private static final String RED_CIRCLE = "🔴";
 
@@ -54,7 +57,6 @@ public class NearestFillingStationCommandTest {
     final long userId = 10L;
     final String fuelStationName = "Filling Station Name";
     final double petrol = 10;
-    final Double diesel = null;
     final double gas = 30;
     final double latitude = 40;
     final double longitude = 50;
@@ -62,7 +64,7 @@ public class NearestFillingStationCommandTest {
     final long defaultLongValue = 0L;
     final Map<String, Double> priceMap = new LinkedHashMap<>();
     priceMap.put("Petrol", petrol);
-    priceMap.put("Diesel", diesel);
+    priceMap.put("Diesel", null);
     priceMap.put("Gas", gas);
 
     final User user = new User();
@@ -93,8 +95,8 @@ public class NearestFillingStationCommandTest {
     assertThat(sendMessage.getChatId()).isEqualTo(Long.toString(chatId));
     assertThat(sendMessage.getReplyMarkup()).isEqualTo(getMainMenuKeyboard());
     assertThat(sendLocation.getChatId()).isEqualTo(Long.toString(chatId));
-    assertThat(sendLocation.getLatitude()).isEqualTo(fillingStationDto.getLatitude());
-    assertThat(sendLocation.getLongitude()).isEqualTo(fillingStationDto.getLongitude());
+    assertThat(sendLocation.getLatitude()).isEqualTo(fillingStationDto.latitude());
+    assertThat(sendLocation.getLongitude()).isEqualTo(fillingStationDto.longitude());
 
     verify(userDataFacade).getUserData(anyLong());
     verify(fillingStationFacade).getNearestFillingStation(anyDouble(), anyDouble(), anyDouble());

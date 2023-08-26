@@ -2,7 +2,6 @@ package md.fuel.bot.infrastructure.repository;
 
 import static java.util.Arrays.stream;
 import static java.util.Collections.emptyList;
-import static java.util.stream.Collectors.toList;
 import static md.fuel.bot.infrastructure.repository.MapperConstants.EXCEPTION_MAPPING_MESSAGE;
 import static md.fuel.bot.infrastructure.repository.MapperConstants.EXCEPTION_METHOD_MESSAGE;
 
@@ -16,7 +15,7 @@ import md.fuel.bot.infrastructure.exception.model.ExecutionException;
 public interface PageMapper {
 
   default <T> Page<T> toEntity(Result<?> result, Class<T> tClass) {
-    final List<?> sourceData = result.getItems();
+    final List<?> sourceData = result.items();
 
     if (Objects.isNull(sourceData) || sourceData.isEmpty()) {
       return new Page<>(0, emptyList());
@@ -41,8 +40,8 @@ public interface PageMapper {
           }
         })
         .map(tClass::cast)
-        .collect(toList());
+        .toList();
 
-    return new Page<>(result.getTotalResults(), targetItems);
+    return new Page<>(result.totalResults(), targetItems);
   }
 }

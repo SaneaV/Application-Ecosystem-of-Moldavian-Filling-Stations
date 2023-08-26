@@ -1,6 +1,5 @@
 package md.fuel.api.infrastructure.repository;
 
-import static java.util.stream.Collectors.toList;
 import static md.fuel.api.infrastructure.configuration.EhcacheConfiguration.ANRE_CACHE;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -49,7 +48,7 @@ public class AnreApiStubImpl implements AnreApi {
 
       final List<FillingStation> fillingStations = fillingStationApis.stream()
           .map(mapper::toEntity)
-          .collect(toList());
+          .toList();
 
       FILLING_STATIONS.addAll(fillingStations);
       return FILLING_STATIONS;

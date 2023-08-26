@@ -43,8 +43,8 @@ public class GetterSetterTest {
   private final Set<String> ignoreMethods = new HashSet<>(singleton("getClass"));
   private final Map<Class<?>, Supplier<?>> supplierMap = new HashMap<>(DEFAULT_SUPPLIERS);
 
-  protected void addIgnoreMethods(List<String> ignoreMethodsNames) {
-    ignoreMethods.addAll(ignoreMethodsNames);
+  protected void addIgnoreMethods(List<String> ignoreMethodNames) {
+    ignoreMethods.addAll(ignoreMethodNames);
   }
 
   public <T> void testGettersAndSetters(T instance) throws Exception {

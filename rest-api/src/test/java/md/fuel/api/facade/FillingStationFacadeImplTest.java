@@ -1,7 +1,6 @@
 package md.fuel.api.facade;
 
 import static java.util.Arrays.asList;
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -166,7 +165,7 @@ public class FillingStationFacadeImplTest {
   void shouldReturnListOfFuelTypes() {
     final List<String> expected = Arrays.stream(FuelType.values())
         .map(FuelType::getDescription)
-        .collect(toList());
+        .toList();
 
     final List<String> result = fillingStationFacade.getAvailableFuelTypes();
 

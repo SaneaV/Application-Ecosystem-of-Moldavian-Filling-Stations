@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.15</version>
+    <version>3.1.3</version>
     <relativePath/>
   </parent>
 
@@ -25,14 +25,14 @@
   </modules>
 
   <properties>
-    <java.version>11</java.version>
+    <java.version>20</java.version>
     <skip.unit.tests>false</skip.unit.tests>
     <skip.integration.tests>false</skip.integration.tests>
 
     <!--SPRING FAMILY-->
-    <spring.boot.parent.version>2.7.15</spring.boot.parent.version>
+    <spring.boot.parent.version>3.1.3</spring.boot.parent.version>
     <telegrambots.spring.boot.starter.version>6.8.0</telegrambots.spring.boot.starter.version>
-    <springdoc.openapi.ui.version>1.7.0</springdoc.openapi.ui.version>
+    <springdoc.openapi.starter.webmvc.ui.version>2.2.0</springdoc.openapi.starter.webmvc.ui.version>
 
     <!--TOOLS-->
     <proj4j.version>1.3.0</proj4j.version>
@@ -42,13 +42,15 @@
     <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
     <jackson.databind.nullable.version>0.2.6</jackson.databind.nullable.version>
     <java.ngrok.version>2.1.0</java.ngrok.version>
-    <spotbugs.version>4.7.3.5</spotbugs.version>
+    <spotbugs.version>4.7.3</spotbugs.version>
+    <swagger.annotations.jakarta.version>2.2.15</swagger.annotations.jakarta.version>
+    <jakarta.validation.api.version>3.0.2</jakarta.validation.api.version>
 
     <!--INTERNAL PROJECTS-->
     <contract.generator.version>1.0.0</contract.generator.version>
 
     <!--TESTING-->
-    <mockito.inline.version>4.5.1</mockito.inline.version>
+    <mockito.inline.version>5.2.0</mockito.inline.version>
     <wiremock.version>2.35.0</wiremock.version>
 
     <!--DATABASE-->
@@ -57,7 +59,7 @@
 
     <!--MAVEN PLUGINS-->
     <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
-    <openapi.generator.maven.plugin.version>6.6.0</openapi.generator.maven.plugin.version>
+    <openapi.generator.maven.plugin.version>7.0.0</openapi.generator.maven.plugin.version>
     <maven.failsafe.plugin.version>3.1.2</maven.failsafe.plugin.version>
     <build.helper.maven.plugin.version>3.4.0</build.helper.maven.plugin.version>
     <dependency.check.maven.version>8.4.0</dependency.check.maven.version>
@@ -112,8 +114,8 @@
       </dependency>
       <dependency>
         <groupId>org.springdoc</groupId>
-        <artifactId>springdoc-openapi-ui</artifactId>
-        <version>${springdoc.openapi.ui.version}</version>
+        <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+        <version>${springdoc.openapi.starter.webmvc.ui.version}</version>
       </dependency>
       <dependency>
         <groupId>org.telegram</groupId>
@@ -177,6 +179,16 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs</artifactId>
         <version>${spotbugs.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.swagger.core.v3</groupId>
+        <artifactId>swagger-annotations-jakarta</artifactId>
+        <version>${swagger.annotations.jakarta.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>jakarta.validation</groupId>
+        <artifactId>jakarta.validation-api</artifactId>
+        <version>${jakarta.validation.api.version}</version>
       </dependency>
 
       <!--DATABASE-->

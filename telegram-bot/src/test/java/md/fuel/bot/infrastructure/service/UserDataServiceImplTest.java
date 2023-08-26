@@ -41,9 +41,8 @@ public class UserDataServiceImplTest {
   @Test
   @DisplayName("Should save user data if not found in database")
   void shouldSaveUserDataIfNotFoundInDatabase() {
-    final UserData userData = null;
     final UserData newUserData = new UserData();
-    when(userDataAdapter.getUserData(USER_ID)).thenReturn(userData);
+    when(userDataAdapter.getUserData(USER_ID)).thenReturn(null);
     when(userDataMapper.toEntity(USER_ID)).thenReturn(newUserData);
 
     userDataService.save(USER_ID);

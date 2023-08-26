@@ -47,35 +47,39 @@ public class FillingStationRepositoryImplIT {
   private static final FillingStation FILLING_STATION = new FillingStation("Fortress", PRICE_MAP, 46.34746746138542,
       28.947447953963454);
 
-  private static final String PAGE_FILLING_STATIONS_RESPONSE = "{\n" +
-      "    \"totalResults\": 1,\n" +
-      "    \"items\": [\n" +
-      "        {\n" +
-      "            \"name\": \"Fortress\",\n" +
-      "            \"petrol\": 25.75,\n" +
-      "            \"diesel\": 22.3,\n" +
-      "            \"gas\": 13.45,\n" +
-      "            \"latitude\": 46.34746746138542,\n" +
-      "            \"longitude\": 28.947447953963454\n" +
-      "        }\n" +
-      "    ]\n" +
-      "}";
-  private static final String EMPTY_PAGE_FILLING_STATIONS_RESPONSE = "{\n" +
-      "    \"totalResults\": 0,\n" +
-      "    \"items\": [\n" +
-      "    ]\n" +
-      "}";
-  private static final String NULL_PAGE_FILLING_STATIONS_RESPONSE = "{\n" +
-      "    \"totalResults\": 0\n" +
-      "}";
-  private static final String NEAREST_FILLING_STATION_RESPONSE = "{\n" +
-      "    \"name\": \"Fortress\",\n" +
-      "    \"petrol\": 25.75,\n" +
-      "    \"diesel\": 22.3,\n" +
-      "    \"gas\": 13.45,\n" +
-      "    \"latitude\": 46.34746746138542,\n" +
-      "    \"longitude\": 28.947447953963454\n" +
-      "}";
+  private static final String PAGE_FILLING_STATIONS_RESPONSE = """
+      {
+          "totalResults": 1,
+          "items": [
+              {
+                  "name": "Fortress",
+                  "petrol": 25.75,
+                  "diesel": 22.3,
+                  "gas": 13.45,
+                  "latitude": 46.34746746138542,
+                  "longitude": 28.947447953963454
+              }
+          ]
+      }""";
+  private static final String EMPTY_PAGE_FILLING_STATIONS_RESPONSE = """
+      {
+          "totalResults": 0,
+          "items": [
+          ]
+      }""";
+  private static final String NULL_PAGE_FILLING_STATIONS_RESPONSE = """
+      {
+          "totalResults": 0
+      }""";
+  private static final String NEAREST_FILLING_STATION_RESPONSE = """
+      {
+          "name": "Fortress",
+          "petrol": 25.75,
+          "diesel": 22.3,
+          "gas": 13.45,
+          "latitude": 46.34746746138542,
+          "longitude": 28.947447953963454
+      }""";
   private static final String TIMESTAMP_UPDATE_RESPONSE = "\"2023-08-25T23:04:00+03:00\"";
   private static final String FUEL_TYPES_RESPONSE = "[\"Petrol\",\"Diesel\",\"Gas\"]";
 
@@ -103,8 +107,8 @@ public class FillingStationRepositoryImplIT {
     final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
         OFFSET);
 
-    assertThat(result.getTotalResults()).isEqualTo(1);
-    assertThat(result.getItems().get(0)).usingRecursiveComparison().isEqualTo(FILLING_STATION);
+    assertThat(result.totalResults()).isEqualTo(1);
+    assertThat(result.items().get(0)).usingRecursiveComparison().isEqualTo(FILLING_STATION);
   }
 
   @Test
@@ -133,8 +137,8 @@ public class FillingStationRepositoryImplIT {
     final Page<FillingStation> result = repository.getBestFuelPriceStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
         OFFSET, "Petrol");
 
-    assertThat(result.getTotalResults()).isEqualTo(1);
-    assertThat(result.getItems().get(0)).usingRecursiveComparison().isEqualTo(FILLING_STATION);
+    assertThat(result.totalResults()).isEqualTo(1);
+    assertThat(result.items().get(0)).usingRecursiveComparison().isEqualTo(FILLING_STATION);
   }
 
   @Test
@@ -162,7 +166,7 @@ public class FillingStationRepositoryImplIT {
             .withBody(FUEL_TYPES_RESPONSE)));
 
     final FuelType result = repository.getSupportedFuelTypes();
-    assertThat(result.getFuelTypes()).containsExactlyElementsOf(expected);
+    assertThat(result.fuelTypes()).containsExactlyElementsOf(expected);
   }
 
   @ParameterizedTest
@@ -187,8 +191,8 @@ public class FillingStationRepositoryImplIT {
 
     assertThatThrownBy(() -> repository.getSupportedFuelTypes())
         .isInstanceOf(DecodingException.class)
-        .hasMessage("JSON decoding error: Unrecognized token 'WRONG_RESPONSE': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false'); nested exception is com.fasterxml.jackson.core.JsonParseException: Unrecognized token 'WRONG_RESPONSE': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')\n"
-            + " at [Source: (io.netty.buffer.ByteBufInputStream); line: 1, column: 15]");
+        .hasMessage(
+            "JSON decoding error: Unrecognized token 'WRONG_RESPONSE': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')");
   }
 
   @Test
@@ -203,8 +207,8 @@ public class FillingStationRepositoryImplIT {
     final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
         OFFSET);
 
-    assertThat(result.getTotalResults()).isEqualTo(0);
-    assertThat(result.getItems()).hasSize(0);
+    assertThat(result.totalResults()).isEqualTo(0);
+    assertThat(result.items()).hasSize(0);
   }
 
   @Test
@@ -219,7 +223,7 @@ public class FillingStationRepositoryImplIT {
     final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
         OFFSET);
 
-    assertThat(result.getTotalResults()).isEqualTo(0);
-    assertThat(result.getItems()).hasSize(0);
+    assertThat(result.totalResults()).isEqualTo(0);
+    assertThat(result.items()).hasSize(0);
   }
 }

@@ -1,17 +1,16 @@
 package md.fuel.api.rest.exception;
 
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
-import static md.fuel.api.rest.exception.ErrorConstants.ERROR_REASON_BIND_ERROR;
 import static md.fuel.api.rest.exception.ErrorConstants.ERROR_REASON_CONSTRAINT_ERROR;
 import static md.fuel.api.rest.exception.ErrorConstants.ERROR_REASON_INTERNAL_ERROR;
+import static md.fuel.api.rest.exception.ErrorConstants.ERROR_REASON_METHOD_ARGUMENT_NOT_VALID;
 import static md.fuel.api.rest.exception.ErrorConstants.ERROR_SOURCE;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.MediaType.APPLICATION_PROBLEM_JSON;
 
+import jakarta.validation.ConstraintViolationException;
 import java.util.List;
-import javax.validation.ConstraintViolationException;
 import md.fuel.api.domain.exception.RfcError;
 import md.fuel.api.infrastructure.exception.ErrorDescriptionResponse;
 import md.fuel.api.infrastructure.exception.ErrorWrappingStrategy;
@@ -22,7 +21,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.validation.BindException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.context.request.WebRequest;
 
 @Component
@@ -60,20 +59,21 @@ public class Rfc7807ErrorWrappingStrategy implements ErrorWrappingStrategy {
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleBindException(BindException exception, WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception,
+      WebRequest request) {
 
     final List<RfcError> rfcErrors = exception.getFieldErrors().stream()
         .map(e -> RfcError.builder()
             .source(ERROR_SOURCE)
             .message(e.getDefaultMessage())
-            .reason(ERROR_REASON_BIND_ERROR)
+            .reason(ERROR_REASON_METHOD_ARGUMENT_NOT_VALID)
             .recoverable(false)
             .build())
-        .collect(toList());
+        .toList();
 
     final RfcErrorDescription error = RfcErrorDescription.builder()
         .status(BAD_REQUEST.value())
-        .title(ERROR_REASON_BIND_ERROR)
+        .title(ERROR_REASON_METHOD_ARGUMENT_NOT_VALID)
         .errorDetails(rfcErrors)
         .build();
 

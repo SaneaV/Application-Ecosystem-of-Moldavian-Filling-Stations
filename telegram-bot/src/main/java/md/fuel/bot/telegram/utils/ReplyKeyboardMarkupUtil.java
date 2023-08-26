@@ -2,7 +2,6 @@ package md.fuel.bot.telegram.utils;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PRIVATE;
 
 import java.util.ArrayList;
@@ -39,11 +38,11 @@ public class ReplyKeyboardMarkupUtil {
   private static ReplyKeyboardMarkup getReplyKeyboardMarkup(List<String> items) {
     final List<KeyboardButton> buttons = items.stream()
         .map(KeyboardButton::new)
-        .collect(toList());
+        .toList();
 
     final List<KeyboardRow> keyboardRows = buttons.stream()
         .map(button -> new KeyboardRow(singletonList(button)))
-        .collect(toList());
+        .toList();
 
     return createReplyKeyBoardMarkup(keyboardRows);
   }

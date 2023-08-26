@@ -34,8 +34,8 @@ public class AllFillingStationInRadiusCommand implements Command {
     final long userId = message.getFrom().getId();
     final long chatId = message.getChatId();
     final UserDataDto userData = userDataFacade.getUserData(userId);
-    final List<FillingStation> allFillingStations = fillingStationFacade.getAllFillingStations(userData.getLatitude(),
-        userData.getLongitude(), userData.getRadius(), FILLING_STATIONS_LIMIT, FILLING_STATIONS_LIMIT);
+    final List<FillingStation> allFillingStations = fillingStationFacade.getAllFillingStations(userData.latitude(),
+        userData.longitude(), userData.radius(), FILLING_STATIONS_LIMIT, FILLING_STATIONS_LIMIT);
 
     return populateMessageMap(allFillingStations, chatId);
   }
@@ -45,8 +45,7 @@ public class AllFillingStationInRadiusCommand implements Command {
     allFillingStations.forEach(fillingStation -> {
       final String messageText = toMessage(fillingStation);
       final SendMessage fillingStationMessage = sendMessage(chatId, messageText);
-      final SendLocation fillingStationLocation = sendLocation(chatId, fillingStation.getLatitude(),
-          fillingStation.getLongitude());
+      final SendLocation fillingStationLocation = sendLocation(chatId, fillingStation.latitude(), fillingStation.longitude());
       messages.add(fillingStationMessage);
       messages.add(fillingStationLocation);
     });
