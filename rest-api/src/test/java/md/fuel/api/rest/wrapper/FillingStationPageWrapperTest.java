@@ -3,8 +3,7 @@ package md.fuel.api.rest.wrapper;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -13,6 +12,9 @@ import java.util.List;
 import java.util.stream.Stream;
 import md.fuel.api.facade.FillingStationFacade;
 import md.fuel.api.rest.dto.FillingStationDto;
+import md.fuel.api.rest.dto.PageDto;
+import md.fuel.api.rest.request.LimitFillingStationRequest;
+import md.fuel.api.rest.request.PageRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -43,11 +45,12 @@ public class FillingStationPageWrapperTest {
   @MethodSource("getData")
   @DisplayName("Should wrap all filling stations into a page")
   void shouldWrapAllFillingStations(int pageLimit, int offset, int finalSize, List<FillingStationDto> finalList) {
-    when(fillingStationFacade.getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt())).thenReturn(
-        List.of(FILLING_STATION_FORTRESS, FILLING_STATION_PETROM));
+    when(fillingStationFacade.getAllFillingStations(any())).thenReturn(List.of(FILLING_STATION_FORTRESS, FILLING_STATION_PETROM));
 
-    final PageDto<FillingStationDto> result = fillingStationPageWrapper.wrapAllFillingStationsList(LATITUDE, LONGITUDE, RADIUS,
-        LIMIT, pageLimit, offset);
+    final PageRequest pageRequest = buildPageRequest(pageLimit, offset);
+
+    final PageDto<FillingStationDto> result = fillingStationPageWrapper.wrapAllFillingStationsList(buildLimitRequest(),
+        pageRequest);
 
     assertThat(result.totalResults()).isEqualTo(2);
     assertThat(result.items()).hasSize(finalSize);
@@ -58,11 +61,13 @@ public class FillingStationPageWrapperTest {
   @MethodSource("getData")
   @DisplayName("Should wrap best fuel price stations into a page")
   void shouldWrapBestFuelPriceStations(int pageLimit, int offset, int finalSize, List<FillingStationDto> finalList) {
-    when(fillingStationFacade.getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), anyString(), anyInt())).thenReturn(
+    when(fillingStationFacade.getBestFuelPrice(any(), anyString())).thenReturn(
         List.of(FILLING_STATION_FORTRESS, FILLING_STATION_PETROM));
 
-    final PageDto<FillingStationDto> result = fillingStationPageWrapper.wrapBestFuelPriceStation(LATITUDE, LONGITUDE, RADIUS,
-        FUEL_TYPE, LIMIT, pageLimit, offset);
+    final PageRequest pageRequest = buildPageRequest(pageLimit, offset);
+
+    final PageDto<FillingStationDto> result = fillingStationPageWrapper.wrapBestFuelPriceStation(buildLimitRequest(), pageRequest,
+        FUEL_TYPE);
 
     assertThat(result.totalResults()).isEqualTo(2);
     assertThat(result.items()).hasSize(finalSize);
@@ -81,5 +86,22 @@ public class FillingStationPageWrapperTest {
         Arguments.of(1, 0, 1, fortressList),
         Arguments.of(2, 2, 0, emptyList())
     );
+  }
+
+  private LimitFillingStationRequest buildLimitRequest() {
+    final LimitFillingStationRequest request = new LimitFillingStationRequest();
+    request.setLatitude(LATITUDE);
+    request.setLongitude(LONGITUDE);
+    request.setRadius(RADIUS);
+    request.setLimit_in_radius(LIMIT);
+    request.setSorting(emptyList());
+    return request;
+  }
+
+  private PageRequest buildPageRequest(int limit, int offset) {
+    final PageRequest request = new PageRequest();
+    request.setLimit(limit);
+    request.setOffset(offset);
+    return request;
   }
 }

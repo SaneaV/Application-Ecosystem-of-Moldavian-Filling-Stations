@@ -27,6 +27,25 @@ paths:
             type: integer
             format: int32
           example: 10
+        - name: sorting
+          in: query
+          description: Sort order by and sort order parameters.
+          required: false
+          schema:
+            type: string
+            default: +distance
+            enum:
+              - +distance
+              - '-distance'
+              - +name
+              - '-name'
+              - +petrol
+              - '-petrol'
+              - +diesel
+              - '-diesel'
+              - +gas
+              - '-gas'
+          example: '-distance,+gas,petrol'
         - name: latitude
           in: query
           description: Latitude of the starting point of the search.
@@ -127,6 +146,25 @@ paths:
             type: integer
             format: int32
           example: 10
+        - name: sorting
+          in: query
+          description: Sort order by and sort order parameters.
+          required: false
+          schema:
+            type: string
+            default: +distance
+            enum:
+              - +distance
+              - '-distance'
+              - +name
+              - '-name'
+              - +petrol
+              - '-petrol'
+              - +diesel
+              - '-diesel'
+              - +gas
+              - '-gas'
+          example: '-distance,+gas,petrol'
         - name: latitude
           in: query
           description: Latitude of the starting point of the search.
@@ -237,6 +275,25 @@ paths:
             type: integer
             format: int32
           example: 10
+        - name: sorting
+          in: query
+          description: Sort order by and sort order parameters.
+          required: false
+          schema:
+            type: string
+            default: +distance
+            enum:
+              - +distance
+              - '-distance'
+              - +name
+              - '-name'
+              - +petrol
+              - '-petrol'
+              - +diesel
+              - '-diesel'
+              - +gas
+              - '-gas'
+          example: '-distance,+gas,petrol'
         - name: latitude
           in: query
           description: Latitude of the starting point of the search.
@@ -321,6 +378,25 @@ paths:
             type: integer
             format: int32
           example: 10
+        - name: sorting
+          in: query
+          description: Sort order by and sort order parameters.
+          required: false
+          schema:
+            type: string
+            default: +distance
+            enum:
+              - +distance
+              - '-distance'
+              - +name
+              - '-name'
+              - +petrol
+              - '-petrol'
+              - +diesel
+              - '-diesel'
+              - +gas
+              - '-gas'
+          example: '-distance,+gas,petrol'
         - name: latitude
           in: query
           description: Latitude of the starting point of the search.

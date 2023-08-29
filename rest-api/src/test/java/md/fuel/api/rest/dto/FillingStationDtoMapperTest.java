@@ -40,7 +40,7 @@ public class FillingStationDtoMapperTest {
   @Test
   @DisplayName("Should map FillingStationDto to null on null FillingStation")
   void shouldMapFillingStationDtoToNullOnNullFillingStation() {
-    final FillingStationDto result = FillingStationDtoMapper.toDto(null);
+    final FillingStationDto result = FillingStationDtoMapper.toDto((FillingStation) null);
 
     assertThat(result).isNull();
   }

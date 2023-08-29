@@ -1,4 +1,4 @@
-package md.fuel.api.rest.wrapper;
+package md.fuel.api.rest.dto;
 
 import static io.swagger.v3.oas.annotations.media.Schema.RequiredMode.REQUIRED;
 

@@ -22,7 +22,7 @@ public class AnreTimestampAspectTest {
 
   @AfterEach
   void resetTimestamp() {
-    FillingStation.timestamp = null;
+    FillingStation.TIMESTAMP = null;
   }
 
   @Test
@@ -34,10 +34,10 @@ public class AnreTimestampAspectTest {
     final AnreApi proxy = proxyFactory.getProxy();
 
     final String formattedTimeStamp = TIMESTAMP.format(FORMATTER);
-    FillingStation.timestamp = formattedTimeStamp;
+    FillingStation.TIMESTAMP = formattedTimeStamp;
     proxy.getFillingStationsInfo();
 
     verify(anreApi).getFillingStationsInfo();
-    assertThat(FillingStation.timestamp).isEqualTo(formattedTimeStamp);
+    assertThat(FillingStation.TIMESTAMP).isEqualTo(formattedTimeStamp);
   }
 }

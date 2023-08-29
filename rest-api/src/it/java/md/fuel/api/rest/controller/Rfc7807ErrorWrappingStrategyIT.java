@@ -1,7 +1,7 @@
 package md.fuel.api.rest.controller;
 
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -88,7 +88,7 @@ public class Rfc7807ErrorWrappingStrategyIT {
   @MethodSource("getExceptions")
   @DisplayName("Should handle exceptions in RFC7807 format")
   void shouldHandleExceptionsInRFC7807(RuntimeException e, String detail, int status, String title) throws Exception {
-    when(fillingStationFacade.getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt())).thenThrow(e);
+    when(fillingStationFacade.getAllFillingStations(any())).thenThrow(e);
 
     final String response = String.format(RFC7807_RESPONSE, status, detail, title);
 
@@ -100,13 +100,15 @@ public class Rfc7807ErrorWrappingStrategyIT {
             .contentType(APPLICATION_JSON))
         .andExpect(status().is(status))
         .andExpect(content().json(response));
+
+    verify(fillingStationFacade).getAllFillingStations(any());
   }
 
   @Test
   @DisplayName("Should throw runtime exception in RFC7807 format")
   void shouldHandleRuntimeExceptionInRFC7807Format() throws Exception {
     final RuntimeException runtimeException = new RuntimeException(ERROR_MESSAGE);
-    when(fillingStationFacade.getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt())).thenThrow(runtimeException);
+    when(fillingStationFacade.getAllFillingStations(any())).thenThrow(runtimeException);
 
     final String response = "{\"status\":500,\"title\":\"Internal Server Error\",\"errorDetails\":[{\"source\":null," +
         "\"reason\":\"INTERNAL_SERVER_ERROR\",\"message\":\"Error message\",\"recoverable\":false}]}";
@@ -119,6 +121,8 @@ public class Rfc7807ErrorWrappingStrategyIT {
             .contentType(APPLICATION_JSON))
         .andExpect(status().is(INTERNAL_SERVER_ERROR.value()))
         .andExpect(content().json(response));
+
+    verify(fillingStationFacade).getAllFillingStations(any());
   }
 
   @Test

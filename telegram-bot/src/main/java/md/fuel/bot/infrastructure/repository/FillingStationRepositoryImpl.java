@@ -31,6 +31,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class FillingStationRepositoryImpl implements FillingStationRepository {
 
+  private static final String BASE_SORTING_PARAM = "-distance";
+
   private final WebClient webClient;
   private final FillingStationMapper mapper;
   private final RetryWebClientConfiguration retryWebClientConfiguration;
@@ -41,7 +43,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
       key = "new org.springframework.cache.interceptor.SimpleKey(#latitude, #longitude, #radius)")
   public Page<FillingStation> getAllFillingStation(double latitude, double longitude, double radius, int limitInRadius, int limit,
       int offset) {
-    final List<Object> parameters = asList(latitude, longitude, radius, limitInRadius, limit, offset);
+    final List<Object> parameters = asList(latitude, longitude, radius, limitInRadius, BASE_SORTING_PARAM, limit, offset);
     final URI uri = resolve(ALL_FILLING_STATIONS_PAGE_PATH, apiConfiguration, parameters);
 
     return webClient.get()
@@ -77,7 +79,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
       key = "new org.springframework.cache.interceptor.SimpleKey(#latitude, #longitude, #radius, #fuelType)")
   public Page<FillingStation> getBestFuelPriceStation(double latitude, double longitude, double radius, int limitInRadius,
       int limit, int offset, String fuelType) {
-    final List<Object> parameters = asList(latitude, longitude, radius, limitInRadius, limit, offset);
+    final List<Object> parameters = asList(latitude, longitude, radius, limitInRadius, BASE_SORTING_PARAM, limit, offset);
     final URI uri = resolve(BEST_FUEL_PRICE_PAGE_PATH, apiConfiguration, parameters, fuelType);
 
     return webClient.get()

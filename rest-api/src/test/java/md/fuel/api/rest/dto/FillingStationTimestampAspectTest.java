@@ -1,5 +1,6 @@
 package md.fuel.api.rest.dto;
 
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -8,6 +9,9 @@ import java.time.LocalDateTime;
 import md.fuel.api.domain.FillingStation;
 import md.fuel.api.facade.FillingStationFacade;
 import md.fuel.api.facade.FillingStationFacadeImpl;
+import md.fuel.api.rest.aspect.FillingStationTimestampAspect;
+import md.fuel.api.rest.request.BaseFillingStationRequest;
+import md.fuel.api.rest.request.LimitFillingStationRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,8 +28,8 @@ public class FillingStationTimestampAspectTest {
 
   @AfterEach
   void resetTimestamp() {
-    FillingStation.timestamp = null;
-    FillingStationDto.timestamp = null;
+    FillingStation.TIMESTAMP = null;
+    FillingStationDto.TIMESTAMP = null;
   }
 
   @Test
@@ -35,12 +39,13 @@ public class FillingStationTimestampAspectTest {
     final AspectJProxyFactory proxyFactory = new AspectJProxyFactory(FillingStationFacade);
     proxyFactory.addAspect(FillingStationTimestampAspect.class);
     final FillingStationFacade proxy = proxyFactory.getProxy();
+    final LimitFillingStationRequest request = buildLimitRequest();
 
-    FillingStation.timestamp = TIMESTAMP;
-    proxy.getAllFillingStations(LATITUDE, LONGITUDE, RADIUS, LIMIT);
+    FillingStation.TIMESTAMP = TIMESTAMP;
+    proxy.getAllFillingStations(request);
 
-    verify(FillingStationFacade).getAllFillingStations(LATITUDE, LONGITUDE, RADIUS, LIMIT);
-    assertThat(FillingStationDto.timestamp).isEqualTo(TIMESTAMP);
+    verify(FillingStationFacade).getAllFillingStations(request);
+    assertThat(FillingStationDto.TIMESTAMP).isEqualTo(TIMESTAMP);
   }
 
   @Test
@@ -50,12 +55,13 @@ public class FillingStationTimestampAspectTest {
     final AspectJProxyFactory proxyFactory = new AspectJProxyFactory(FillingStationFacade);
     proxyFactory.addAspect(FillingStationTimestampAspect.class);
     final FillingStationFacade proxy = proxyFactory.getProxy();
+    final BaseFillingStationRequest request = buildBaseRequest();
 
-    FillingStation.timestamp = TIMESTAMP;
-    proxy.getNearestFillingStation(LATITUDE, LONGITUDE, RADIUS);
+    FillingStation.TIMESTAMP = TIMESTAMP;
+    proxy.getNearestFillingStation(request);
 
-    verify(FillingStationFacade).getNearestFillingStation(LATITUDE, LONGITUDE, RADIUS);
-    assertThat(FillingStationDto.timestamp).isEqualTo(TIMESTAMP);
+    verify(FillingStationFacade).getNearestFillingStation(request);
+    assertThat(FillingStationDto.TIMESTAMP).isEqualTo(TIMESTAMP);
   }
 
   @Test
@@ -65,11 +71,30 @@ public class FillingStationTimestampAspectTest {
     final AspectJProxyFactory proxyFactory = new AspectJProxyFactory(FillingStationFacade);
     proxyFactory.addAspect(FillingStationTimestampAspect.class);
     final FillingStationFacade proxy = proxyFactory.getProxy();
+    final LimitFillingStationRequest request = buildLimitRequest();
 
-    FillingStation.timestamp = TIMESTAMP;
-    proxy.getBestFuelPrice(LATITUDE, LONGITUDE, RADIUS, FUEL_TYPE, LIMIT);
+    FillingStation.TIMESTAMP = TIMESTAMP;
+    proxy.getBestFuelPrice(request, FUEL_TYPE);
 
-    verify(FillingStationFacade).getBestFuelPrice(LATITUDE, LONGITUDE, RADIUS, FUEL_TYPE, LIMIT);
-    assertThat(FillingStationDto.timestamp).isEqualTo(TIMESTAMP);
+    verify(FillingStationFacade).getBestFuelPrice(request, FUEL_TYPE);
+    assertThat(FillingStationDto.TIMESTAMP).isEqualTo(TIMESTAMP);
+  }
+
+  private LimitFillingStationRequest buildLimitRequest() {
+    final LimitFillingStationRequest request = new LimitFillingStationRequest();
+    request.setLatitude(LATITUDE);
+    request.setLongitude(LONGITUDE);
+    request.setRadius(RADIUS);
+    request.setLimit_in_radius(LIMIT);
+    request.setSorting(emptyList());
+    return request;
+  }
+
+  private BaseFillingStationRequest buildBaseRequest() {
+    final BaseFillingStationRequest request = new BaseFillingStationRequest();
+    request.setLatitude(LATITUDE);
+    request.setLongitude(LONGITUDE);
+    request.setRadius(RADIUS);
+    return request;
   }
 }

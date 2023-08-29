@@ -1,8 +1,7 @@
 package md.fuel.api.rest.controller;
 
 import static java.util.Collections.singletonList;
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -16,9 +15,9 @@ import java.util.List;
 import md.fuel.api.domain.FuelType;
 import md.fuel.api.facade.FillingStationFacade;
 import md.fuel.api.rest.dto.FillingStationDto;
+import md.fuel.api.rest.dto.PageDto;
 import md.fuel.api.rest.exception.XmlGatewayErrorWrappingStrategy;
 import md.fuel.api.rest.wrapper.FillingStationPageWrapper;
-import md.fuel.api.rest.wrapper.PageDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -99,8 +98,7 @@ public class FillingStationControllerImplIT {
   @Test
   @DisplayName("Should return all filling stations in specified radius")
   void shouldReturnAllFillingStations() throws Exception {
-    when(fillingStationFacade.getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt()))
-        .thenReturn(singletonList(FILLING_STATION_DTO));
+    when(fillingStationFacade.getAllFillingStations(any())).thenReturn(singletonList(FILLING_STATION_DTO));
 
     mockMvc.perform(get("/filling-station")
             .param(LATITUDE_PARAM, LATITUDE_VALUE)
@@ -118,9 +116,7 @@ public class FillingStationControllerImplIT {
     final List<FillingStationDto> listOfFillingStations = singletonList(FILLING_STATION_DTO);
     final PageDto<FillingStationDto> pageOfFillingStations = new PageDto<>(listOfFillingStations.size(), listOfFillingStations);
 
-    when(
-        fillingStationPageWrapper.wrapAllFillingStationsList(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt(), anyInt()))
-        .thenReturn(pageOfFillingStations);
+    when(fillingStationPageWrapper.wrapAllFillingStationsList(any(), any())).thenReturn(pageOfFillingStations);
 
     mockMvc.perform(get("/page/filling-station")
             .param(LATITUDE_PARAM, LATITUDE_VALUE)
@@ -137,7 +133,7 @@ public class FillingStationControllerImplIT {
   @Test
   @DisplayName("Should return nearest filling station in specified radius")
   void shouldReturnNearestFillingStation() throws Exception {
-    when(fillingStationFacade.getNearestFillingStation(anyDouble(), anyDouble(), anyDouble())).thenReturn(FILLING_STATION_DTO);
+    when(fillingStationFacade.getNearestFillingStation(any())).thenReturn(FILLING_STATION_DTO);
 
     mockMvc.perform(get("/filling-station/nearest")
             .param(LATITUDE_PARAM, LATITUDE_VALUE)
@@ -152,8 +148,7 @@ public class FillingStationControllerImplIT {
   @Test
   @DisplayName("Should return filling station in specified radius with the best specified fuel type")
   void shouldReturnBestFuelPrice() throws Exception {
-    when(fillingStationFacade.getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), anyString(), anyInt()))
-        .thenReturn(singletonList(FILLING_STATION_DTO));
+    when(fillingStationFacade.getBestFuelPrice(any(), anyString())).thenReturn(singletonList(FILLING_STATION_DTO));
 
     mockMvc.perform(get("/filling-station/gas")
             .param(LATITUDE_PARAM, LATITUDE_VALUE)
@@ -171,8 +166,7 @@ public class FillingStationControllerImplIT {
     final List<FillingStationDto> listOfFillingStations = singletonList(FILLING_STATION_DTO);
     final PageDto<FillingStationDto> pageOfFillingStations = new PageDto<>(listOfFillingStations.size(), listOfFillingStations);
     when(
-        fillingStationPageWrapper.wrapBestFuelPriceStation(anyDouble(), anyDouble(), anyDouble(), anyString(), anyInt(), anyInt(),
-            anyInt())).thenReturn(pageOfFillingStations);
+        fillingStationPageWrapper.wrapBestFuelPriceStation(any(), any(), anyString())).thenReturn(pageOfFillingStations);
 
     mockMvc.perform(get("/page/filling-station/gas")
             .param(LATITUDE_PARAM, LATITUDE_VALUE)

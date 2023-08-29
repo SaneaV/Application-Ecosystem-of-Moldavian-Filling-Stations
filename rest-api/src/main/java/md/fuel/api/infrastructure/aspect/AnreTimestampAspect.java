@@ -16,6 +16,6 @@ public class AnreTimestampAspect {
 
   @After("execution(* md.fuel.api.infrastructure.repository.AnreApiImpl.getFillingStationsInfo())")
   public void setAnreTimestamp() {
-    FillingStation.timestamp = FORMATTER.format(LocalDateTime.now());
+    FillingStation.TIMESTAMP = FORMATTER.format(LocalDateTime.now());
   }
 }

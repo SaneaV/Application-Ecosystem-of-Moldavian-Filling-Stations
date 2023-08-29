@@ -28,11 +28,11 @@ public class ApiConfigurationTest {
     apiConfiguration.setPaths(
         Map.of(
             ALL_FILLING_STATIONS_PAGE_PATH, buildDetails("/page/filling-station",
-                asList("latitude", "longitude", "radius", "limit_in_radius", "limit", "offset")),
+                asList("latitude", "longitude", "radius", "limit_in_radius", "sorting", "limit", "offset")),
             NEAREST_PATH, buildDetails("/filling-station/nearest",
                 asList("latitude", "longitude", "radius")),
             BEST_FUEL_PRICE_PAGE_PATH, buildDetails("/page/filling-station/{fuel-type}",
-                asList("latitude", "longitude", "radius", "limit_in_radius", "limit", "offset")),
+                asList("latitude", "longitude", "radius", "limit_in_radius", "sorting", "limit", "offset")),
             LAST_UPDATE_PATH, buildDetails("/filling-station/last-update", emptyList()),
             FUEL_TYPE_PATH, buildDetails("/filling-station/fuel-type", emptyList())));
     return apiConfiguration;

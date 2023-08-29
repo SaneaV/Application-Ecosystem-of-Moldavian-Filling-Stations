@@ -1,5 +1,6 @@
 package md.fuel.api.rest.dto;
 
+import java.util.List;
 import md.fuel.api.domain.FillingStation;
 import org.mapstruct.Mapper;
 
@@ -7,4 +8,6 @@ import org.mapstruct.Mapper;
 public interface FillingStationDtoMapper {
 
   FillingStationDto toDto(FillingStation fillingStation);
+
+  List<FillingStationDto> toDto(List<FillingStation> fillingStationList);
 }

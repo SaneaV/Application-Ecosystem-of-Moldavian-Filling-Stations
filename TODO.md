@@ -25,6 +25,7 @@
 - [X] [API] Add sorting by proximity to getAllFillingStations.
 - [X] [TELEGRAM] Implement filling station cache.
 - [X] [CORE] Migrate to Java 20 and Spring Boot 3.
+- [X] [API] Add sort parameters in request.
 
 ## Important Features
 
@@ -45,5 +46,5 @@
 - [ ] [CORE] Add Actuator.
 - [ ] [TELEGRAM] Implement request per time unit limiter.
 - [ ] [API] Add an endpoint to request the official fuel price from ANRE.
-- [ ] [API] Add sort parameters in request.
 - [ ] [CORE] Add SonarQube.
+- [ ] [API] Move `limit` and `offset` logic on service layer.

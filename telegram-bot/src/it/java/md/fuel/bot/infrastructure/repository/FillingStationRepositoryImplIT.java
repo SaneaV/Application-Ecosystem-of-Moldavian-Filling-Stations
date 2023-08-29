@@ -99,7 +99,7 @@ public class FillingStationRepositoryImplIT {
   @DisplayName("Should return page of filling stations")
   void shouldReturnPageOfFillingStations() {
     wireMock.stubFor(get(urlEqualTo(
-        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&limit=10&offset=10"))
+        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&sorting=-distance&limit=10&offset=10"))
         .willReturn(aResponse()
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .withBody(PAGE_FILLING_STATIONS_RESPONSE)));
@@ -129,7 +129,7 @@ public class FillingStationRepositoryImplIT {
   @DisplayName("Should return page of best fuel price filling stations")
   void shouldReturnPageOfBestFuelPriceFillingStations() {
     wireMock.stubFor(get(urlEqualTo(
-        "/page/filling-station/Petrol?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&limit=10&offset=10"))
+        "/page/filling-station/Petrol?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&sorting=-distance&limit=10&offset=10"))
         .willReturn(aResponse()
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .withBody(PAGE_FILLING_STATIONS_RESPONSE)));
@@ -199,7 +199,7 @@ public class FillingStationRepositoryImplIT {
   @DisplayName("Should return empty page on empty list")
   void shouldReturnEmptyPageOnEmptyList() {
     wireMock.stubFor(get(urlEqualTo(
-        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&limit=10&offset=10"))
+        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&sorting=-distance&limit=10&offset=10"))
         .willReturn(aResponse()
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .withBody(EMPTY_PAGE_FILLING_STATIONS_RESPONSE)));
@@ -215,7 +215,7 @@ public class FillingStationRepositoryImplIT {
   @DisplayName("Should return empty page on null list")
   void shouldReturnEmptyPageOnNullList() {
     wireMock.stubFor(get(urlEqualTo(
-        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&limit=10&offset=10"))
+        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&sorting=-distance&limit=10&offset=10"))
         .willReturn(aResponse()
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .withBody(NULL_PAGE_FILLING_STATIONS_RESPONSE)));

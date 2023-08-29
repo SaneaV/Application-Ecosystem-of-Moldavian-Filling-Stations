@@ -1,13 +1,13 @@
 package md.fuel.api.facade;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -21,11 +21,15 @@ import java.util.Arrays;
 import java.util.List;
 import md.fuel.api.domain.FillingStation;
 import md.fuel.api.domain.FuelType;
+import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
+import md.fuel.api.infrastructure.mapper.CriteriaMapper;
 import md.fuel.api.infrastructure.service.FillingStationService;
 import md.fuel.api.rest.dto.FillingStationDto;
 import md.fuel.api.rest.dto.FillingStationDtoMapper;
+import md.fuel.api.rest.request.BaseFillingStationRequest;
+import md.fuel.api.rest.request.LimitFillingStationRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -44,20 +48,26 @@ public class FillingStationFacadeImplTest {
   private final FillingStationFacade fillingStationFacade;
   private final FillingStationService fillingStationService;
   private final FillingStationDtoMapper fillingStationDtoMapper;
+  private final CriteriaMapper criteriaMapper;
 
   public FillingStationFacadeImplTest() {
     this.fillingStationService = mock(FillingStationService.class);
     this.fillingStationDtoMapper = mock(FillingStationDtoMapper.class);
-    this.fillingStationFacade = new FillingStationFacadeImpl(fillingStationService, fillingStationDtoMapper);
+    this.criteriaMapper = mock(CriteriaMapper.class);
+    this.fillingStationFacade = new FillingStationFacadeImpl(fillingStationService, fillingStationDtoMapper, criteriaMapper);
   }
 
   @Test
   @DisplayName("Should throw InvalidRequestException if limit is less than or equal to zero on getAllFillingStations")
   void shouldThrowInvalidRequestExceptionOnGetAllFillingStations() {
-    assertThatThrownBy(() -> fillingStationFacade.getAllFillingStations(LATITUDE, LONGITUDE, RADIUS, INVALID_LIMIT))
+    final LimitFillingStationRequest request = buildRequest(INVALID_LIMIT);
+    when(criteriaMapper.toEntity(any())).thenReturn(buildCriteria(INVALID_LIMIT));
+
+    assertThatThrownBy(() -> fillingStationFacade.getAllFillingStations(request))
         .isInstanceOf(InvalidRequestException.class)
         .hasMessage(ERROR_MESSAGE);
 
+    verify(criteriaMapper).toEntity(any());
     verifyNoInteractions(fillingStationService);
     verifyNoInteractions(fillingStationDtoMapper);
   }
@@ -65,10 +75,14 @@ public class FillingStationFacadeImplTest {
   @Test
   @DisplayName("Should throw InvalidRequestException if limit is less than or equal to zero on getBestFuelPrice")
   void shouldThrowInvalidRequestExceptionOnGetBestFuelPrice() {
-    assertThatThrownBy(() -> fillingStationFacade.getBestFuelPrice(LATITUDE, LONGITUDE, RADIUS, FUEL_TYPE, INVALID_LIMIT))
+    final LimitFillingStationRequest request = buildRequest(INVALID_LIMIT);
+    when(criteriaMapper.toEntity(any())).thenReturn(buildCriteria(INVALID_LIMIT));
+
+    assertThatThrownBy(() -> fillingStationFacade.getBestFuelPrice(request, FUEL_TYPE))
         .isInstanceOf(InvalidRequestException.class)
         .hasMessage(ERROR_MESSAGE);
 
+    verify(criteriaMapper).toEntity(any());
     verifyNoInteractions(fillingStationService);
     verifyNoInteractions(fillingStationDtoMapper);
   }
@@ -77,20 +91,21 @@ public class FillingStationFacadeImplTest {
   @DisplayName("Should return list of all filling stations")
   void shouldReturnListOfAllFillingStation() {
     final FillingStation fillingStation = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
-    final FillingStation fillingStation2 = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
-    final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation2));
+    final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation));
     final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
         LONGITUDE);
 
-    when(fillingStationService.getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt())).thenReturn(
-        fillingStations);
-    when(fillingStationDtoMapper.toDto(any())).thenReturn(fillingStationDto);
+    final LimitFillingStationRequest request = buildRequest(VALID_LIMIT);
+    when(criteriaMapper.toEntity(any())).thenReturn(buildCriteria(VALID_LIMIT));
 
-    final List<FillingStationDto> allFillingStations = fillingStationFacade.getAllFillingStations(LATITUDE, LONGITUDE, RADIUS,
-        VALID_LIMIT);
+    when(fillingStationService.getAllFillingStations(any())).thenReturn(fillingStations);
+    when(fillingStationDtoMapper.toDto(anyList())).thenReturn(asList(fillingStationDto, fillingStationDto));
 
-    verify(fillingStationService).getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt());
-    verify(fillingStationDtoMapper, times(2)).toDto(any());
+    final List<FillingStationDto> allFillingStations = fillingStationFacade.getAllFillingStations(request);
+
+    verify(criteriaMapper).toEntity(any());
+    verify(fillingStationService).getAllFillingStations(any());
+    verify(fillingStationDtoMapper).toDto(anyList());
 
     assertThat(allFillingStations).containsExactly(fillingStationDto, fillingStationDto);
   }
@@ -102,13 +117,15 @@ public class FillingStationFacadeImplTest {
     final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
         LONGITUDE);
 
-    when(fillingStationService.getNearestFillingStation(anyDouble(), anyDouble(), anyDouble())).thenReturn(fillingStation);
-    when(fillingStationDtoMapper.toDto(any())).thenReturn(fillingStationDto);
+    when(fillingStationService.getNearestFillingStation(any())).thenReturn(fillingStation);
+    when(fillingStationDtoMapper.toDto(any(FillingStation.class))).thenReturn(fillingStationDto);
 
-    final FillingStationDto nearestFillingStation = fillingStationFacade.getNearestFillingStation(LATITUDE, LONGITUDE, RADIUS);
+    final BaseFillingStationRequest request = buildRequest();
 
-    verify(fillingStationService).getNearestFillingStation(anyDouble(), anyDouble(), anyDouble());
-    verify(fillingStationDtoMapper).toDto(any());
+    final FillingStationDto nearestFillingStation = fillingStationFacade.getNearestFillingStation(request);
+
+    verify(fillingStationService).getNearestFillingStation(any());
+    verify(fillingStationDtoMapper).toDto(any(FillingStation.class));
 
     assertThat(nearestFillingStation).isEqualTo(fillingStationDto);
   }
@@ -117,21 +134,21 @@ public class FillingStationFacadeImplTest {
   @DisplayName("Should return list of best fuel price stations")
   void shouldReturnListOfBestFuelPriceFillingStations() {
     final FillingStation fillingStation = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
-    final FillingStation fillingStation2 = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
-    final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation2));
+    final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation));
     final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
         LONGITUDE);
 
-    when(fillingStationService.getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), any(), anyInt())).thenReturn(
-        fillingStations);
-    when(fillingStationDtoMapper.toDto(any())).thenReturn(fillingStationDto);
+    final LimitFillingStationRequest request = buildRequest(VALID_LIMIT);
+    when(criteriaMapper.toEntity(any())).thenReturn(buildCriteria(VALID_LIMIT));
 
-    final List<FillingStationDto> bestFuelPriceStation = fillingStationFacade.getBestFuelPrice(LATITUDE, LONGITUDE, RADIUS,
-        FUEL_TYPE,
-        VALID_LIMIT);
+    when(fillingStationService.getBestFuelPrice(any(), anyString())).thenReturn(fillingStations);
+    when(fillingStationDtoMapper.toDto(anyList())).thenReturn(asList(fillingStationDto, fillingStationDto));
 
-    verify(fillingStationService).getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), any(), anyInt());
-    verify(fillingStationDtoMapper, times(2)).toDto(any());
+    final List<FillingStationDto> bestFuelPriceStation = fillingStationFacade.getBestFuelPrice(request, FUEL_TYPE);
+
+    verify(criteriaMapper).toEntity(any());
+    verify(fillingStationService).getBestFuelPrice(any(), anyString());
+    verify(fillingStationDtoMapper).toDto(anyList());
 
     assertThat(bestFuelPriceStation).containsExactly(fillingStationDto, fillingStationDto);
   }
@@ -143,9 +160,9 @@ public class FillingStationFacadeImplTest {
     final String MOLDOVA_ZONE_DATE_TIME = "Europe/Chisinau";
     final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
-    FillingStation.timestamp = ZonedDateTime.now().format(FORMATTER);
+    FillingStation.TIMESTAMP = ZonedDateTime.now().format(FORMATTER);
 
-    final ZonedDateTime expected = LocalDateTime.parse(FillingStation.timestamp, FORMATTER)
+    final ZonedDateTime expected = LocalDateTime.parse(FillingStation.TIMESTAMP, FORMATTER)
         .atZone(ZoneId.of(MOLDOVA_ZONE_DATE_TIME));
     final ZonedDateTime result = fillingStationFacade.getLastUpdateTimestamp();
 
@@ -170,5 +187,26 @@ public class FillingStationFacadeImplTest {
     final List<String> result = fillingStationFacade.getAvailableFuelTypes();
 
     assertThat(result).containsExactlyElementsOf(expected);
+  }
+
+  private LimitFillingStationRequest buildRequest(int limitInRadius) {
+    final LimitFillingStationRequest request = new LimitFillingStationRequest();
+    request.setLatitude(LATITUDE);
+    request.setLongitude(LONGITUDE);
+    request.setRadius(RADIUS);
+    request.setLimit_in_radius(limitInRadius);
+    return request;
+  }
+
+  private LimitFillingStationCriteria buildCriteria(int limitInRadius) {
+    return new LimitFillingStationCriteria(LATITUDE, LONGITUDE, RADIUS, limitInRadius, emptyList());
+  }
+
+  private BaseFillingStationRequest buildRequest() {
+    final BaseFillingStationRequest request = new BaseFillingStationRequest();
+    request.setLatitude(LATITUDE);
+    request.setLongitude(LONGITUDE);
+    request.setRadius(RADIUS);
+    return request;
   }
 }

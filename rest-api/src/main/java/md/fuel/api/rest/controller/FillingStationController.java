@@ -17,17 +17,16 @@ import java.util.List;
 import md.fuel.api.domain.FuelType;
 import md.fuel.api.infrastructure.validation.ValueOfEnum;
 import md.fuel.api.rest.dto.FillingStationDto;
+import md.fuel.api.rest.dto.PageDto;
 import md.fuel.api.rest.exception.GatewayErrorDescription;
 import md.fuel.api.rest.exception.RfcErrorDescription;
 import md.fuel.api.rest.request.BaseFillingStationRequest;
 import md.fuel.api.rest.request.LimitFillingStationRequest;
 import md.fuel.api.rest.request.PageRequest;
-import md.fuel.api.rest.wrapper.PageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.context.request.WebRequest;
 
 @Validated
 @OpenAPIDefinition(info = @Info(title = "Moldova Filling Station API", description =
@@ -53,7 +52,7 @@ public interface FillingStationController {
               RfcErrorDescription.class}))})
   })
   @GetMapping(value = "/filling-station")
-  ResponseEntity<List<FillingStationDto>> getAllFillingStations(@Valid LimitFillingStationRequest request, WebRequest webRequest);
+  ResponseEntity<List<FillingStationDto>> getAllFillingStations(@Valid LimitFillingStationRequest request);
 
   @Operation(summary = "Get page of all filling stations within a certain radius.", description = "Returns all filling stations "
       + "within a certain radius in page format.")
@@ -71,7 +70,7 @@ public interface FillingStationController {
   })
   @GetMapping(value = "/page/filling-station")
   ResponseEntity<PageDto<FillingStationDto>> getPageOfAllFillingStations(@Valid LimitFillingStationRequest request,
-      @Valid PageRequest pageRequest, WebRequest webRequest);
+      @Valid PageRequest pageRequest);
 
   @Operation(summary = "Get nearest filling station within a certain radius.", description =
       "Returns nearest filling station within a certain radius.")
@@ -89,7 +88,7 @@ public interface FillingStationController {
               RfcErrorDescription.class}))})
   })
   @GetMapping(value = "/filling-station/nearest")
-  ResponseEntity<FillingStationDto> getNearestFillingStation(@Valid BaseFillingStationRequest request, WebRequest webRequest);
+  ResponseEntity<FillingStationDto> getNearestFillingStation(@Valid BaseFillingStationRequest request);
 
   @Operation(summary = "Get filling stations with the best specified fuel type within a certain radius.", description = "Return "
       + "filling stations with the best specified fuel type within a certain radius.")
@@ -112,8 +111,7 @@ public interface FillingStationController {
       @ValueOfEnum(enumClass = FuelType.class, message = "The fuel type must be one of the following: Petrol, Diesel, Gas")
       @Parameter(name = "fuel-type", description = "Type of fuel for price search.", required = true, schema =
       @Schema(allowableValues = {"Petrol", "Diesel", "Gas"}))
-      String fuelType,
-      WebRequest webRequest);
+      String fuelType);
 
   @Operation(summary = "Get page of filling stations with the best specified fuel type within a certain radius.", description =
       "Return filling stations with the best specified fuel type within a certain radius in page format.")
@@ -136,8 +134,7 @@ public interface FillingStationController {
       @ValueOfEnum(enumClass = FuelType.class, message = "The fuel type must be one of the following: Petrol, Diesel, Gas")
       @Parameter(name = "fuel-type", description = "Type of fuel for price search.", required = true, schema =
       @Schema(allowableValues = {"Petrol", "Diesel", "Gas"}))
-      String fuelType,
-      WebRequest webRequest);
+      String fuelType);
 
   @Operation(summary = "Get last update timestamp.", description = "Return last update timestamp.")
   @ApiResponses(value = {

@@ -13,5 +13,5 @@ public record FillingStationDto(
     @Schema(description = "Filling station latitude.", example = "46.0", requiredMode = REQUIRED) double latitude,
     @Schema(description = "Filling station longitude.", example = "28.0", requiredMode = REQUIRED) double longitude) {
 
-  public static String timestamp;
+  public static String TIMESTAMP;
 }
