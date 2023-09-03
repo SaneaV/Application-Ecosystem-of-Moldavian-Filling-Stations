@@ -29,7 +29,7 @@ paths:
           example: 10
         - name: sorting
           in: query
-          description: Sort order by and sort order parameters.
+          description: Parameters and order of sorting filling stations. If there are more than 2 sort options, importance priority goes from left to right.
           required: false
           schema:
             type: string
@@ -45,6 +45,11 @@ paths:
               - '-diesel'
               - +gas
               - '-gas'
+              - distance
+              - name
+              - petrol
+              - diesel
+              - gas
           example: '-distance,+gas,petrol'
         - name: latitude
           in: query
@@ -148,7 +153,7 @@ paths:
           example: 10
         - name: sorting
           in: query
-          description: Sort order by and sort order parameters.
+          description: Parameters and order of sorting filling stations. If there are more than 2 sort options, importance priority goes from left to right.
           required: false
           schema:
             type: string
@@ -164,6 +169,11 @@ paths:
               - '-diesel'
               - +gas
               - '-gas'
+              - distance
+              - name
+              - petrol
+              - diesel
+              - gas
           example: '-distance,+gas,petrol'
         - name: latitude
           in: query
@@ -277,7 +287,7 @@ paths:
           example: 10
         - name: sorting
           in: query
-          description: Sort order by and sort order parameters.
+          description: Parameters and order of sorting filling stations. If there are more than 2 sort options, importance priority goes from left to right.
           required: false
           schema:
             type: string
@@ -293,6 +303,11 @@ paths:
               - '-diesel'
               - +gas
               - '-gas'
+              - distance
+              - name
+              - petrol
+              - diesel
+              - gas
           example: '-distance,+gas,petrol'
         - name: latitude
           in: query
@@ -380,7 +395,7 @@ paths:
           example: 10
         - name: sorting
           in: query
-          description: Sort order by and sort order parameters.
+          description: Parameters and order of sorting filling stations. If there are more than 2 sort options, importance priority goes from left to right.
           required: false
           schema:
             type: string
@@ -396,6 +411,11 @@ paths:
               - '-diesel'
               - +gas
               - '-gas'
+              - distance
+              - name
+              - petrol
+              - diesel
+              - gas
           example: '-distance,+gas,petrol'
         - name: latitude
           in: query

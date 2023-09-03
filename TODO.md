@@ -48,3 +48,13 @@
 - [ ] [API] Add an endpoint to request the official fuel price from ANRE.
 - [ ] [CORE] Add SonarQube.
 - [ ] [API] Move `limit` and `offset` logic on service layer.
+
+## Food For Thought
+- A component for creating advertisements for the Telegram bot
+  (UI for adding date, video/pictures, text, etc. for an advertisement, and TARGET city).
+- A component for sending advertisements in a chat with a bot, based on the user's city.
+- The ad component and telegram bot can be libraries or microservices that use the core logic of Telegram Bot.
+- Check the possibility of using the Telegram Bot Web Application API (as the second option for displaying the nearest gas stations)
+- UI component for displaying statistics on REST and Telegram requests based on the Kafka-Statistics module.
+- Java Swing applications that query the state of a component through the Spring Boot Actuator (Live Health Check Monitoring).
+- Get rid of the limit of 10 filling stations in the radius and replace it with CallBackQuery with arrows (forward and backward).

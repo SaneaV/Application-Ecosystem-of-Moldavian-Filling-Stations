@@ -20,7 +20,7 @@ import md.fuel.bot.infrastructure.repository.FillingStationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class FillingStationFacadeImplTest {
+public class FillingStationFacadeTest {
 
   private static final String PETROL = "Petrol";
   private static final String DIESEL = "Diesel";
@@ -38,7 +38,7 @@ public class FillingStationFacadeImplTest {
   private final FillingStationFacade facade;
   private final FillingStationRepository repository;
 
-  public FillingStationFacadeImplTest() {
+  public FillingStationFacadeTest() {
     this.repository = mock(FillingStationRepository.class);
     this.facade = new FillingStationFacadeImpl(this.repository);
   }

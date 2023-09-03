@@ -12,7 +12,7 @@ import md.fuel.bot.infrastructure.mapper.UserDataMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class UserDataServiceImplTest {
+public class UserDataServiceTest {
 
   private static final long USER_ID = 1;
 
@@ -20,7 +20,7 @@ public class UserDataServiceImplTest {
   private final UserDataAdapter userDataAdapter;
   private final UserDataMapper userDataMapper;
 
-  public UserDataServiceImplTest() {
+  public UserDataServiceTest() {
     this.userDataAdapter = mock(UserDataAdapter.class);
     this.userDataMapper = mock(UserDataMapper.class);
     this.userDataService = new UserDataServiceImpl(userDataAdapter, userDataMapper);

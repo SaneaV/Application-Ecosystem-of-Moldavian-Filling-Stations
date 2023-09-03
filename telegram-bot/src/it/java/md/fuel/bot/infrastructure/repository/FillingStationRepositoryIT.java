@@ -34,7 +34,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @Import({FillingStationRepositoryImpl.class, FillingStationMapperImpl.class, WebClientTestConfiguration.class,
     ApiConfigurationTest.class, RetryWebClientConfiguration.class})
 @TestPropertySource("classpath:application-test.properties")
-public class FillingStationRepositoryImplIT {
+public class FillingStationRepositoryIT {
 
   private static final String CONTENT_TYPE = "Content-Type";
   private static final Double LATITUDE = 46.328803;

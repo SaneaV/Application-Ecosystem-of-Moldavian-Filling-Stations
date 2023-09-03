@@ -1,10 +1,13 @@
 package md.fuel.api.infrastructure.mapper;
 
+import static lombok.AccessLevel.PRIVATE;
 import static md.fuel.api.rest.request.SortOrder.ASC;
 import static md.fuel.api.rest.request.SortOrder.DESC;
 
+import lombok.NoArgsConstructor;
 import md.fuel.api.rest.request.SortingQuery;
 
+@NoArgsConstructor(access = PRIVATE)
 public class SortParameterMapper {
 
   private static final char MINUS = '-';

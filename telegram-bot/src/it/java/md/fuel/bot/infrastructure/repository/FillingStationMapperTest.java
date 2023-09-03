@@ -7,7 +7,7 @@ import md.fuel.bot.domain.FillingStation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class FillingStationMapperImplTest {
+public class FillingStationMapperTest {
 
   private final FillingStationMapperImpl mapper = new FillingStationMapperImpl();
 

@@ -1,7 +1,7 @@
 package md.fuel.api.rest.request;
 
+import static java.util.Collections.reverse;
 import static java.util.Collections.singletonList;
-import static java.util.Objects.isNull;
 import static lombok.AccessLevel.NONE;
 
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,9 +28,12 @@ public class LimitFillingStationRequest extends BaseFillingStationRequest {
   private int limitInRadius;
 
   @Setter(NONE)
-  @Parameter(name = "sorting", description = "Sort order by and sort order parameters.", example = "-distance,+gas,petrol",
+  @Parameter(name = "sorting",
+      description = "Parameters and order of sorting filling stations. If there are more than 2 sort options, importance "
+          + "priority goes from left to right.",
+      example = "-distance,+gas,petrol",
       schema = @Schema(allowableValues = {"+distance", "-distance", "+name", "-name", "+petrol", "-petrol", "+diesel", "-diesel",
-          "+gas", "-gas"}, defaultValue = DEFAULT_SORTING))
+          "+gas", "-gas", "distance", "name", "petrol", "diesel", "gas"}, defaultValue = DEFAULT_SORTING))
   private List<String> sorting = DEFAULT_SORTING_LIST;
 
   public void setLimit_in_radius(int limitInRadius) {
@@ -38,10 +41,7 @@ public class LimitFillingStationRequest extends BaseFillingStationRequest {
   }
 
   public void setSorting(List<String> sorting) {
-    if (isNull(sorting) || sorting.isEmpty()) {
-      this.sorting = DEFAULT_SORTING_LIST;
-    } else {
-      this.sorting = sorting;
-    }
+    reverse(sorting);
+    this.sorting = sorting.isEmpty() ? DEFAULT_SORTING_LIST : sorting;
   }
 }

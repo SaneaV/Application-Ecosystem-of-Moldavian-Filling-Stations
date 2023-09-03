@@ -1,6 +1,7 @@
 package md.fuel.api.rest.controller;
 
 import static java.util.Collections.singletonList;
+import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -31,7 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @ExtendWith(SpringExtension.class)
 @Import({XmlGatewayErrorWrappingStrategy.class})
 @WebMvcTest(value = FillingStationController.class)
-public class FillingStationControllerImplIT {
+public class FillingStationControllerIT {
 
   private static final FillingStationDto FILLING_STATION_DTO = new FillingStationDto("Fortress", 25.75, 22.3, 13.45,
       46.34746746138542, 28.947447953963454);
@@ -42,11 +43,14 @@ public class FillingStationControllerImplIT {
   private static final String RADIUS_PARAM = "radius";
   private static final String LIMIT_PARAM = "limit";
   private static final String OFFSET_PARAM = "offset";
+  private static final String SORTING_PARAM = "sorting";
 
   private static final String LATITUDE_VALUE = "46.328803";
   private static final String LONGITUDE_VALUE = "28.965323";
   private static final String LIMIT_IN_RADIUS_VALUE = "10";
   private static final String RADIUS_VALUE = "5000";
+  private static final String SORTING_VALUE = "+distance, -distance, +name, -name, +petrol, -petrol, +diesel, -diesel, +gas, "
+      + "-gas, distance, name, petrol, diesel, gas, null)";
   private static final String LIMIT_VALUE = "20";
   private static final String OFFSET_VALUE = "0";
 
@@ -105,6 +109,7 @@ public class FillingStationControllerImplIT {
             .param(LONGITUDE_PARAM, LONGITUDE_VALUE)
             .param(LIMIT_IN_RADIUS_PARAM, LIMIT_IN_RADIUS_VALUE)
             .param(RADIUS_PARAM, RADIUS_VALUE)
+            .param(SORTING_PARAM, SORTING_VALUE)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().json(FILLING_STATIONS_RESPONSE));
@@ -125,6 +130,7 @@ public class FillingStationControllerImplIT {
             .param(RADIUS_PARAM, RADIUS_VALUE)
             .param(LIMIT_PARAM, LIMIT_VALUE)
             .param(OFFSET_PARAM, OFFSET_VALUE)
+            .param(SORTING_PARAM, SORTING_VALUE)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().json(PAGE_FILLING_STATIONS_RESPONSE));
@@ -155,6 +161,7 @@ public class FillingStationControllerImplIT {
             .param(LONGITUDE_PARAM, LONGITUDE_VALUE)
             .param(LIMIT_IN_RADIUS_PARAM, LIMIT_IN_RADIUS_VALUE)
             .param(RADIUS_PARAM, RADIUS_VALUE)
+            .param(SORTING_PARAM, SORTING_VALUE)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().json(FILLING_STATIONS_RESPONSE));
@@ -175,6 +182,7 @@ public class FillingStationControllerImplIT {
             .param(RADIUS_PARAM, RADIUS_VALUE)
             .param(LIMIT_PARAM, LIMIT_VALUE)
             .param(OFFSET_PARAM, OFFSET_VALUE)
+            .param(SORTING_PARAM, SORTING_VALUE)
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().json(PAGE_FILLING_STATIONS_RESPONSE));
@@ -207,5 +215,21 @@ public class FillingStationControllerImplIT {
             .contentType(APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().string(FUEL_TYPES_RESPONSE));
+  }
+
+  @Test
+  @DisplayName("Should return all filling stations in specified radius with empty sorting")
+  void shouldReturnAllFillingStationsWithEmptySorting() throws Exception {
+    when(fillingStationFacade.getAllFillingStations(any())).thenReturn(singletonList(FILLING_STATION_DTO));
+
+    mockMvc.perform(get("/filling-station")
+            .param(LATITUDE_PARAM, LATITUDE_VALUE)
+            .param(LONGITUDE_PARAM, LONGITUDE_VALUE)
+            .param(LIMIT_IN_RADIUS_PARAM, LIMIT_IN_RADIUS_VALUE)
+            .param(RADIUS_PARAM, RADIUS_VALUE)
+            .param(SORTING_PARAM, EMPTY)
+            .contentType(APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().json(FILLING_STATIONS_RESPONSE));
   }
 }

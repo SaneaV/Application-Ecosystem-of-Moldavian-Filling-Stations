@@ -17,7 +17,7 @@ import md.fuel.bot.telegram.dto.UserDataDtoMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class UserDataFacadeImplTest {
+public class UserDataFacadeTest {
 
   private static final String ERROR_SPECIFY_COORDINATES = "To start working with bot you have to send your geolocation";
   private static final String ERROR_SPECIFY_RADIUS =
@@ -33,7 +33,7 @@ public class UserDataFacadeImplTest {
   private final UserDataDtoMapper userDataDtoMapper;
   private final UserDataFacade userDataFacade;
 
-  public UserDataFacadeImplTest() {
+  public UserDataFacadeTest() {
     this.userDataService = mock(UserDataService.class);
     this.userDataDtoMapper = mock(UserDataDtoMapper.class);
     this.userDataFacade = new UserDataFacadeImpl(userDataService, userDataDtoMapper);

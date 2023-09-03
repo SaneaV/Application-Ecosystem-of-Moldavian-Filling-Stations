@@ -1,7 +1,6 @@
 package md.fuel.api.infrastructure.service;
 
 import static java.util.Comparator.comparing;
-import static java.util.Comparator.comparingDouble;
 import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.toList;
 import static md.fuel.api.domain.FuelType.DIESEL;
@@ -15,7 +14,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import md.fuel.api.domain.FillingStation;
@@ -37,7 +35,6 @@ public class FillingStationServiceImpl implements FillingStationService {
   private static final String ERROR_NO_FUEL_IN_STOCK =
       "Filling stations within the specified radius do not have %s in stock. Increase the search radius.";
   private static final String ERROR_INVALID_FUEL_TYPE = "Invalid fuel type.";
-  private static final String DISTANCE = "distance";
 
   private static final double ZERO_PRICE_PRIMITIVE = 0D;
   private static final HashMap<FuelType, Function<FillingStation, Double>> FUEL_TYPE_FUNCTION_HASH_MAP = new HashMap<>();
@@ -128,28 +125,8 @@ public class FillingStationServiceImpl implements FillingStationService {
   }
 
   private List<Comparator<FillingStation>> getComparators(List<SortingQuery> sortingQuery, double latitude, double longitude) {
-    final List<Comparator<FillingStation>> comparators = getComparatorFor(sortingQuery);
-    final Optional<SortingQuery> distanceSortingQuery = sortingQuery.stream()
-        .filter(s -> DISTANCE.equalsIgnoreCase(s.sortOrderBy()))
-        .findFirst();
-
-    distanceSortingQuery.ifPresent(query -> comparators.add(populateDistanceComparator(comparators, query, latitude, longitude)));
-    return comparators;
-  }
-
-  private Comparator<FillingStation> populateDistanceComparator(List<Comparator<FillingStation>> comparators,
-      SortingQuery distanceSort, double latitude, double longitude) {
-    // Remove stub comparator
-    comparators.remove(FillingStation.getComparator(distanceSort));
-
-    final Comparator<FillingStation> distanceComparator = comparingDouble(
-        s -> calculateMeters(latitude, longitude, s.latitude(), s.longitude()));
-    return distanceSort.isAscending() ? distanceComparator : distanceComparator.reversed();
-  }
-
-  private List<Comparator<FillingStation>> getComparatorFor(List<SortingQuery> sortingQuery) {
     return sortingQuery.stream()
-        .map(FillingStation::getComparator)
+        .map(query -> FillingStation.getComparator(query, latitude, longitude))
         .collect(toList());
   }
 }
