@@ -1,6 +1,6 @@
 api-configuration:
-  retry-count: 3
-  time-duration: 5000
+  retry-count: 2
+  time-duration: 500
   retryable: 404, 429
 
   base-path: ${filling-station.api-host:http://localhost:8080}

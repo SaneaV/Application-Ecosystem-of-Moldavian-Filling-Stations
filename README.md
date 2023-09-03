@@ -54,9 +54,11 @@ To identify the best fuel price, and filling station location was used: [ANRE-AP
 26. [Maven Checkstyle Plugin](https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-checkstyle-plugin)
 27. [Maven OpenAPI Generator Plugin](https://mvnrepository.com/artifact/org.openapitools/openapi-generator-maven-plugin)
 28. [Maven SpotBugs Plugin](https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-maven-plugin)
-29. [Java Ngrok](https://mvnrepository.com/artifact/com.github.alexdlaird/java-ngrok)
-30. [Jakarta Bean Validation API](https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api/3.0.2)
-31. [Swagger Annotations Jakarta](https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta)
+29. [Maven Flyway Plugin](https://mvnrepository.com/artifact/org.flywaydb/flyway-maven-plugin)
+30. [Java Ngrok](https://mvnrepository.com/artifact/com.github.alexdlaird/java-ngrok)
+31. [Jakarta Bean Validation API](https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api/3.0.2)
+32. [Swagger Annotations Jakarta](https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta)
+33. [Flyway Core](https://mvnrepository.com/artifact/org.flywaydb/flyway-core)
 
 # TODO
 

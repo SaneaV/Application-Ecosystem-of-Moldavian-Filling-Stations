@@ -5,6 +5,12 @@ This bot uses telegram messenger for convenient interaction with filling station
 - [Telegram Functionality](#telegram-functionality)
 - [Project Architecture](#project-architecture)
 - [Environment Variables](#environment-variables)
+- [Installation](#installation)
+    - [Database Installation](#database-installation)
+    - [Flyway](#flyway)
+        - [Clean](#clean)
+        - [Migrate](#migrate)
+    - [Manual Ngrok Installation](#manual-ngrok-installation)
 - [Test](#test)
 - [Plugins](#plugins)
     - [Reports](#reports)
@@ -46,6 +52,22 @@ Setting up and installing a database using Docker.
 
 - `DATABASE_URL` example: `jdbc:postgresql://localhost:5432/telegram-user-preference`
 - Note that the database must exist or use `?createDatabaseIfNotExist=true` in the `DATABASE_URL`.
+
+## Flyway
+
+### Clean
+
+- `cd .\telegram-bot\`
+- `mvn flyway:clean "-Dflyway.url=${DATABASE_URL}" "-Dflyway.user=${DATABASE_USERNAME}" "-Dflyway.password=${DATABASE_PASSWORD}"`
+
+### Migrate
+
+1. Automatic migration/validation of SQL scripts on application startup:
+    - Set `SPRING_FLYWAY_ENABLED` environment variable to `true`.
+
+2. Using maven:
+    - `cd .\telegram-bot\`
+    - `mvn flyway:migrate "-Dflyway.url=${DATABASE_URL}" "-Dflyway.user=${DATABASE_USERNAME}" "-Dflyway.password=${DATABASE_PASSWORD}"`
 
 ## Manual Ngrok Installation
 
@@ -97,6 +119,7 @@ If everything is correct, you will see the message:
 |       DATABASE_URL       |            No            |    Database URL     |     \<Empty\>     | PostgreSQL connection URL                                                                                       |
 |    DATABASE_USERNAME     |            No            |  Database username  |     \<Empty\>     | PostgreSQL username                                                                                             |
 |    DATABASE_PASSWORD     |            No            |  Database password  |     \<Empty\>     | PostgreSQL user password                                                                                        |
+|  SPRING_FLYWAY_ENABLED   |           Yes            |    `true/false`     |       false       | Checking/applying all SQL scripts in the database/migration folder                                              |
 
 Run project via maven:
 
@@ -166,6 +189,7 @@ If you want to check the project for the following factors:
 - Garden variety mistakes: typos, use of the wrong boolean operator
 
 You can run the SpotBugs plugin to check:
+
 1. `mvn spotbugs:spotbugs`
 2. `mvn spotbugs:gui`
 

@@ -26,6 +26,7 @@
 - [X] [TELEGRAM] Implement filling station cache.
 - [X] [CORE] Migrate to Java 20 and Spring Boot 3.
 - [X] [API] Add sort parameters in request.
+- [X] [TELEGRAM] Add Flyway instead of `spring.jpa.hibernate.ddl-auto=update`.
 
 ## Important Features
 
@@ -34,7 +35,6 @@
 - [ ] [EXTERNAL] Add custom JWT token library.
 - [ ] [CORE] Create a Kafka-Statistics module to collect data about the cities from which the request is made (implement through
   aspects and Thymeleaf).
-- [ ] [TELEGRAM] Add Flyway instead of `spring.jpa.hibernate.ddl-auto=update`.
 - [ ] [CORE] Add SL4FJ logging in a project.
 - [ ] [API] Add auditable for controllers (save data in database).
 - [ ] [TELEGRAM] Implement exception rethrowing from third-party API.
