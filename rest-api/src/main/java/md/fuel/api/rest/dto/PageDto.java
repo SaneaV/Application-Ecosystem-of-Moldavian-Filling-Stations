@@ -9,8 +9,11 @@ import java.util.List;
 
 @Schema(description = "Page with list of items and total results.")
 public record PageDto<T>(
-    @Schema(description = "Total number of filling stations in radius.", example = "10", requiredMode = REQUIRED) int totalResults,
-    @Schema(description = "List of filling stations.", requiredMode = REQUIRED) List<T> items) {
+    @Schema(description = "Total number of filling stations in radius.", example = "10", requiredMode = REQUIRED)
+    int totalResults,
+
+    @Schema(description = "List of filling stations.", requiredMode = REQUIRED)
+    List<T> items) {
 
   @JsonCreator
   public PageDto(@JsonProperty(value = "totalResults", required = true) int totalResults,

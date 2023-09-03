@@ -39,9 +39,9 @@ public interface FillingStationMapper extends PageMapper {
     final Field[] allFields = FillingStationDto.class.getDeclaredFields();
 
     stream(allFields)
-        .filter(field -> field.getType().equals(Double.class) &&
-            !field.getName().equalsIgnoreCase(LATITUDE) &&
-            !field.getName().equalsIgnoreCase(LONGITUDE))
+        .filter(field -> field.getType().equals(Double.class)
+            && !field.getName().equalsIgnoreCase(LATITUDE)
+            && !field.getName().equalsIgnoreCase(LONGITUDE))
         .forEach(field -> {
           try {
             field.setAccessible(true);

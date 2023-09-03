@@ -17,7 +17,8 @@ public class DtoGetterSetterTest extends GetterSetterTest {
 
   public static Stream<Arguments> getData() {
     return Stream.of(
-        Arguments.of(new FillingStationDto(EMPTY, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE)));
+        Arguments.of(
+            new FillingStationDto(EMPTY, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE)));
   }
 
   @ParameterizedTest

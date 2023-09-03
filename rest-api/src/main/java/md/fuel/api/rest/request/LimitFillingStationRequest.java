@@ -23,8 +23,8 @@ public class LimitFillingStationRequest extends BaseFillingStationRequest {
 
   @Setter(NONE)
   @Min(value = 1, message = "Limit in radius value should be equal or greater than one.")
-  @Parameter(name = "limit_in_radius", description = "Number of filling stations allowed to be displayed within a certain radius.",
-      example = "10", required = true)
+  @Parameter(name = "limit_in_radius", example = "10", required = true,
+      description = "Number of filling stations allowed to be displayed within a certain radius.")
   private int limitInRadius;
 
   @Setter(NONE)

@@ -31,7 +31,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 @Validated
 @OpenAPIDefinition(info = @Info(title = "Moldova Filling Station API", description =
     "Description of available APIs for interacting with filling stations in Moldova.", version = "v1"))
-@Tags(value = @Tag(name = "Filling Station Controller", description = "A group of controllers to work with filling station data."))
+@Tags(value = @Tag(name = "Filling Station Controller",
+    description = "A group of controllers to work with filling station data."))
 public interface FillingStationController {
 
   String FUEL_TYPE_PATH_PARAM = "fuel-type";
@@ -40,7 +41,8 @@ public interface FillingStationController {
       "Returns all filling stations within a certain radius.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "OK.", content = {
-          @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FillingStationDto.class)))}),
+          @Content(mediaType = "application/json",
+              array = @ArraySchema(schema = @Schema(implementation = FillingStationDto.class)))}),
       @ApiResponse(responseCode = "404", description = "Not Found.",
           content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
               RfcErrorDescription.class}))}),
@@ -94,7 +96,8 @@ public interface FillingStationController {
       + "filling stations with the best specified fuel type within a certain radius.")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "OK.", content = {
-          @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = FillingStationDto.class)))}),
+          @Content(mediaType = "application/json",
+              array = @ArraySchema(schema = @Schema(implementation = FillingStationDto.class)))}),
       @ApiResponse(responseCode = "404", description = "Not Found.",
           content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
               RfcErrorDescription.class}))}),

@@ -17,7 +17,8 @@ public class ApiGetterSetterTest extends GetterSetterTest {
 
   public static Stream<Arguments> getData() {
     return Stream.of(
-        Arguments.of(new FillingStationApi(EMPTY, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE)));
+        Arguments.of(
+            new FillingStationApi(EMPTY, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE)));
   }
 
   @ParameterizedTest

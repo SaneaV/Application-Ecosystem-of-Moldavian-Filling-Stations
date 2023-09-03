@@ -198,14 +198,14 @@ public class FillingStationFacadeTest {
   @Test
   @DisplayName("Should return timestamp of filling station data update")
   void shouldReturnTimestampOfFillingStationDataUpdate() {
-    final String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
-    final String MOLDOVA_ZONE_DATE_TIME = "Europe/Chisinau";
-    final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+    final String dateTimeFormat = "dd.MM.yyyy HH:mm";
+    final String moldovaZoneDateTime = "Europe/Chisinau";
+    final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateTimeFormat);
 
-    FillingStation.TIMESTAMP = ZonedDateTime.now().format(FORMATTER);
+    FillingStation.TIMESTAMP = ZonedDateTime.now().format(formatter);
 
-    final ZonedDateTime expected = LocalDateTime.parse(FillingStation.TIMESTAMP, FORMATTER)
-        .atZone(ZoneId.of(MOLDOVA_ZONE_DATE_TIME));
+    final ZonedDateTime expected = LocalDateTime.parse(FillingStation.TIMESTAMP, formatter)
+        .atZone(ZoneId.of(moldovaZoneDateTime));
     final ZonedDateTime result = fillingStationFacade.getLastUpdateTimestamp();
 
     assertThat(result).isEqualTo(expected);
@@ -231,6 +231,10 @@ public class FillingStationFacadeTest {
     assertThat(result).containsExactlyElementsOf(expected);
   }
 
+  private LimitFillingStationCriteria buildCriteria(int limitInRadius) {
+    return new LimitFillingStationCriteria(LATITUDE, LONGITUDE, RADIUS, limitInRadius, emptyList());
+  }
+
   private LimitFillingStationRequest buildRequest(int limitInRadius) {
     final LimitFillingStationRequest request = new LimitFillingStationRequest();
     request.setLatitude(LATITUDE);
@@ -238,10 +242,6 @@ public class FillingStationFacadeTest {
     request.setRadius(RADIUS);
     request.setLimit_in_radius(limitInRadius);
     return request;
-  }
-
-  private LimitFillingStationCriteria buildCriteria(int limitInRadius) {
-    return new LimitFillingStationCriteria(LATITUDE, LONGITUDE, RADIUS, limitInRadius, emptyList());
   }
 
   private BaseFillingStationRequest buildRequest() {

@@ -103,6 +103,8 @@ If you want to check the project for the following factors:
 - Misunderstood invariants when code is modified during maintenance
 - Garden variety mistakes: typos, use of the wrong boolean operator
 
-You can run the SpotBugs plugin to check: `mvn spotbugs:gui`
+You can run the SpotBugs plugin to check:
+1. `mvn spotbugs:spotbugs`
+2. `mvn spotbugs:gui`
 
 After that, a convenient GUI screen will appear with a presentation of all bugs, bad practices, etc. in project.

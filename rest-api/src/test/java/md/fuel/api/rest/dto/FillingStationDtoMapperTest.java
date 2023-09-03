@@ -17,10 +17,10 @@ public class FillingStationDtoMapperTest {
   private static final double LATITUDE = 10;
   private static final double LONGITUDE = 10;
 
-  private final FillingStationDtoMapper FillingStationDtoMapper;
+  private final FillingStationDtoMapper fillingStationDtoMapper;
 
   public FillingStationDtoMapperTest() {
-    this.FillingStationDtoMapper = new FillingStationDtoMapperImpl();
+    this.fillingStationDtoMapper = new FillingStationDtoMapperImpl();
   }
 
   @Test
@@ -29,7 +29,7 @@ public class FillingStationDtoMapperTest {
     final FillingStation fillingStation = new FillingStation(FILLING_STATION_NAME, PETROL_PRICE, DIESEL_PRICE, GAS_PRICE,
         LATITUDE, LONGITUDE);
 
-    final FillingStationDto result = FillingStationDtoMapper.toDto(fillingStation);
+    final FillingStationDto result = fillingStationDtoMapper.toDto(fillingStation);
 
     assertThat(result.name()).isEqualTo(fillingStation.name());
     assertThat(result.petrol()).isEqualTo(fillingStation.petrol());
@@ -45,7 +45,7 @@ public class FillingStationDtoMapperTest {
     final FillingStation fillingStation = new FillingStation(FILLING_STATION_NAME, PETROL_PRICE, DIESEL_PRICE, GAS_PRICE,
         LATITUDE, LONGITUDE);
 
-    final List<FillingStationDto> result = FillingStationDtoMapper.toDto(singletonList(fillingStation));
+    final List<FillingStationDto> result = fillingStationDtoMapper.toDto(singletonList(fillingStation));
 
     assertThat(result).hasSize(1);
     final FillingStationDto fillingStationDto = result.get(0);
@@ -60,7 +60,7 @@ public class FillingStationDtoMapperTest {
   @Test
   @DisplayName("Should map FillingStationDto to null on null FillingStation")
   void shouldMapFillingStationDtoToNullOnNullFillingStation() {
-    final FillingStationDto result = FillingStationDtoMapper.toDto((FillingStation) null);
+    final FillingStationDto result = fillingStationDtoMapper.toDto((FillingStation) null);
 
     assertThat(result).isNull();
   }
@@ -68,7 +68,7 @@ public class FillingStationDtoMapperTest {
   @Test
   @DisplayName("Should map list of FillingStationDto to null on null list of FillingStation")
   void shouldMapListOfFillingStationDtoToNullOnNullListOfFillingStation() {
-    final List<FillingStationDto> result = FillingStationDtoMapper.toDto((List<FillingStation>) null);
+    final List<FillingStationDto> result = fillingStationDtoMapper.toDto((List<FillingStation>) null);
 
     assertThat(result).isNull();
   }
