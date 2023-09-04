@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.domain.FuelType;
-import md.fuel.bot.infrastructure.exception.model.ExecutionException;
+import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -48,7 +48,7 @@ public interface FillingStationMapper extends PageMapper {
             priceMap.put(capitalize(field.getName()), (Double) field.get(fillingStationDto));
             field.setAccessible(false);
           } catch (IllegalAccessException e) {
-            throw new ExecutionException(EXCEPTION_PRICE_MAPPING_MESSAGE);
+            throw new InfrastructureException(EXCEPTION_PRICE_MAPPING_MESSAGE);
           }
         });
 

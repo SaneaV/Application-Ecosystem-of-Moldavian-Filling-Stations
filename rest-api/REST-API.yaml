@@ -115,6 +115,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -123,6 +124,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -131,6 +133,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -249,6 +252,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -257,6 +261,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -265,6 +270,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -357,6 +363,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -365,6 +372,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -373,6 +381,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -475,6 +484,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -483,6 +493,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -491,6 +502,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -548,6 +560,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -556,6 +569,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -564,6 +578,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -587,6 +602,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -595,6 +611,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'
@@ -619,6 +636,7 @@ paths:
           content:
             application/json:
               schema:
+                title: ErrorDescriptionResponse
                 oneOf:
                   - $ref: '#/components/schemas/GatewayErrorDescription'
                   - $ref: '#/components/schemas/RfcErrorDescription'

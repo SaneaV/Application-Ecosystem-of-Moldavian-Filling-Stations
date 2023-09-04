@@ -59,6 +59,7 @@
               <generateModelTests>false</generateModelTests>
               <generateApiDocumentation>false</generateApiDocumentation>
               <generateModelDocumentation>false</generateModelDocumentation>
+              <generateSupportingFiles>false</generateSupportingFiles>
               <configOptions>
                 <delegatePattern>true</delegatePattern>
                 <useJakartaEe>true</useJakartaEe>

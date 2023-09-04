@@ -45,7 +45,7 @@ public class FillingStationFacadeTest {
   private static final String FUEL_TYPE = "Petrol";
   private static final String ERROR_INVALID_LIMIT = "The limit should be greater than 0";
   private static final String ERROR_FOUND_MORE_THAN_LIMIT =
-      "More than %s gas stations were found. This is more than your specified limit. Decrease the search radius.";
+      "More than %s filling stations were found. This is more than your specified limit. Decrease the search radius.";
 
   private final FillingStationFacade fillingStationFacade;
   private final FillingStationService fillingStationService;

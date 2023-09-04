@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.stream.Stream;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
-import md.fuel.bot.infrastructure.exception.model.ExecutionException;
+import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import md.fuel.bot.telegram.FillingStationTelegramBot;
 import md.fuel.bot.telegram.command.BestFuelInRadiusCommand;
 import md.fuel.bot.telegram.exception.TelegramExceptionWrappingStrategy;
@@ -100,7 +100,7 @@ public class GlobalExceptionHandlerIT {
     return Stream.of(
         Arguments.of(new RuntimeException(ERROR_MESSAGE), STANDARD_RUNTIME_EXCEPTION_MESSAGE),
         Arguments.of(new EntityNotFoundException(ERROR_MESSAGE), ERROR_MESSAGE),
-        Arguments.of(new ExecutionException(ERROR_MESSAGE), ERROR_MESSAGE)
+        Arguments.of(new InfrastructureException(ERROR_MESSAGE), ERROR_MESSAGE)
     );
   }
 }

@@ -2,7 +2,8 @@ package md.fuel.bot.infrastructure.exception;
 
 import lombok.RequiredArgsConstructor;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
-import md.fuel.bot.infrastructure.exception.model.ExecutionException;
+import md.fuel.bot.infrastructure.exception.model.GatewayPassThroughException;
+import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -26,8 +27,13 @@ public class GlobalExceptionHandler {
     return errorWrappingStrategy.handleEntityNotFoundException(exception, request);
   }
 
-  @ExceptionHandler(ExecutionException.class)
-  public ResponseEntity<BotApiMethod<?>> handleExecutionException(ExecutionException exception, WebRequest request) {
-    return errorWrappingStrategy.handleExecutionException(exception, request);
+  @ExceptionHandler(InfrastructureException.class)
+  public ResponseEntity<BotApiMethod<?>> handleInfrastructureException(InfrastructureException exception, WebRequest request) {
+    return errorWrappingStrategy.handleInfrastructureException(exception, request);
+  }
+
+  @ExceptionHandler(GatewayPassThroughException.class)
+  public ResponseEntity<BotApiMethod<?>> handleGatewayPassThroughException(GatewayPassThroughException exception, WebRequest request) {
+    return errorWrappingStrategy.handleGatewayPassThroughException(exception, request);
   }
 }

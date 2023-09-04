@@ -1,7 +1,7 @@
 package md.fuel.bot.infrastructure.configuration;
 
 import lombok.RequiredArgsConstructor;
-import md.fuel.bot.infrastructure.exception.model.ExecutionException;
+import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.util.retry.Retry;
@@ -17,7 +17,7 @@ public class RetryWebClientConfiguration {
   public Retry fixedRetry() {
     return Retry.fixedDelay(configuration.getRetryCount(), configuration.getTimeDuration())
         .filter(this::worthRetrying)
-        .onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> new ExecutionException(ERROR_MESSAGE));
+        .onRetryExhaustedThrow((retryBackoffSpec, retrySignal) -> new InfrastructureException(ERROR_MESSAGE));
   }
 
   private boolean worthRetrying(Throwable throwable) {

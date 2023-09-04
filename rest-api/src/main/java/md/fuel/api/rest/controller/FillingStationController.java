@@ -44,14 +44,14 @@ public interface FillingStationController {
           @Content(mediaType = "application/json",
               array = @ArraySchema(schema = @Schema(implementation = FillingStationDto.class)))}),
       @ApiResponse(responseCode = "404", description = "Not Found.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "400", description = "Bad Request.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "500", description = "Internal Server Error.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))})
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))})
   })
   @GetMapping(value = "/filling-station")
   ResponseEntity<List<FillingStationDto>> getAllFillingStations(@Valid LimitFillingStationRequest request);
@@ -61,14 +61,14 @@ public interface FillingStationController {
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "OK.", useReturnTypeSchema = true),
       @ApiResponse(responseCode = "404", description = "Not Found.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "400", description = "Bad Request.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "500", description = "Internal Server Error.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))})
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))})
   })
   @GetMapping(value = "/page/filling-station")
   ResponseEntity<PageDto<FillingStationDto>> getPageOfAllFillingStations(@Valid LimitFillingStationRequest request,
@@ -80,14 +80,14 @@ public interface FillingStationController {
       @ApiResponse(responseCode = "200", description = "OK.", content = {
           @Content(mediaType = "application/json", schema = @Schema(implementation = FillingStationDto.class))}),
       @ApiResponse(responseCode = "404", description = "Not Found.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "400", description = "Bad Request.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "500", description = "Internal Server Error.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))})
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))})
   })
   @GetMapping(value = "/filling-station/nearest")
   ResponseEntity<FillingStationDto> getNearestFillingStation(@Valid BaseFillingStationRequest request);
@@ -99,14 +99,14 @@ public interface FillingStationController {
           @Content(mediaType = "application/json",
               array = @ArraySchema(schema = @Schema(implementation = FillingStationDto.class)))}),
       @ApiResponse(responseCode = "404", description = "Not Found.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "400", description = "Bad Request.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "500", description = "Internal Server Error.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))})
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))})
   })
   @GetMapping(value = "/filling-station/{fuel-type}")
   ResponseEntity<List<FillingStationDto>> getBestFuelPrice(@Valid LimitFillingStationRequest request,
@@ -121,14 +121,14 @@ public interface FillingStationController {
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "OK.", useReturnTypeSchema = true),
       @ApiResponse(responseCode = "404", description = "Not Found.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "400", description = "Bad Request.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "500", description = "Internal Server Error.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))})
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))})
   })
   @GetMapping(value = "/page/filling-station/{fuel-type}")
   ResponseEntity<PageDto<FillingStationDto>> getPageOfBestFuelPrice(@Valid LimitFillingStationRequest request,
@@ -144,11 +144,11 @@ public interface FillingStationController {
       @ApiResponse(responseCode = "200", description = "OK.", content = {
           @Content(mediaType = "application/json", schema = @Schema(implementation = ZonedDateTime.class))}),
       @ApiResponse(responseCode = "404", description = "Not Found.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))}),
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
       @ApiResponse(responseCode = "500", description = "Internal Server Error.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))})})
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))})})
   @GetMapping(value = "/filling-station/last-update")
   ResponseEntity<ZonedDateTime> getLastUpdateTimestamp();
 
@@ -157,8 +157,8 @@ public interface FillingStationController {
       @ApiResponse(responseCode = "200", description = "OK.", content = {
           @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = String.class)))}),
       @ApiResponse(responseCode = "500", description = "Internal Server Error.",
-          content = {@Content(mediaType = "application/json", schema = @Schema(oneOf = {GatewayErrorDescription.class,
-              RfcErrorDescription.class}))})})
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))})})
   @GetMapping(value = "/filling-station/fuel-type")
   ResponseEntity<List<String>> getAvailableFuelTypes();
 }

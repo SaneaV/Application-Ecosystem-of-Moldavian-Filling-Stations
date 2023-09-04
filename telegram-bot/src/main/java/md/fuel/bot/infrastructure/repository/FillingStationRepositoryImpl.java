@@ -22,6 +22,7 @@ import md.fuel.bot.domain.FuelType;
 import md.fuel.bot.domain.Page;
 import md.fuel.bot.infrastructure.configuration.ApiConfiguration;
 import md.fuel.bot.infrastructure.configuration.RetryWebClientConfiguration;
+import md.fuel.bot.infrastructure.exception.ExceptionUtils;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
@@ -53,6 +54,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
         .bodyToMono(new ParameterizedTypeReference<Result<FillingStationDto>>() {
         })
         .retryWhen(retryWebClientConfiguration.fixedRetry())
+        .doOnError(ExceptionUtils::raiseException)
         .map(f -> mapper.toEntity(f, FillingStation.class))
         .block();
   }
@@ -70,6 +72,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
         .retrieve()
         .bodyToMono(FillingStationDto.class)
         .retryWhen(retryWebClientConfiguration.fixedRetry())
+        .doOnError(ExceptionUtils::raiseException)
         .map(mapper::toEntity)
         .block();
   }
@@ -89,6 +92,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
         .bodyToMono(new ParameterizedTypeReference<Result<FillingStationDto>>() {
         })
         .retryWhen(retryWebClientConfiguration.fixedRetry())
+        .doOnError(ExceptionUtils::raiseException)
         .map(f -> mapper.toEntity(f, FillingStation.class))
         .block();
   }
@@ -104,6 +108,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
         .retrieve()
         .bodyToMono(ZonedDateTime.class)
         .retryWhen(retryWebClientConfiguration.fixedRetry())
+        .doOnError(ExceptionUtils::raiseException)
         .map(mapper::toString)
         .block();
   }
@@ -118,6 +123,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
         .retrieve()
         .bodyToMono(ArrayList.class)
         .retryWhen(retryWebClientConfiguration.fixedRetry())
+        .doOnError(ExceptionUtils::raiseException)
         .map(mapper::toEntity)
         .block();
   }

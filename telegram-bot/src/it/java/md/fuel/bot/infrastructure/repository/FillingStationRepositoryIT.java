@@ -18,7 +18,7 @@ import md.fuel.bot.infrastructure.configuration.ApiConfiguration;
 import md.fuel.bot.infrastructure.configuration.ApiConfigurationTest;
 import md.fuel.bot.infrastructure.configuration.RetryWebClientConfiguration;
 import md.fuel.bot.infrastructure.configuration.WebClientTestConfiguration;
-import md.fuel.bot.infrastructure.exception.model.ExecutionException;
+import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -177,7 +177,7 @@ public class FillingStationRepositoryIT {
         .willReturn(aResponse().withStatus(status)));
 
     assertThatThrownBy(() -> repository.getSupportedFuelTypes())
-        .isInstanceOf(ExecutionException.class)
+        .isInstanceOf(InfrastructureException.class)
         .hasMessage("Request timed out.");
   }
 

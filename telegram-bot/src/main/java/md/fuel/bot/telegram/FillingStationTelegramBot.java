@@ -1,6 +1,6 @@
 package md.fuel.bot.telegram;
 
-import md.fuel.bot.infrastructure.exception.model.ExecutionException;
+import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import md.fuel.bot.telegram.command.DispatcherCommand;
 import md.fuel.bot.telegram.configuration.TelegramBotConfiguration;
 import org.springframework.stereotype.Component;
@@ -38,7 +38,7 @@ public class FillingStationTelegramBot extends SpringWebhookBot {
           execute((SendLocation) message);
         }
       } catch (TelegramApiException e) {
-        throw new ExecutionException(ERROR_DESCRIPTION);
+        throw new InfrastructureException(ERROR_DESCRIPTION);
       }
     });
     return null;

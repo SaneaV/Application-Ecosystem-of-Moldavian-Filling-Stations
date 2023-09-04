@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Objects;
 import md.fuel.bot.domain.Page;
-import md.fuel.bot.infrastructure.exception.model.ExecutionException;
+import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 
 public interface PageMapper {
 
@@ -36,7 +36,7 @@ public interface PageMapper {
           try {
             return method.invoke(this, obj);
           } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new ExecutionException(EXCEPTION_MAPPING_MESSAGE);
+            throw new InfrastructureException(EXCEPTION_MAPPING_MESSAGE);
           }
         })
         .map(targerClass::cast)

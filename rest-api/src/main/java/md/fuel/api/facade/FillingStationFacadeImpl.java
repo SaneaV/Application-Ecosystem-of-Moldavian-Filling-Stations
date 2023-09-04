@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 public class FillingStationFacadeImpl implements FillingStationFacade {
 
   private static final String ERROR_FOUND_MORE_THAN_LIMIT =
-      "More than %s gas stations were found. This is more than your specified limit. Decrease the search radius.";
+      "More than %s filling stations were found. This is more than your specified limit. Decrease the search radius.";
   private static final String ERROR_EXCEED_LIMIT_REASON_CODE = "EXCEED_LIMIT";
   private static final String ERROR_LIMIT_MESSAGE = "The limit should be greater than 0";
   private static final String ERROR_UPDATE_MESSAGE = "There is no data to retrieve. Made any request to update the timestamp.";

@@ -27,6 +27,7 @@
 - [X] [CORE] Migrate to Java 20 and Spring Boot 3.
 - [X] [API] Add sort parameters in request.
 - [X] [TELEGRAM] Add Flyway instead of `spring.jpa.hibernate.ddl-auto=update`.
+- [X] [TELEGRAM] Implement exception rethrowing from third-party API.
 
 ## Important Features
 
@@ -37,7 +38,6 @@
   aspects and Thymeleaf).
 - [ ] [CORE] Add SL4FJ logging in a project.
 - [ ] [API] Add auditable for controllers (save data in database).
-- [ ] [TELEGRAM] Implement exception rethrowing from third-party API.
 
 ## Secondary
 
@@ -54,7 +54,7 @@
   (UI for adding date, video/pictures, text, etc. for an advertisement, and TARGET city).
 - A component for sending advertisements in a chat with a bot, based on the user's city.
 - The ad component and telegram bot can be libraries or microservices that use the core logic of Telegram Bot.
-- Check the possibility of using the Telegram Bot Web Application API (as the second option for displaying the nearest gas stations)
+- Check the possibility of using the Telegram Bot Web Application API (as the second option for displaying the nearest filling stations)
 - UI component for displaying statistics on REST and Telegram requests based on the Kafka-Statistics module.
 - Java Swing applications that query the state of a component through the Spring Boot Actuator (Live Health Check Monitoring).
 - Get rid of the limit of 10 filling stations in the radius and replace it with CallBackQuery with arrows (forward and backward).

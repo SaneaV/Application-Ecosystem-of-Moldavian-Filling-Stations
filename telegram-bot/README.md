@@ -195,6 +195,10 @@ You can run the SpotBugs plugin to check:
 
 After that, a convenient GUI screen will appear with a presentation of all bugs, bad practices, etc. in project.
 
+# Important notes
+
+- The Telegram bot can intercept (from rest-api service) in XML format and send errors to the user.
+
 # QA
 
 1. (<b>Q</b>) Why is the distance calculation in EPSG:4326?

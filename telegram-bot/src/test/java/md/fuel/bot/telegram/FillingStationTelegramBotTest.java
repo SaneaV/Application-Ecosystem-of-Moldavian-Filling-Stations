@@ -10,7 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import md.fuel.bot.infrastructure.exception.model.ExecutionException;
+import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import md.fuel.bot.telegram.command.DispatcherCommand;
 import md.fuel.bot.telegram.configuration.TelegramBotConfiguration;
 import org.junit.jupiter.api.DisplayName;
@@ -89,7 +89,7 @@ public class FillingStationTelegramBotTest {
       doThrow(TelegramApiException.class).when(fillingStationTelegramBot).execute(any(SendLocation.class));
 
       assertThatThrownBy(() -> fillingStationTelegramBot.onWebhookUpdateReceived(update))
-          .isInstanceOf(ExecutionException.class);
+          .isInstanceOf(InfrastructureException.class);
 
       verify(dispatcherCommand).getMessages(any());
     }
