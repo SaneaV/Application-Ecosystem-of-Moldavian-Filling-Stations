@@ -56,9 +56,10 @@ To identify the best fuel price, and filling station location was used: [ANRE-AP
 28. [Maven SpotBugs Plugin](https://mvnrepository.com/artifact/com.github.spotbugs/spotbugs-maven-plugin)
 29. [Maven Flyway Plugin](https://mvnrepository.com/artifact/org.flywaydb/flyway-maven-plugin)
 30. [Java Ngrok](https://mvnrepository.com/artifact/com.github.alexdlaird/java-ngrok)
-31. [Jakarta Bean Validation API](https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api/3.0.2)
+31. [Jakarta Bean Validation API](https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api)
 32. [Swagger Annotations Jakarta](https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta)
 33. [Flyway Core](https://mvnrepository.com/artifact/org.flywaydb/flyway-core)
+34. [Caffeine](https://mvnrepository.com/artifact/com.github.ben-manes.caffeine/caffeine)
 
 # TODO
 
@@ -66,4 +67,4 @@ Read the [TODO](TODO.md) to see the current task list.
 
 # Useful Resources
 
-I used these resources in the process of creating this Pet Project: [Useful](Useful.md)
+In the creation of this pet project, I made use of these resources: [Useful](Useful.md)

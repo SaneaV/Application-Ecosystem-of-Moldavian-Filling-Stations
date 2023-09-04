@@ -13,6 +13,7 @@ import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import md.fuel.bot.telegram.FillingStationTelegramBot;
 import md.fuel.bot.telegram.command.BestFuelInRadiusCommand;
+import md.fuel.bot.telegram.configuration.RequestRateValidator;
 import md.fuel.bot.telegram.exception.TelegramExceptionWrappingStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -79,6 +80,9 @@ public class GlobalExceptionHandlerIT {
 
   @MockBean
   private FillingStationTelegramBot fillingStationTelegramBot;
+
+  @MockBean
+  private RequestRateValidator requestRateValidator;
 
   @ParameterizedTest
   @MethodSource("getExceptions")

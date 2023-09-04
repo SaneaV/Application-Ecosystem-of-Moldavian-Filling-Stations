@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.bot.infrastructure.exception.model.GatewayPassThroughException;
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
+import md.fuel.bot.telegram.exception.model.ClientRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,7 +34,13 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(GatewayPassThroughException.class)
-  public ResponseEntity<BotApiMethod<?>> handleGatewayPassThroughException(GatewayPassThroughException exception, WebRequest request) {
+  public ResponseEntity<BotApiMethod<?>> handleGatewayPassThroughException(GatewayPassThroughException exception,
+      WebRequest request) {
     return errorWrappingStrategy.handleGatewayPassThroughException(exception, request);
+  }
+
+  @ExceptionHandler(ClientRequestException.class)
+  public ResponseEntity<BotApiMethod<?>> handleClientRequestException(ClientRequestException exception, WebRequest request) {
+    return errorWrappingStrategy.handleClientRequestException(exception, request);
   }
 }

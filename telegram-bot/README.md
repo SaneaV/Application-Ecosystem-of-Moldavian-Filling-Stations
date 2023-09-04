@@ -17,6 +17,7 @@ This bot uses telegram messenger for convenient interaction with filling station
     - [Dependency Check](#dependency-check)
     - [Checkstyle](#checkstyle)
     - [SpotBugs](#spotbugs)
+- [Important Notes](#important-notes)
 - [QA](#qa)
 
 ## Telegram functionality
@@ -110,16 +111,18 @@ If everything is correct, you will see the message:
 
 # Environment Variables
 
-| **Environment Variable** |       **Optional**       | **Possible Values** | **Default Value** | **Description**                                                                                                 |
-|:------------------------:|:------------------------:|:-------------------:|:-----------------:|-----------------------------------------------------------------------------------------------------------------|
-|        BOT_TOKEN         |            No            | Telegram bot token  |     \<Empty\>     | Telegram bot token (you can take it from [Bot Father](https://t.me/BotFather))                                  |
-|      NGROK_ENABLED       |           Yes            |    `true/false`     |       true        | Enable/Disable automatic tunnel creation.                                                                       |
-|       NGROK_TOKEN        | Depends on NGROK_ENABLED |  Ngrok auth token   |     \<Empty\>     | If NGROK_ENABLED=true, you must specify a personal ngrok [token](https://dashboard.ngrok.com/get-started/setup) |
-|         WEBHOOK          | Depends on NGROK_ENABLED | HTTPS WebHook path  |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                                                       |
-|       DATABASE_URL       |            No            |    Database URL     |     \<Empty\>     | PostgreSQL connection URL                                                                                       |
-|    DATABASE_USERNAME     |            No            |  Database username  |     \<Empty\>     | PostgreSQL username                                                                                             |
-|    DATABASE_PASSWORD     |            No            |  Database password  |     \<Empty\>     | PostgreSQL user password                                                                                        |
-|  SPRING_FLYWAY_ENABLED   |           Yes            |    `true/false`     |       false       | Checking/applying all SQL scripts in the database/migration folder                                              |
+|     **Environment Variable**     |       **Optional**       | **Possible Values** | **Default Value** | **Description**                                                                                                 |
+|:--------------------------------:|:------------------------:|:-------------------:|:-----------------:|-----------------------------------------------------------------------------------------------------------------|
+|            BOT_TOKEN             |            No            | Telegram bot token  |     \<Empty\>     | Telegram bot token (you can take it from [Bot Father](https://t.me/BotFather))                                  |
+|          NGROK_ENABLED           |           Yes            |    `true/false`     |       true        | Enable/Disable automatic tunnel creation.                                                                       |
+|           NGROK_TOKEN            | Depends on NGROK_ENABLED |  Ngrok auth token   |     \<Empty\>     | If NGROK_ENABLED=true, you must specify a personal ngrok [token](https://dashboard.ngrok.com/get-started/setup) |
+|             WEBHOOK              | Depends on NGROK_ENABLED | HTTPS WebHook path  |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                                                       |
+|           DATABASE_URL           |            No            |    Database URL     |     \<Empty\>     | PostgreSQL connection URL                                                                                       |
+|        DATABASE_USERNAME         |            No            |  Database username  |     \<Empty\>     | PostgreSQL username                                                                                             |
+|        DATABASE_PASSWORD         |            No            |  Database password  |     \<Empty\>     | PostgreSQL user password                                                                                        |
+|      SPRING_FLYWAY_ENABLED       |           Yes            |    `true/false`     |       false       | Checking/applying all SQL scripts in the database/migration folder                                              |
+| TELEGRAM_BOT_REQUESTS_PER_SECOND |           Yes            |       Integer       |         5         | Max request per second for specific user                                                                        |
+| TELEGRAM_BOT_REQUESTS_TIME_RESET |           Yes            |       Integer       |         3         | Time to reset the counter of all user requests (in seconds)                                                     |
 
 Run project via maven:
 
@@ -195,9 +198,11 @@ You can run the SpotBugs plugin to check:
 
 After that, a convenient GUI screen will appear with a presentation of all bugs, bad practices, etc. in project.
 
-# Important notes
+# Important Notes
 
 - The Telegram bot can intercept (from rest-api service) in XML format and send errors to the user.
+- The default sorting of filling stations in the full list and the search for the best fuel occurs by distance 
+(the nearest filling station is always at the very bottom)
 
 # QA
 

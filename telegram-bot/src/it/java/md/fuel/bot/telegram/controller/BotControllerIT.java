@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import md.fuel.bot.telegram.FillingStationTelegramBot;
+import md.fuel.bot.telegram.configuration.RequestRateValidator;
 import md.fuel.bot.telegram.exception.TelegramExceptionWrappingStrategy;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,8 +46,12 @@ public class BotControllerIT {
 
   @Autowired
   private MockMvc mockMvc;
+
   @MockBean
   private FillingStationTelegramBot fillingStationTelegramBot;
+
+  @MockBean
+  private RequestRateValidator requestRateValidator;
 
   @Test
   @DisplayName("Should handle telegram request")

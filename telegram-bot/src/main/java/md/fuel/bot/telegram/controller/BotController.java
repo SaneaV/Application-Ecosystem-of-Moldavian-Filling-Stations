@@ -5,6 +5,7 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_RE
 
 import lombok.RequiredArgsConstructor;
 import md.fuel.bot.telegram.FillingStationTelegramBot;
+import md.fuel.bot.telegram.configuration.RequestRateValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,10 +21,14 @@ public class BotController {
   private static final String CHAT_ID_ATTRIBUTE = "chatId";
 
   private final FillingStationTelegramBot fillingStationTelegramBot;
+  private final RequestRateValidator requestRateValidator;
 
   @PostMapping(value = "/callback/${telegram.bot-token}")
   public ResponseEntity<BotApiMethod<?>> onUpdateReceived(@RequestBody Update update, WebRequest webRequest) {
-    webRequest.setAttribute(CHAT_ID_ATTRIBUTE, update.getMessage().getChat().getId(), SCOPE_REQUEST);
+    final Long userId = update.getMessage().getChat().getId();
+
+    webRequest.setAttribute(CHAT_ID_ATTRIBUTE, userId, SCOPE_REQUEST);
+    requestRateValidator.validateRequest(userId);
 
     final BotApiMethod<?> botApiMethod = fillingStationTelegramBot.onWebhookUpdateReceived(update);
     return ok().body(botApiMethod);

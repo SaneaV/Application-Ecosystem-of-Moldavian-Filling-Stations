@@ -28,6 +28,7 @@
 - [X] [API] Add sort parameters in request.
 - [X] [TELEGRAM] Add Flyway instead of `spring.jpa.hibernate.ddl-auto=update`.
 - [X] [TELEGRAM] Implement exception rethrowing from third-party API.
+- [X] [TELEGRAM] Implement request per time unit limiter.
 
 ## Important Features
 
@@ -44,7 +45,6 @@
 - [ ] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [CORE] Add Actuator.
-- [ ] [TELEGRAM] Implement request per time unit limiter.
 - [ ] [API] Add an endpoint to request the official fuel price from ANRE.
 - [ ] [CORE] Add SonarQube.
 - [ ] [API] Move `limit` and `offset` logic on service layer.

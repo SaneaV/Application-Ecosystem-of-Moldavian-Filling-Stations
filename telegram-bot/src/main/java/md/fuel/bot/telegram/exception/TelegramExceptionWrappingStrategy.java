@@ -8,6 +8,7 @@ import md.fuel.bot.infrastructure.exception.ErrorWrappingStrategy;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.bot.infrastructure.exception.model.GatewayPassThroughException;
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
+import md.fuel.bot.telegram.exception.model.ClientRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -42,6 +43,11 @@ public class TelegramExceptionWrappingStrategy implements ErrorWrappingStrategy 
       WebRequest request) {
     final String exceptionMessage = exception.getGatewayError().getErrors().getError().get(0).getDescription();
     return prepareErrorMessage(exceptionMessage, request);
+  }
+
+  @Override
+  public ResponseEntity<BotApiMethod<?>> handleClientRequestException(ClientRequestException exception, WebRequest request) {
+    return prepareErrorMessage(exception.getMessage(), request);
   }
 
   private ResponseEntity<BotApiMethod<?>> prepareErrorMessage(String errorText, WebRequest request) {
