@@ -19,6 +19,7 @@ import md.fuel.api.infrastructure.mapper.CriteriaMapper;
 import md.fuel.api.infrastructure.service.FillingStationService;
 import md.fuel.api.rest.dto.FillingStationDto;
 import md.fuel.api.rest.dto.FillingStationDtoMapper;
+import md.fuel.api.rest.dto.FuelPriceDto;
 import md.fuel.api.rest.request.BaseFillingStationRequest;
 import md.fuel.api.rest.request.LimitFillingStationRequest;
 import org.springframework.stereotype.Component;
@@ -84,6 +85,11 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
     return Arrays.stream(FuelType.values())
         .map(FuelType::getDescription)
         .toList();
+  }
+
+  @Override
+  public FuelPriceDto getAnrePrices() {
+    return fillingStationDtoMapper.toDto(fillingStationService.getAnrePrices());
   }
 
   private void checkLimit(int limit) {

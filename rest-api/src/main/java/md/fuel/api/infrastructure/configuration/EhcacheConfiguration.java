@@ -26,6 +26,7 @@ import org.springframework.context.annotation.Configuration;
 public class EhcacheConfiguration {
 
   public static final String ANRE_CACHE = "anreCache";
+  public static final String ANRE_PRICE_CACHE = "anrePriceCache";
   public static final String J_CACHE_CACHE_MANAGER = "jCacheCacheManager";
 
   @Value("${cache.onheap.size}")
@@ -57,6 +58,7 @@ public class EhcacheConfiguration {
 
     final Map<String, CacheConfiguration<?, ?>> caches = new HashMap<>();
     caches.put(ANRE_CACHE, cacheConfiguration);
+    caches.put(ANRE_PRICE_CACHE, cacheConfiguration);
 
     final org.ehcache.config.Configuration configuration = new DefaultConfiguration(caches,
         ehcacheCachingProvider.getDefaultClassLoader());

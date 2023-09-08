@@ -7,4 +7,4 @@ api-configuration:
 
   paths:
     all-filling-stations: /
-    today-fuel-price: /plafon
+    today-fuel-price: /plafon/

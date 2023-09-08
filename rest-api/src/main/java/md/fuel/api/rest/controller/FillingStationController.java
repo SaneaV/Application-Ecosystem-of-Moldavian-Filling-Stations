@@ -1,9 +1,7 @@
 package md.fuel.api.rest.controller;
 
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,11 +27,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Validated
-@OpenAPIDefinition(info = @Info(title = "Moldova Filling Station API", description =
-    "Description of available APIs for interacting with filling stations in Moldova.", version = "v1"))
-@Tags(value = @Tag(name = "Filling Station Controller",
-    description = "A group of controllers to work with filling station data."))
-public interface FillingStationController {
+@Tags(value = @Tag(name = "Filling Station Controller", description = "A group of controllers to work with filling station data."))
+public interface FillingStationController extends SwaggerController {
 
   String FUEL_TYPE_PATH_PARAM = "fuel-type";
 

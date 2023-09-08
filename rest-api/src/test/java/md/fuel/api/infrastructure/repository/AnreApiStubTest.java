@@ -50,7 +50,7 @@ public class AnreApiStubTest {
 
     assertThat(firstCall).hasSize(1);
     verify(objectMapper).readValue(any(InputStream.class), any(TypeReference.class));
-    verify(anreApiMapper).toEntity(any());
+    verify(anreApiMapper).toEntity(any(FillingStationApi.class));
 
     clearInvocations(objectMapper);
     clearInvocations(anreApiMapper);

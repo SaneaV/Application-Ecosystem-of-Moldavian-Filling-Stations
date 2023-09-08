@@ -40,7 +40,7 @@ public class AnreApiMapperTest {
   @Test
   @DisplayName("Should return null on null fillingStationApi")
   void shouldReturnNullOnNullFillingStationApi() {
-    final FillingStation result = anreApiMapper.toEntity(null);
+    final FillingStation result = anreApiMapper.toEntity((FillingStationApi) null);
 
     assertThat(result).isNull();
   }

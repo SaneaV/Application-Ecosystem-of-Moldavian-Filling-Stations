@@ -1,6 +1,5 @@
 package md.fuel.api.infrastructure.repository;
 
-
 import static md.fuel.api.infrastructure.utils.CoordinateConverter.convertWgs84ToUtm;
 
 import com.fasterxml.jackson.annotation.JsonCreator;

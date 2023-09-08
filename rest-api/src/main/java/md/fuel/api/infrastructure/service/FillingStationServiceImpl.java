@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import md.fuel.api.domain.FillingStation;
+import md.fuel.api.domain.FuelPrice;
 import md.fuel.api.domain.FuelType;
 import md.fuel.api.domain.criteria.BaseFillingStationCriteria;
 import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
@@ -97,6 +98,11 @@ public class FillingStationServiceImpl implements FillingStationService {
 
     sort(filterByPriceList, getComparators(criteria.getSorting(), latitude, longitude));
     return filterByPriceList;
+  }
+
+  @Override
+  public FuelPrice getAnrePrices() {
+    return anreApi.getAnrePrices();
   }
 
   private double getMinimalFuelPrice(List<FillingStation> filteredFillingStationsList,
