@@ -15,4 +15,6 @@ public interface FillingStationService {
   List<FillingStation> getBestFuelPrice(LimitFillingStationCriteria criteria, String fuelType);
 
   FuelPrice getAnrePrices();
+
+  int getTotalNumberOfFillingStations();
 }

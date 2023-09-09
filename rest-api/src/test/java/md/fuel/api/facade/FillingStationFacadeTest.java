@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 
 public class FillingStationFacadeTest {
 
-  private static final String name = "Filling Station";
+  private static final String NAME = "Filling Station";
   private static final double LATITUDE = 10;
   private static final double LONGITUDE = 20;
   private static final double RADIUS = 30;
@@ -80,7 +80,7 @@ public class FillingStationFacadeTest {
   void shouldThrowInvalidRequestExceptionOnGetAllFillingStationsOnGreaterLimit() {
     final int limit = 1;
     final LimitFillingStationRequest request = buildRequest(limit);
-    final FillingStation fillingStation = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
+    final FillingStation fillingStation = new FillingStation(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
     final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation));
 
     when(criteriaMapper.toEntity(any())).thenReturn(buildCriteria(limit));
@@ -116,7 +116,7 @@ public class FillingStationFacadeTest {
   void shouldThrowInvalidRequestExceptionOnGetBestFuelPricesOnGreaterLimit() {
     final int limit = 1;
     final LimitFillingStationRequest request = buildRequest(limit);
-    final FillingStation fillingStation = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
+    final FillingStation fillingStation = new FillingStation(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
     final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation));
 
     when(criteriaMapper.toEntity(any())).thenReturn(buildCriteria(limit));
@@ -134,9 +134,9 @@ public class FillingStationFacadeTest {
   @Test
   @DisplayName("Should return list of all filling stations")
   void shouldReturnListOfAllFillingStation() {
-    final FillingStation fillingStation = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
+    final FillingStation fillingStation = new FillingStation(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
     final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation));
-    final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
+    final FillingStationDto fillingStationDto = new FillingStationDto(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
         LONGITUDE);
     final LimitFillingStationRequest request = buildRequest(VALID_LIMIT);
 
@@ -156,8 +156,8 @@ public class FillingStationFacadeTest {
   @Test
   @DisplayName("Should return nearest filling station")
   void shouldReturnNearestFillingStation() {
-    final FillingStation fillingStation = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
-    final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
+    final FillingStation fillingStation = new FillingStation(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
+    final FillingStationDto fillingStationDto = new FillingStationDto(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
         LONGITUDE);
 
     when(fillingStationService.getNearestFillingStation(any())).thenReturn(fillingStation);
@@ -176,9 +176,9 @@ public class FillingStationFacadeTest {
   @Test
   @DisplayName("Should return list of best fuel price stations")
   void shouldReturnListOfBestFuelPriceFillingStations() {
-    final FillingStation fillingStation = new FillingStation(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
+    final FillingStation fillingStation = new FillingStation(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
     final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation));
-    final FillingStationDto fillingStationDto = new FillingStationDto(name, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
+    final FillingStationDto fillingStationDto = new FillingStationDto(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
         LONGITUDE);
     final LimitFillingStationRequest request = buildRequest(VALID_LIMIT);
 
@@ -232,7 +232,7 @@ public class FillingStationFacadeTest {
   }
 
   private LimitFillingStationCriteria buildCriteria(int limitInRadius) {
-    return new LimitFillingStationCriteria(LATITUDE, LONGITUDE, RADIUS, limitInRadius, emptyList());
+    return new LimitFillingStationCriteria(LATITUDE, LONGITUDE, RADIUS, limitInRadius, emptyList(), 1000, 0);
   }
 
   private LimitFillingStationRequest buildRequest(int limitInRadius) {

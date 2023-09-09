@@ -20,8 +20,10 @@ import md.fuel.api.infrastructure.service.FillingStationService;
 import md.fuel.api.rest.dto.FillingStationDto;
 import md.fuel.api.rest.dto.FillingStationDtoMapper;
 import md.fuel.api.rest.dto.FuelPriceDto;
+import md.fuel.api.rest.dto.PageDto;
 import md.fuel.api.rest.request.BaseFillingStationRequest;
 import md.fuel.api.rest.request.LimitFillingStationRequest;
+import md.fuel.api.rest.request.PageRequest;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -42,6 +44,20 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
   private final FillingStationService fillingStationService;
   private final FillingStationDtoMapper fillingStationDtoMapper;
   private final CriteriaMapper criteriaMapper;
+
+  @Override
+  public PageDto<FillingStationDto> getPageOfFillingStations(LimitFillingStationRequest limitFillingStationRequest,
+      PageRequest pageRequest) {
+    final LimitFillingStationCriteria criteria = criteriaMapper.toEntity(limitFillingStationRequest, pageRequest);
+
+    checkLimit(criteria.getLimitInRadius());
+    final List<FillingStation> fillingStations = fillingStationService.getAllFillingStations(criteria);
+    checkLimit(fillingStations.size(), criteria.getLimitInRadius());
+
+    final int totalFillingStations = fillingStationService.getTotalNumberOfFillingStations();
+
+    return fillingStationDtoMapper.toDto(fillingStations, totalFillingStations);
+  }
 
   @Override
   public List<FillingStationDto> getAllFillingStations(LimitFillingStationRequest request) {
@@ -70,6 +86,20 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
     checkLimit(fillingStations.size(), criteria.getLimitInRadius());
 
     return fillingStationDtoMapper.toDto(fillingStations);
+  }
+
+  @Override
+  public PageDto<FillingStationDto> getPageOfBestFuelPrices(LimitFillingStationRequest limitFillingStationRequest,
+      PageRequest pageRequest, String fuelType) {
+    final LimitFillingStationCriteria criteria = criteriaMapper.toEntity(limitFillingStationRequest, pageRequest);
+
+    checkLimit(criteria.getLimitInRadius());
+    final List<FillingStation> fillingStations = fillingStationService.getBestFuelPrice(criteria, fuelType);
+    checkLimit(fillingStations.size(), criteria.getLimitInRadius());
+
+    final int totalFillingStations = fillingStationService.getTotalNumberOfFillingStations();
+
+    return fillingStationDtoMapper.toDto(fillingStations, totalFillingStations);
   }
 
   @Override

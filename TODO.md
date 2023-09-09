@@ -30,8 +30,9 @@
 - [X] [TELEGRAM] Implement exception rethrowing from third-party API.
 - [X] [TELEGRAM] Implement request per time unit limiter.
 - [X] [API] Add an endpoint to request the official fuel price from ANRE.
+- [X] [API] Move `limit` and `offset` logic on the service layer.
 
-## Important Features
+## Features
 
 - [ ] [CORE] Add Dockerfile and Docker-compose to build a project in container.
 - [ ] [API] Add Spring Security for REST API (using mock LDAP).
@@ -40,21 +41,19 @@
   aspects and Thymeleaf).
 - [ ] [CORE] Add SL4FJ logging in a project.
 - [ ] [API] Add auditable for controllers (save data in database).
-
-## Secondary
-
 - [ ] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [CORE] Add Actuator.
 - [ ] [CORE] Add SonarQube.
-- [ ] [API] Move `limit` and `offset` logic on service layer.
 
 ## Food For Thought
+
 - A component for creating advertisements for the Telegram bot
   (UI for adding date, video/pictures, text, etc. for an advertisement, and TARGET city).
 - A component for sending advertisements in a chat with a bot, based on the user's city.
 - The ad component and telegram bot can be libraries or microservices that use the core logic of Telegram Bot.
-- Check the possibility of using the Telegram Bot Web Application API (as the second option for displaying the nearest filling stations)
+- Check the possibility of using the Telegram Bot Web Application API (as the second option for displaying the nearest filling
+  stations)
 - UI component for displaying statistics on REST and Telegram requests based on the Kafka-Statistics module.
 - Java Swing applications that query the state of a component through the Spring Boot Actuator (Live Health Check Monitoring).
 - Get rid of the limit of 10 filling stations in the radius and replace it with CallBackQuery with arrows (forward and backward).

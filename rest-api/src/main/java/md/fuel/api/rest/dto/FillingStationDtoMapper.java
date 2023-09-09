@@ -13,4 +13,6 @@ public interface FillingStationDtoMapper {
   List<FillingStationDto> toDto(List<FillingStation> fillingStationList);
 
   FuelPriceDto toDto(FuelPrice fuelPrice);
+
+  PageDto<FillingStationDto> toDto(List<FillingStation> items, int totalResults);
 }

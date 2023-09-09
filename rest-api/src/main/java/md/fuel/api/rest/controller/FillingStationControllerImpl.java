@@ -9,7 +9,6 @@ import md.fuel.api.rest.dto.PageDto;
 import md.fuel.api.rest.request.BaseFillingStationRequest;
 import md.fuel.api.rest.request.LimitFillingStationRequest;
 import md.fuel.api.rest.request.PageRequest;
-import md.fuel.api.rest.wrapper.FillingStationPageWrapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class FillingStationControllerImpl implements FillingStationController {
 
   private final FillingStationFacade fillingStationFacade;
-  private final FillingStationPageWrapper fillingStationPageWrapper;
 
   @Override
   public ResponseEntity<List<FillingStationDto>> getAllFillingStations(LimitFillingStationRequest request) {
@@ -31,7 +29,7 @@ public class FillingStationControllerImpl implements FillingStationController {
   @Override
   public ResponseEntity<PageDto<FillingStationDto>> getPageOfAllFillingStations(LimitFillingStationRequest fillingStationRequest,
       PageRequest pageRequest) {
-    final PageDto<FillingStationDto> fillingStationDtoPageDto = fillingStationPageWrapper.wrapAllFillingStationsList(
+    final PageDto<FillingStationDto> fillingStationDtoPageDto = fillingStationFacade.getPageOfFillingStations(
         fillingStationRequest, pageRequest);
 
     return ResponseEntity.ok().body(fillingStationDtoPageDto);
@@ -55,8 +53,8 @@ public class FillingStationControllerImpl implements FillingStationController {
   @Override
   public ResponseEntity<PageDto<FillingStationDto>> getPageOfBestFuelPrice(LimitFillingStationRequest request,
       PageRequest pageRequest, @PathVariable(value = FUEL_TYPE_PATH_PARAM) String fuelType) {
-    final PageDto<FillingStationDto> fillingStationDtoPageDto = fillingStationPageWrapper.wrapBestFuelPriceStation(request,
-        pageRequest, fuelType);
+    final PageDto<FillingStationDto> fillingStationDtoPageDto = fillingStationFacade.getPageOfBestFuelPrices(request, pageRequest,
+        fuelType);
 
     return ResponseEntity.ok().body(fillingStationDtoPageDto);
   }

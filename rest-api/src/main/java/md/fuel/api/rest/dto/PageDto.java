@@ -11,7 +11,6 @@ import java.util.List;
 public record PageDto<T>(
     @Schema(description = "Total number of filling stations in radius.", example = "10", requiredMode = REQUIRED)
     int totalResults,
-
     @Schema(description = "List of filling stations.", requiredMode = REQUIRED)
     List<T> items) {
 

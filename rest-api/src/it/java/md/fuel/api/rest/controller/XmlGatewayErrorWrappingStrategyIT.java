@@ -17,7 +17,6 @@ import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import md.fuel.api.rest.exception.XmlGatewayErrorWrappingStrategy;
-import md.fuel.api.rest.wrapper.FillingStationPageWrapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -100,9 +99,6 @@ public class XmlGatewayErrorWrappingStrategyIT {
 
   @MockBean
   private FillingStationFacade fillingStationFacade;
-
-  @MockBean
-  private FillingStationPageWrapper fillingStationPageWrapper;
 
   @ParameterizedTest
   @MethodSource("getExceptions")

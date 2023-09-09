@@ -8,6 +8,7 @@ import md.fuel.api.domain.criteria.BaseFillingStationCriteria;
 import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
 import md.fuel.api.rest.request.BaseFillingStationRequest;
 import md.fuel.api.rest.request.LimitFillingStationRequest;
+import md.fuel.api.rest.request.PageRequest;
 import md.fuel.api.rest.request.SortingQuery;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,7 +20,14 @@ public interface CriteriaMapper {
   BaseFillingStationCriteria toEntity(BaseFillingStationRequest request);
 
   @Mapping(target = "sorting", source = "sorting", qualifiedByName = "toSortingQueryList")
+  @Mapping(target = "pageLimit", ignore = true)
+  @Mapping(target = "pageOffset", ignore = true)
   LimitFillingStationCriteria toEntity(LimitFillingStationRequest request);
+
+  @Mapping(target = "sorting", source = "limitFillingStationRequest.sorting", qualifiedByName = "toSortingQueryList")
+  @Mapping(target = "pageLimit", source = "pageRequest.limit")
+  @Mapping(target = "pageOffset", source = "pageRequest.offset")
+  LimitFillingStationCriteria toEntity(LimitFillingStationRequest limitFillingStationRequest, PageRequest pageRequest);
 
   @Named("toSortingQueryList")
   default List<SortingQuery> toSortingQueryList(List<String> sorting) {

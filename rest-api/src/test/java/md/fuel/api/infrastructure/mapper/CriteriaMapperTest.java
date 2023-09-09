@@ -66,9 +66,10 @@ public class CriteriaMapperTest {
 
     final LimitFillingStationCriteria criteria = mapper.toEntity(request);
 
-    assertThat(criteria).usingRecursiveComparison().ignoringFields("sorting")
-        .isEqualTo(request);
+    assertThat(criteria).usingRecursiveComparison().ignoringFields("sorting", "pageLimit", "pageOffset").isEqualTo(request);
     assertThat(criteria.getSorting()).usingRecursiveComparison().isEqualTo(sorting);
+    assertThat(criteria.getPageOffset()).isNull();
+    assertThat(criteria.getPageLimit()).isNull();
   }
 
   @Test

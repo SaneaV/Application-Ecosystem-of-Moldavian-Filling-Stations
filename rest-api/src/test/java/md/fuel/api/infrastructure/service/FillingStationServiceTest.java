@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
+import javax.cache.CacheManager;
 import md.fuel.api.domain.FillingStation;
 import md.fuel.api.domain.criteria.BaseFillingStationCriteria;
 import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
@@ -61,7 +62,8 @@ public class FillingStationServiceTest {
 
   public FillingStationServiceTest() {
     this.anreApi = mock(AnreApi.class);
-    this.fillingStationService = new FillingStationServiceImpl(anreApi);
+    final CacheManager cacheManager = mock(CacheManager.class);
+    this.fillingStationService = new FillingStationServiceImpl(anreApi, cacheManager);
   }
 
   @Test
@@ -299,6 +301,6 @@ public class FillingStationServiceTest {
 
   private LimitFillingStationCriteria buildLimitCriteria(double latitude, double longitude, double radius,
       List<SortingQuery> sortingQueries) {
-    return new LimitFillingStationCriteria(latitude, longitude, radius, 50, sortingQueries);
+    return new LimitFillingStationCriteria(latitude, longitude, radius, 50, sortingQueries, null, null);
   }
 }
