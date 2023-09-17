@@ -5,7 +5,6 @@ import static lombok.AccessLevel.PRIVATE;
 import lombok.NoArgsConstructor;
 import md.fuel.bot.infrastructure.exception.model.GatewayPassThroughException;
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
-import org.springframework.core.codec.DecodingException;
 
 @NoArgsConstructor(access = PRIVATE)
 public class ExceptionUtils {
@@ -14,9 +13,6 @@ public class ExceptionUtils {
 
   public static void raiseException(Throwable throwable) {
     if (throwable instanceof InfrastructureException exception) {
-      throw exception;
-    }
-    if (throwable instanceof DecodingException exception) {
       throw exception;
     }
     if (throwable instanceof GatewayPassThroughException exception) {

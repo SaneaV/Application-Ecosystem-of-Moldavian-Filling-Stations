@@ -1,9 +1,9 @@
 package md.fuel.bot.infrastructure.configuration;
 
 import lombok.RequiredArgsConstructor;
+import md.fuel.bot.infrastructure.exception.model.GatewayPassThroughException;
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.util.retry.Retry;
 
 @Configuration
@@ -21,8 +21,8 @@ public class RetryWebClientConfiguration {
   }
 
   private boolean worthRetrying(Throwable throwable) {
-    if (throwable instanceof WebClientResponseException responseException) {
-      return configuration.getRetryable().contains(responseException.getStatusCode().value());
+    if (throwable instanceof GatewayPassThroughException responseException) {
+      return configuration.getRetryable().contains(responseException.getHttpStatus().value());
     }
     return false;
   }

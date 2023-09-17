@@ -48,7 +48,7 @@ public class XmlGatewayErrorWrappingStrategyIT {
 
   private static final String ERROR_MESSAGE = "Error message";
   private static final String ERROR_REASON_CODE = "Error reason code";
-  private static final String RFC7807_RESPONSE = """
+  private static final String XML_GATEWAY_ERROR_RESPONSE = """
       {
           "Errors": {
               "Error": [
@@ -113,7 +113,7 @@ public class XmlGatewayErrorWrappingStrategyIT {
             .param(RADIUS_PARAM, RADIUS_VALUE)
             .contentType(APPLICATION_JSON))
         .andExpect(status().is(status))
-        .andExpect(content().json(RFC7807_RESPONSE));
+        .andExpect(content().json(XML_GATEWAY_ERROR_RESPONSE));
 
     verify(fillingStationFacade).getAllFillingStations(any());
   }

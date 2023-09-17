@@ -6,6 +6,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.TOO_MANY_REQUESTS;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -18,15 +20,13 @@ import md.fuel.bot.infrastructure.configuration.ApiConfiguration;
 import md.fuel.bot.infrastructure.configuration.ApiConfigurationTest;
 import md.fuel.bot.infrastructure.configuration.RetryWebClientConfiguration;
 import md.fuel.bot.infrastructure.configuration.WebClientTestConfiguration;
+import md.fuel.bot.infrastructure.exception.model.GatewayPassThroughException;
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
-import org.springframework.core.codec.DecodingException;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -82,6 +82,8 @@ public class FillingStationRepositoryIT {
       }""";
   private static final String TIMESTAMP_UPDATE_RESPONSE = "\"2023-08-25T23:04:00+03:00\"";
   private static final String FUEL_TYPES_RESPONSE = "[\"Petrol\",\"Diesel\",\"Gas\"]";
+  private static final String INFRASTRUCTURE_EXCEPTION_MESSAGE = "An error occurred when calling external service.";
+  private static final String REQUEST_TIMED_OUT_EXCEPTION_MESSAGE = "Request timed out.";
 
   @Autowired
   private FillingStationRepository repository;
@@ -169,20 +171,47 @@ public class FillingStationRepositoryIT {
     assertThat(result.fuelTypes()).containsExactlyElementsOf(expected);
   }
 
-  @ParameterizedTest
-  @ValueSource(ints = {404, 429})
-  @DisplayName("Should throw timeout exception on retry webclient configuration (worthRetrying is true)")
-  void shouldThrowTimeoutExceptionOnRetryWebClientConfiguration(int status) {
+  private static final String XML_GATEWAY_ERROR_RESPONSE = """
+      {
+          "Errors": {
+              "Error": [
+                  {
+                      "source": "MD_FUEL_PRICE_APP",
+                      "reasonCode": "Error reason code",
+                      "description": "Error message",
+                      "recoverable": false
+                  }
+              ]
+          }
+      }""";
+
+  @Test
+  @DisplayName("Should retry webclient request on specified statuses(worthRetrying is true)")
+  void shouldThrowTimeoutExceptionOnRetryWebClientConfiguration() {
     wireMock.stubFor(get(urlEqualTo("/filling-station/fuel-type"))
-        .willReturn(aResponse().withStatus(status)));
+        .willReturn(aResponse().withStatus(TOO_MANY_REQUESTS.value())
+            .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .withBody(XML_GATEWAY_ERROR_RESPONSE)));
 
     assertThatThrownBy(() -> repository.getSupportedFuelTypes())
         .isInstanceOf(InfrastructureException.class)
-        .hasMessage("Request timed out.");
+        .hasMessage(REQUEST_TIMED_OUT_EXCEPTION_MESSAGE);
   }
 
   @Test
-  @DisplayName("Should throw exception on non webclient exception (worthRetrying is false)")
+  @DisplayName("Should GatewayPassThroughException (non listed in retry config)")
+  void shouldCatchNonListedExceptionInExceptionUtilsOnWebclientRequest() {
+    wireMock.stubFor(get(urlEqualTo("/filling-station/fuel-type"))
+        .willReturn(aResponse().withStatus(NOT_FOUND.value())
+            .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+            .withBody(XML_GATEWAY_ERROR_RESPONSE)));
+
+    assertThatThrownBy(() -> repository.getSupportedFuelTypes())
+        .isInstanceOf(GatewayPassThroughException.class);
+  }
+
+  @Test
+  @DisplayName("Should catch non-listed exception on non webclient request")
   void shouldThrowExceptionOnNonWebclientException() {
     wireMock.stubFor(get(urlEqualTo("/filling-station/fuel-type"))
         .willReturn(aResponse()
@@ -190,9 +219,8 @@ public class FillingStationRepositoryIT {
             .withBody("WRONG_RESPONSE")));
 
     assertThatThrownBy(() -> repository.getSupportedFuelTypes())
-        .isInstanceOf(DecodingException.class)
-        .hasMessage(
-            "JSON decoding error: Unrecognized token 'WRONG_RESPONSE': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')");
+        .isInstanceOf(InfrastructureException.class)
+        .hasMessage(INFRASTRUCTURE_EXCEPTION_MESSAGE);
   }
 
   @Test
