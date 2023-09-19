@@ -11,6 +11,7 @@ import md.fuel.api.domain.criteria.BaseFillingStationCriteria;
 import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
 import md.fuel.api.rest.request.BaseFillingStationRequest;
 import md.fuel.api.rest.request.LimitFillingStationRequest;
+import md.fuel.api.rest.request.PageRequest;
 import md.fuel.api.rest.request.SortingQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -73,9 +74,81 @@ public class CriteriaMapperTest {
   }
 
   @Test
+  @DisplayName("Should map LimitFillingStationRequest and PageRequest to LimitFillingStationCriteria")
+  void shouldMapLimitFillingStationRequestAndPageRequestToLimitFillingStationCriteria() {
+    final LimitFillingStationRequest request = new LimitFillingStationRequest();
+    request.setLatitude(LATITUDE);
+    request.setLongitude(LONGITUDE);
+    request.setRadius(RADIUS);
+    request.setLimit_in_radius(LIMIT_IN_RADIUS);
+    request.setSorting(SORTING);
+    final PageRequest pageRequest = new PageRequest();
+    pageRequest.setLimit(20);
+    pageRequest.setOffset(0);
+
+    final List<SortingQuery> sorting = new ArrayList<>(asList(new SortingQuery(DISTANCE, ASC),
+        new SortingQuery(DISTANCE, DESC), new SortingQuery(DISTANCE, ASC)));
+
+    final LimitFillingStationCriteria criteria = mapper.toEntity(request, pageRequest);
+
+    assertThat(criteria).usingRecursiveComparison().ignoringFields("sorting", "pageLimit", "pageOffset").isEqualTo(request);
+    assertThat(criteria.getSorting()).usingRecursiveComparison().isEqualTo(sorting);
+    assertThat(criteria.getPageOffset()).isEqualTo(pageRequest.getOffset());
+    assertThat(criteria.getPageLimit()).isEqualTo(pageRequest.getLimit());
+  }
+
+  @Test
+  @DisplayName("Should map null LimitFillingStationRequest and PageRequest to LimitFillingStationCriteria")
+  void shouldMapNullLimitFillingStationRequestAndPageRequestToLimitFillingStationCriteria() {
+    final PageRequest pageRequest = new PageRequest();
+    pageRequest.setLimit(20);
+    pageRequest.setOffset(0);
+
+    final LimitFillingStationCriteria criteria = mapper.toEntity(null, pageRequest);
+
+    assertThat(criteria.getLimitInRadius()).isEqualTo(0);
+    assertThat(criteria.getSorting()).isNull();
+    assertThat(criteria.getLatitude()).isEqualTo(0.0d);
+    assertThat(criteria.getLongitude()).isEqualTo(0.0d);
+    assertThat(criteria.getRadius()).isEqualTo(0.0d);
+    assertThat(criteria.getPageOffset()).isEqualTo(pageRequest.getOffset());
+    assertThat(criteria.getPageLimit()).isEqualTo(pageRequest.getLimit());
+  }
+
+  @Test
+  @DisplayName("Should map LimitFillingStationRequest and null PageRequest to LimitFillingStationCriteria")
+  void shouldMapLimitFillingStationRequestAndNullPageRequestToLimitFillingStationCriteria() {
+    final LimitFillingStationRequest request = new LimitFillingStationRequest();
+    request.setLatitude(LATITUDE);
+    request.setLongitude(LONGITUDE);
+    request.setRadius(RADIUS);
+    request.setLimit_in_radius(LIMIT_IN_RADIUS);
+    request.setSorting(SORTING);
+
+    final List<SortingQuery> sorting = new ArrayList<>(asList(new SortingQuery(DISTANCE, ASC),
+        new SortingQuery(DISTANCE, DESC), new SortingQuery(DISTANCE, ASC)));
+
+    final LimitFillingStationCriteria criteria = mapper.toEntity(request, null);
+
+    assertThat(criteria).usingRecursiveComparison().ignoringFields("sorting", "pageLimit", "pageOffset").isEqualTo(request);
+    assertThat(criteria.getSorting()).usingRecursiveComparison().isEqualTo(sorting);
+    assertThat(criteria.getPageOffset()).isNull();
+    assertThat(criteria.getPageLimit()).isNull();
+  }
+
+
+  @Test
   @DisplayName("Should map LimitFillingStationRequest to null LimitFillingStationCriteria")
   void shouldMapLimitFillingStationRequestToNullLimitFillingStationCriteria() {
     final LimitFillingStationCriteria criteria = mapper.toEntity(null);
+
+    assertThat(criteria).isNull();
+  }
+
+  @Test
+  @DisplayName("Should map LimitFillingStationRequest and PageRequest to null LimitFillingStationCriteria")
+  void shouldMapLimitFillingStationRequestAndPageRequestToNullLimitFillingStationCriteria() {
+    final LimitFillingStationCriteria criteria = mapper.toEntity(null, null);
 
     assertThat(criteria).isNull();
   }

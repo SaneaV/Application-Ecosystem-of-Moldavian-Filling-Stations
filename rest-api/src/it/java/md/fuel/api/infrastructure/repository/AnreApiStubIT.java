@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
 import java.util.List;
 import md.fuel.api.domain.FillingStation;
+import md.fuel.api.domain.FuelPrice;
 import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -38,6 +40,18 @@ public class AnreApiStubIT {
     void shouldReturnListOfStubbedFillingStations() {
       final List<FillingStation> result = anreApiStub.getFillingStationsInfo();
       assertThat(result).hasSize(723);
+    }
+
+    @Test
+    @DisplayName("Should return stubbed ANRE fuel prices")
+    void shouldReturnStubbedAnreFuelPrices() {
+      final FuelPrice result = anreApiStub.getAnrePrices();
+
+      assertThat(result.date()).isEqualTo(LocalDate.now().toString());
+      assertThat(result.petrol()).isExactlyInstanceOf(Double.class);
+      assertThat(result.petrol()).isLessThan(50);
+      assertThat(result.diesel()).isExactlyInstanceOf(Double.class);
+      assertThat(result.diesel()).isLessThan(50);
     }
   }
 

@@ -10,6 +10,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import java.util.List;
 import md.fuel.api.domain.FillingStation;
+import md.fuel.api.domain.FuelPrice;
 import md.fuel.api.infrastructure.configuration.ApiConfigurationTest;
 import md.fuel.api.infrastructure.configuration.RetryWebClientConfiguration;
 import md.fuel.api.infrastructure.configuration.WebClientTestConfiguration;
@@ -31,7 +32,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @TestPropertySource("classpath:application-test.properties")
 public class AnreApiIT {
 
-  private static final String PATH = "/";
+  private static final String ALL_FILLING_STATIONS_PATH = "/";
+  private static final String ANRE_PRICES_PATH = "/plafon";
   private static final String CONTENT_TYPE = "Content-Type";
   private static final String ANRE_RESPONSE = """
       [
@@ -110,6 +112,8 @@ public class AnreApiIT {
               "openhours": null
           }
       ]""";
+  private static final String ANRE_OFFICIAL_PRICES_RESPONSE = """
+      {"date":"2023-09-19","b_pc":26.76,"m_pc":24.5}""";
 
   @Autowired
   private AnreApi anreApi;
@@ -128,7 +132,7 @@ public class AnreApiIT {
     final FillingStation fillingStation2 = new FillingStation("Agro Destinație", 25.02, 21.01, null, 48.27022290028225,
         26.68362775316868);
 
-    wireMock.stubFor(get(urlEqualTo(PATH)).willReturn(aResponse()
+    wireMock.stubFor(get(urlEqualTo(ALL_FILLING_STATIONS_PATH)).willReturn(aResponse()
         .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
         .withBody(ANRE_RESPONSE)));
 
@@ -139,11 +143,25 @@ public class AnreApiIT {
     assertThat(fillingStationsInfo.get(1)).usingRecursiveComparison().isEqualTo(fillingStation2);
   }
 
+  @Test
+  @DisplayName("Should return ANRE official prices")
+  void shouldReturnAnreOfficialPrices() {
+    wireMock.stubFor(get(urlEqualTo(ANRE_PRICES_PATH)).willReturn(aResponse()
+        .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+        .withBody(ANRE_OFFICIAL_PRICES_RESPONSE)));
+
+    final FuelPrice result = anreApi.getAnrePrices();
+
+    assertThat(result.petrol()).isEqualTo(26.76);
+    assertThat(result.diesel()).isEqualTo(24.5);
+    assertThat(result.date()).isEqualTo("2023-09-19");
+  }
+
   @ParameterizedTest
   @ValueSource(ints = {404, 429})
   @DisplayName("Should throw timeout exception on retry webclient configuration (worthRetrying is true)")
   void shouldThrowTimeoutExceptionOnRetryWebClientConfiguration(int status) {
-    wireMock.stubFor(get(urlEqualTo(PATH))
+    wireMock.stubFor(get(urlEqualTo(ALL_FILLING_STATIONS_PATH))
         .willReturn(aResponse().withStatus(status)));
 
     assertThatThrownBy(() -> anreApi.getFillingStationsInfo())
@@ -154,7 +172,7 @@ public class AnreApiIT {
   @Test
   @DisplayName("Should throw exception on non webclient exception (worthRetrying is false)")
   void shouldThrowExceptionOnNonWebclientException() {
-    wireMock.stubFor(get(urlEqualTo(PATH))
+    wireMock.stubFor(get(urlEqualTo(ALL_FILLING_STATIONS_PATH))
         .willReturn(aResponse()
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .withBody("WRONG_RESPONSE")));

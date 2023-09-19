@@ -5,6 +5,8 @@ import static md.fuel.api.rest.request.SortOrder.ASC;
 import static md.fuel.api.rest.request.SortOrder.DESC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_DATE;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -12,13 +14,17 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
+import javax.cache.Cache;
 import javax.cache.CacheManager;
 import md.fuel.api.domain.FillingStation;
+import md.fuel.api.domain.FuelPrice;
 import md.fuel.api.domain.criteria.BaseFillingStationCriteria;
 import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
+import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import md.fuel.api.infrastructure.repository.AnreApi;
 import md.fuel.api.rest.request.SortOrder;
@@ -27,6 +33,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -59,10 +66,10 @@ public class FillingStationServiceTest {
 
   private final AnreApi anreApi;
   private final FillingStationService fillingStationService;
+  private final CacheManager cacheManager = mock(CacheManager.class);
 
   public FillingStationServiceTest() {
     this.anreApi = mock(AnreApi.class);
-    final CacheManager cacheManager = mock(CacheManager.class);
     this.fillingStationService = new FillingStationServiceImpl(anreApi, cacheManager);
   }
 
@@ -104,16 +111,38 @@ public class FillingStationServiceTest {
     verify(anreApi).getFillingStationsInfo();
   }
 
-  @Test
+  @ParameterizedTest
+  @CsvSource(value = {"10, null", "null, null"}, nullValues = "null")
   @DisplayName("Should return all filling stations in radius")
-  void shouldReturnAllFillingStationsInRadius() {
+  void shouldReturnAllFillingStationsInRadius(Integer limit, Integer offset) {
     final List<FillingStation> fillingStations = getFillingStations();
-    final LimitFillingStationCriteria criteria = buildLimitCriteria(3.006, 3.006, 500, new ArrayList<>());
+    final LimitFillingStationCriteria criteria = new LimitFillingStationCriteria(3.006, 3.006, 500,
+        50, new ArrayList<>(), limit, offset);
 
     when(anreApi.getFillingStationsInfo()).thenReturn(fillingStations);
 
     final List<FillingStation> allFillingStations = fillingStationService.getAllFillingStations(criteria);
     assertThat(allFillingStations.size()).isEqualTo(10);
+
+    final List<String> fillingStationsName = allFillingStations.stream()
+        .map(FillingStation::name)
+        .toList();
+    assertThat(fillingStationsName).doesNotContain(FILLING_STATION_IN_ANOTHER_LOCATION);
+
+    verify(anreApi).getFillingStationsInfo();
+  }
+
+  @Test
+  @DisplayName("Should return all filling stations in radius with limit and offset")
+  void shouldReturnAllFillingStationsInRadiusWithLimitAndOffset() {
+    final List<FillingStation> fillingStations = getFillingStations();
+    final LimitFillingStationCriteria criteria = new LimitFillingStationCriteria(3.006, 3.006, 500,
+        50, new ArrayList<>(), 8, 2);
+
+    when(anreApi.getFillingStationsInfo()).thenReturn(fillingStations);
+
+    final List<FillingStation> allFillingStations = fillingStationService.getAllFillingStations(criteria);
+    assertThat(allFillingStations.size()).isEqualTo(8);
 
     final List<String> fillingStationsName = allFillingStations.stream()
         .map(FillingStation::name)
@@ -251,7 +280,81 @@ public class FillingStationServiceTest {
     assertThatThrownBy(() -> fillingStationService.getAllFillingStations(criteria))
         .isInstanceOf(InvalidRequestException.class)
         .hasMessage("Wrong sorting parameter: WRONG-COMPARATOR-NAME");
+
     verify(anreApi).getFillingStationsInfo();
+  }
+
+  @Test
+  @DisplayName("Should return total number of filling stations in cache")
+  void shouldReturnTotalNumberOfFillingStationsInCache() {
+    final Cache<Object, Object> cache = mock(Cache.class);
+    final Cache.Entry<Object, List<FillingStation>> cacheEntry = mock(Cache.Entry.class);
+    final Iterator iterator = mock(Iterator.class);
+    when(cacheManager.getCache(any())).thenReturn(cache);
+    when(cache.iterator()).thenReturn(iterator);
+    when(iterator.next()).thenReturn(cacheEntry);
+    when(cacheEntry.getValue()).thenReturn(FILLING_STATIONS);
+
+    final int totalNumberOfFillingStations = fillingStationService.getTotalNumberOfFillingStations();
+
+    verify(cacheManager).getCache(any());
+    verify(cache).iterator();
+    verify(iterator).next();
+    verify(cacheEntry).getValue();
+
+    assertThat(totalNumberOfFillingStations).isEqualTo(FILLING_STATIONS.size());
+  }
+
+  @Test
+  @DisplayName("Should throw exception on total number of filling stations in cache read")
+  void shouldThrowExceptionOnTotalNumberOfFillingStationsInCacheRead() {
+    final Cache<Object, Object> cache = mock(Cache.class);
+    final Iterator iterator = mock(Iterator.class);
+    when(cacheManager.getCache(any())).thenReturn(cache);
+    when(cache.iterator()).thenReturn(iterator);
+
+    assertThatThrownBy(fillingStationService::getTotalNumberOfFillingStations)
+        .isInstanceOf(InfrastructureException.class)
+        .hasMessage("Can't read value from ANRE cache");
+
+    verify(cacheManager).getCache(any());
+    verify(cache).iterator();
+    verify(iterator).next();
+  }
+
+  @Test
+  @DisplayName("Should throw exception on total number of filling stations in cache if not list")
+  void shouldThrowExceptionOnTotalNumberOfFillingStationsInCacheIfNotList() {
+    final Cache<Object, Object> cache = mock(Cache.class);
+    final Cache.Entry<Object, Object> cacheEntry = mock(Cache.Entry.class);
+    final Iterator iterator = mock(Iterator.class);
+    when(cacheManager.getCache(any())).thenReturn(cache);
+    when(cache.iterator()).thenReturn(iterator);
+    when(iterator.next()).thenReturn(cacheEntry);
+    when(cacheEntry.getValue()).thenReturn(new Object());
+
+    assertThatThrownBy(fillingStationService::getTotalNumberOfFillingStations)
+        .isInstanceOf(InfrastructureException.class)
+        .hasMessage("Can't read value from ANRE cache");
+
+    verify(cacheManager).getCache(any());
+    verify(cache).iterator();
+    verify(iterator).next();
+    verify(cacheEntry).getValue();
+  }
+
+  @Test
+  @DisplayName("Should return ANRE prices")
+  void shouldReturnAnrePrices() {
+    final FuelPrice fuelPrice = new FuelPrice(DEFAULT_PRICE, DEFAULT_PRICE, LOCAL_DATE.toString());
+
+    when(anreApi.getAnrePrices()).thenReturn(fuelPrice);
+
+    final FuelPrice anrePrices = fillingStationService.getAnrePrices();
+
+    verify(anreApi).getAnrePrices();
+
+    assertThat(anrePrices).isEqualTo(fuelPrice);
   }
 
   private static Stream<Arguments> getComparatorParameters() {

@@ -1,8 +1,10 @@
 package md.fuel.api.infrastructure.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_DATE;
 
 import md.fuel.api.domain.FillingStation;
+import md.fuel.api.domain.FuelPrice;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -58,5 +60,25 @@ public class AnreApiMapperTest {
     assertThat(result.gas()).isNull();
     assertThat(result.longitude()).isEqualTo(fillingStationApi.getCoordinates().fst());
     assertThat(result.latitude()).isEqualTo(fillingStationApi.getCoordinates().snd());
+  }
+
+  @Test
+  @DisplayName("Should return null on null FuelPriceApi")
+  void shouldReturnNullOnNullFuelPriceApi() {
+    final FuelPrice result = anreApiMapper.toEntity((FuelPriceApi) null);
+
+    assertThat(result).isNull();
+  }
+
+  @Test
+  @DisplayName("Should map FuelPriceApi to FuelPriceApi")
+  void shouldMapFuelPriceApiToFuelPrice() {
+    final FuelPriceApi fuelPrice = new FuelPriceApi(PETROL_PRICE, DIESEL_PRICE, LOCAL_DATE.toString());
+
+    final FuelPrice result = anreApiMapper.toEntity(fuelPrice);
+
+    assertThat(result.petrol()).isEqualTo(fuelPrice.getPetrol());
+    assertThat(result.diesel()).isEqualTo(fuelPrice.getDiesel());
+    assertThat(result.date()).isEqualTo(fuelPrice.getDate());
   }
 }

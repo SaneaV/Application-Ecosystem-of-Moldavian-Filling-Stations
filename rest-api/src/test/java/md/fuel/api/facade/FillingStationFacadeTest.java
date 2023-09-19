@@ -5,6 +5,7 @@ import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -12,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import md.fuel.api.domain.FillingStation;
+import md.fuel.api.domain.FuelPrice;
 import md.fuel.api.domain.FuelType;
 import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
@@ -28,8 +31,11 @@ import md.fuel.api.infrastructure.mapper.CriteriaMapper;
 import md.fuel.api.infrastructure.service.FillingStationService;
 import md.fuel.api.rest.dto.FillingStationDto;
 import md.fuel.api.rest.dto.FillingStationDtoMapper;
+import md.fuel.api.rest.dto.FuelPriceDto;
+import md.fuel.api.rest.dto.PageDto;
 import md.fuel.api.rest.request.BaseFillingStationRequest;
 import md.fuel.api.rest.request.LimitFillingStationRequest;
+import md.fuel.api.rest.request.PageRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -229,6 +235,88 @@ public class FillingStationFacadeTest {
     final List<String> result = fillingStationFacade.getAvailableFuelTypes();
 
     assertThat(result).containsExactlyElementsOf(expected);
+  }
+
+  @Test
+  @DisplayName("Should return official ANRE prices")
+  void shouldReturnOfficialAnrePrices() {
+    final double petrolPrice = 10.0;
+    final double dieselPrice = 10.0;
+    final String date = LocalDate.now().toString();
+    final FuelPrice fuelPrice = new FuelPrice(petrolPrice, dieselPrice, date);
+    final FuelPriceDto fuelPriceDto = new FuelPriceDto(petrolPrice, dieselPrice, date);
+
+    when(fillingStationService.getAnrePrices()).thenReturn(fuelPrice);
+    when(fillingStationDtoMapper.toDto(any(FuelPrice.class))).thenReturn(fuelPriceDto);
+
+    final FuelPriceDto result = fillingStationFacade.getAnrePrices();
+
+    verify(fillingStationService).getAnrePrices();
+    verify(fillingStationDtoMapper).toDto(any(FuelPrice.class));
+
+    assertThat(result).isEqualTo(fuelPriceDto);
+  }
+
+  @Test
+  @DisplayName("Should get page of filling stations")
+  void shouldGetPageOfFillingStations() {
+    final FillingStation fillingStation = new FillingStation(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
+    final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation));
+    final FillingStationDto fillingStationDto = new FillingStationDto(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
+        LONGITUDE);
+    final LimitFillingStationRequest limitFillingStationRequest = buildRequest(VALID_LIMIT);
+    final PageRequest pageRequest = new PageRequest();
+    pageRequest.setOffset(0);
+    pageRequest.setLimit(20);
+    final int numberOfStations = 2;
+    final PageDto<FillingStationDto> expected = new PageDto<>(numberOfStations, List.of(fillingStationDto, fillingStationDto));
+
+    when(criteriaMapper.toEntity(any(), any())).thenReturn(buildCriteria(10));
+    when(fillingStationService.getAllFillingStations(any())).thenReturn(fillingStations);
+    when(fillingStationDtoMapper.toDto(anyList(), anyInt())).thenReturn(expected);
+    when(fillingStationService.getTotalNumberOfFillingStations()).thenReturn(numberOfStations);
+
+    final PageDto<FillingStationDto> page = fillingStationFacade.getPageOfFillingStations(limitFillingStationRequest,
+        pageRequest);
+
+    verify(criteriaMapper).toEntity(any(), any());
+    verify(fillingStationService).getAllFillingStations(any());
+    verify(fillingStationDtoMapper).toDto(anyList(), anyInt());
+    verify(fillingStationService).getTotalNumberOfFillingStations();
+
+    assertThat(page.totalResults()).isEqualTo(numberOfStations);
+    assertThat(page.items()).containsExactly(fillingStationDto, fillingStationDto);
+  }
+
+  @Test
+  @DisplayName("Should get page of best fuel price stations")
+  void shouldGetPageOfBestFuelPriceStations() {
+    final FillingStation fillingStation = new FillingStation(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
+    final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation));
+    final FillingStationDto fillingStationDto = new FillingStationDto(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE,
+        LONGITUDE);
+    final LimitFillingStationRequest request = buildRequest(VALID_LIMIT);
+    final PageRequest pageRequest = new PageRequest();
+    pageRequest.setOffset(0);
+    pageRequest.setLimit(20);
+    final int numberOfStations = 2;
+    final PageDto<FillingStationDto> expected = new PageDto<>(numberOfStations, List.of(fillingStationDto, fillingStationDto));
+
+    when(criteriaMapper.toEntity(any(), any())).thenReturn(buildCriteria(10));
+    when(fillingStationService.getBestFuelPrice(any(), anyString())).thenReturn(fillingStations);
+    when(fillingStationDtoMapper.toDto(anyList(), anyInt())).thenReturn(expected);
+    when(fillingStationService.getTotalNumberOfFillingStations()).thenReturn(numberOfStations);
+
+    final PageDto<FillingStationDto> result = fillingStationFacade.getPageOfBestFuelPrices(request, pageRequest,
+        FUEL_TYPE);
+
+    verify(criteriaMapper).toEntity(any(), any());
+    verify(fillingStationService).getBestFuelPrice(any(), anyString());
+    verify(fillingStationDtoMapper).toDto(anyList(), anyInt());
+    verify(fillingStationService).getTotalNumberOfFillingStations();
+
+    assertThat(result.totalResults()).isEqualTo(numberOfStations);
+    assertThat(result.items()).containsExactly(fillingStationDto, fillingStationDto);
   }
 
   private LimitFillingStationCriteria buildCriteria(int limitInRadius) {
