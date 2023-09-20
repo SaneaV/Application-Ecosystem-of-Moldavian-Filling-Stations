@@ -31,6 +31,7 @@
 - [X] [TELEGRAM] Implement request per time unit limiter.
 - [X] [API] Add an endpoint to request the official fuel price from ANRE.
 - [X] [API] Move `limit` and `offset` logic on the service layer.
+- [X] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
 
 ## Features
 
@@ -41,7 +42,6 @@
   aspects and Thymeleaf).
 - [ ] [CORE] Add SL4FJ logging in a project.
 - [ ] [API] Add auditable for controllers (save data in database).
-- [ ] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [CORE] Add Actuator.
 - [ ] [CORE] Add SonarQube.

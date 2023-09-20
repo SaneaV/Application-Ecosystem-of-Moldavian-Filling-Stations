@@ -25,6 +25,7 @@ import md.fuel.api.domain.criteria.BaseFillingStationCriteria;
 import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.api.infrastructure.exception.model.InfrastructureException;
+import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import md.fuel.api.infrastructure.repository.AnreApi;
 import md.fuel.api.rest.request.SortingQuery;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class FillingStationServiceImpl implements FillingStationService {
 
+  private static final String ERROR_FOUND_MORE_THAN_LIMIT =
+      "More than %s filling stations were found. This is more than your specified limit. Decrease the search radius.";
+  private static final String ERROR_EXCEED_LIMIT_REASON_CODE = "EXCEED_LIMIT";
   private static final String ERROR_NO_FILLING_STATION_NEAR_YOU =
       "No filling stations were found in the specified radius. Change the search point or increase the radius.";
   private static final String ERROR_NOT_FOUND_REASON_CODE = "NOT_FOUND";
@@ -64,6 +68,8 @@ public class FillingStationServiceImpl implements FillingStationService {
         .filter(s -> isWithinRadius(latitude, longitude, s.latitude(), s.longitude(), radius)
             && checkCorrectPrice(s.petrol(), s.diesel(), s.gas()))
         .collect(toList());
+
+    checkLimit(fillingStations.size(), criteria.getLimitInRadius());
 
     if (fillingStations.isEmpty()) {
       throw new EntityNotFoundException(ERROR_NO_FILLING_STATION_NEAR_YOU, ERROR_NOT_FOUND_REASON_CODE);
@@ -101,6 +107,8 @@ public class FillingStationServiceImpl implements FillingStationService {
     final List<FillingStation> filterByPriceList = filterByDistanceList.stream()
         .filter(station -> fillingStationFunction.apply(station).equals(minimalFuelPrice))
         .collect(toList());
+
+    checkLimit(filterByPriceList.size(), criteria.getLimitInRadius());
 
     sort(filterByPriceList, getComparators(criteria.getSorting(), latitude, longitude));
     return filterByOffsetAndLimit(filterByPriceList, criteria.getPageLimit(), criteria.getPageOffset());
@@ -162,5 +170,11 @@ public class FillingStationServiceImpl implements FillingStationService {
         .skip(offset)
         .limit(limit)
         .toList();
+  }
+
+  private void checkLimit(int numberOfFillingStations, int limit) {
+    if (numberOfFillingStations > limit) {
+      throw new InvalidRequestException(String.format(ERROR_FOUND_MORE_THAN_LIMIT, limit), ERROR_EXCEED_LIMIT_REASON_CODE);
+    }
   }
 }

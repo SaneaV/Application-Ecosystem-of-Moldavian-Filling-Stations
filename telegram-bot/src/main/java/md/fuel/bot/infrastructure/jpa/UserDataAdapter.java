@@ -6,5 +6,7 @@ public interface UserDataAdapter {
 
   UserData getUserData(long userId);
 
+  void delete(long userId);
+
   void save(UserData userData);
 }

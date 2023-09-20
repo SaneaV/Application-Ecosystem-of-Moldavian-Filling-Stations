@@ -50,8 +50,6 @@ public class FillingStationFacadeTest {
   private static final double MOCK_PRICE = 0;
   private static final String FUEL_TYPE = "Petrol";
   private static final String ERROR_INVALID_LIMIT = "The limit should be greater than 0";
-  private static final String ERROR_FOUND_MORE_THAN_LIMIT =
-      "More than %s filling stations were found. This is more than your specified limit. Decrease the search radius.";
 
   private final FillingStationFacade fillingStationFacade;
   private final FillingStationService fillingStationService;
@@ -82,26 +80,6 @@ public class FillingStationFacadeTest {
   }
 
   @Test
-  @DisplayName("Should throw InvalidRequestException if number of results greater than limit on getAllFillingStations")
-  void shouldThrowInvalidRequestExceptionOnGetAllFillingStationsOnGreaterLimit() {
-    final int limit = 1;
-    final LimitFillingStationRequest request = buildRequest(limit);
-    final FillingStation fillingStation = new FillingStation(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
-    final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation));
-
-    when(criteriaMapper.toEntity(any())).thenReturn(buildCriteria(limit));
-    when(fillingStationService.getAllFillingStations(any())).thenReturn(fillingStations);
-
-    assertThatThrownBy(() -> fillingStationFacade.getAllFillingStations(request))
-        .isInstanceOf(InvalidRequestException.class)
-        .hasMessage(String.format(ERROR_FOUND_MORE_THAN_LIMIT, limit));
-
-    verify(criteriaMapper).toEntity(any());
-    when(fillingStationService.getAllFillingStations(any())).thenReturn(fillingStations);
-    verifyNoInteractions(fillingStationDtoMapper);
-  }
-
-  @Test
   @DisplayName("Should throw InvalidRequestException if limit is less than or equal to zero on getBestFuelPrice")
   void shouldThrowInvalidRequestExceptionOnGetBestFuelPriceOnLessLimit() {
     final LimitFillingStationRequest request = buildRequest(INVALID_LIMIT);
@@ -114,26 +92,6 @@ public class FillingStationFacadeTest {
 
     verify(criteriaMapper).toEntity(any());
     verifyNoInteractions(fillingStationService);
-    verifyNoInteractions(fillingStationDtoMapper);
-  }
-
-  @Test
-  @DisplayName("Should throw InvalidRequestException if number of results greater than limit on getBestFuelPrice")
-  void shouldThrowInvalidRequestExceptionOnGetBestFuelPricesOnGreaterLimit() {
-    final int limit = 1;
-    final LimitFillingStationRequest request = buildRequest(limit);
-    final FillingStation fillingStation = new FillingStation(NAME, MOCK_PRICE, MOCK_PRICE, MOCK_PRICE, LATITUDE, LONGITUDE);
-    final List<FillingStation> fillingStations = new ArrayList<>(asList(fillingStation, fillingStation));
-
-    when(criteriaMapper.toEntity(any())).thenReturn(buildCriteria(limit));
-    when(fillingStationService.getBestFuelPrice(any(), anyString())).thenReturn(fillingStations);
-
-    assertThatThrownBy(() -> fillingStationFacade.getBestFuelPrice(request, FUEL_TYPE))
-        .isInstanceOf(InvalidRequestException.class)
-        .hasMessage(String.format(ERROR_FOUND_MORE_THAN_LIMIT, limit));
-
-    verify(criteriaMapper).toEntity(any());
-    when(fillingStationService.getBestFuelPrice(any(), anyString())).thenReturn(fillingStations);
     verifyNoInteractions(fillingStationDtoMapper);
   }
 

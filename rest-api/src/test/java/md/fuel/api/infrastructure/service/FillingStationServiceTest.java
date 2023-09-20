@@ -39,6 +39,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class FillingStationServiceTest {
 
+  private static final String ERROR_FOUND_MORE_THAN_LIMIT =
+      "More than %s filling stations were found. This is more than your specified limit. Decrease the search radius.";
   private static final String ERROR_NO_FILLING_STATION_NEAR_YOU =
       "No filling stations were found in the specified radius. Change the search point or increase the radius.";
   private static final String ERROR_NO_FUEL_IN_STOCK =
@@ -133,6 +135,23 @@ public class FillingStationServiceTest {
   }
 
   @Test
+  @DisplayName("Should throw InvalidRequestException if number of results greater than limit on getAllFillingStations")
+  void shouldThrowInvalidRequestExceptionOnGetAllFillingStationsOnGreaterLimit() {
+    final int limit = 5;
+    final List<FillingStation> fillingStations = getFillingStations();
+    final LimitFillingStationCriteria criteria = new LimitFillingStationCriteria(3.006, 3.006, 500,
+        5, new ArrayList<>(), 10, 0);
+
+    when(anreApi.getFillingStationsInfo()).thenReturn(fillingStations);
+
+    assertThatThrownBy(() -> fillingStationService.getAllFillingStations(criteria))
+        .isInstanceOf(InvalidRequestException.class)
+        .hasMessage(String.format(ERROR_FOUND_MORE_THAN_LIMIT, limit));
+
+    verify(anreApi).getFillingStationsInfo();
+  }
+
+  @Test
   @DisplayName("Should return all filling stations in radius with limit and offset")
   void shouldReturnAllFillingStationsInRadiusWithLimitAndOffset() {
     final List<FillingStation> fillingStations = getFillingStations();
@@ -171,7 +190,7 @@ public class FillingStationServiceTest {
   @DisplayName("Should return filling station with the best fuel price")
   void shouldReturnBestFuelPriceStation(String fuelType) {
     final List<FillingStation> fillingStations = getFillingStations();
-    final LimitFillingStationCriteria criteria = buildLimitCriteria(3, 3, 100000, new ArrayList<>());
+    final LimitFillingStationCriteria criteria = buildLimitCriteria(3.006, 3.006, 1000000000, new ArrayList<>());
 
     when(anreApi.getFillingStationsInfo()).thenReturn(fillingStations);
 

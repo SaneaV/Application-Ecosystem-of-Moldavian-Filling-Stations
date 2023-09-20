@@ -20,6 +20,11 @@ public class UserDataAdapterImpl implements UserDataAdapter {
   }
 
   @Override
+  public void delete(long userId) {
+    userDataRepository.deleteById(String.valueOf(userId));
+  }
+
+  @Override
   public void save(UserData userData) {
     final UserDataJpa userDataJpa = userDataRepository.findById(userData.getId());
 

@@ -30,9 +30,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class FillingStationFacadeImpl implements FillingStationFacade {
 
-  private static final String ERROR_FOUND_MORE_THAN_LIMIT =
-      "More than %s filling stations were found. This is more than your specified limit. Decrease the search radius.";
-  private static final String ERROR_EXCEED_LIMIT_REASON_CODE = "EXCEED_LIMIT";
   private static final String ERROR_LIMIT_MESSAGE = "The limit should be greater than 0";
   private static final String ERROR_UPDATE_MESSAGE = "There is no data to retrieve. Made any request to update the timestamp.";
   private static final String ERROR_LIMIT_REASON_CODE = "INVALID_LIMIT";
@@ -52,7 +49,6 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
     checkLimit(criteria.getLimitInRadius());
     final List<FillingStation> fillingStations = fillingStationService.getAllFillingStations(criteria);
-    checkLimit(fillingStations.size(), criteria.getLimitInRadius());
 
     final int totalFillingStations = fillingStationService.getTotalNumberOfFillingStations();
 
@@ -65,7 +61,6 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
     checkLimit(criteria.getLimitInRadius());
     final List<FillingStation> fillingStations = fillingStationService.getAllFillingStations(criteria);
-    checkLimit(fillingStations.size(), criteria.getLimitInRadius());
 
     return fillingStationDtoMapper.toDto(fillingStations);
   }
@@ -83,7 +78,6 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
     checkLimit(criteria.getLimitInRadius());
     final List<FillingStation> fillingStations = fillingStationService.getBestFuelPrice(criteria, fuelType);
-    checkLimit(fillingStations.size(), criteria.getLimitInRadius());
 
     return fillingStationDtoMapper.toDto(fillingStations);
   }
@@ -95,7 +89,6 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
     checkLimit(criteria.getLimitInRadius());
     final List<FillingStation> fillingStations = fillingStationService.getBestFuelPrice(criteria, fuelType);
-    checkLimit(fillingStations.size(), criteria.getLimitInRadius());
 
     final int totalFillingStations = fillingStationService.getTotalNumberOfFillingStations();
 
@@ -125,12 +118,6 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
   private void checkLimit(int limit) {
     if (limit <= 0) {
       throw new InvalidRequestException(ERROR_LIMIT_MESSAGE, ERROR_LIMIT_REASON_CODE);
-    }
-  }
-
-  private void checkLimit(int numberOfFillingStations, int limit) {
-    if (numberOfFillingStations > limit) {
-      throw new InvalidRequestException(String.format(ERROR_FOUND_MORE_THAN_LIMIT, limit), ERROR_EXCEED_LIMIT_REASON_CODE);
     }
   }
 }
