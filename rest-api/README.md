@@ -18,8 +18,8 @@ Swagger is used to create REST API contracts.
 
 In runtime swagger contracts can be obtained from the [Swagger UI](http://localhost:8080/swagger-ui/index.html)
 
-You can also find current contracts in the file: REST-API.yaml.<br>
-Yaml to HTML converter: [Swagger Editor](https://editor.swagger.io/)
+You can also find current contracts in the file: target/openapi.json (if there is nothing, run `mvn verify`).<br>
+Json to HTML converter: [Swagger Editor](https://editor.swagger.io/)
 
 # Project Architecture
 

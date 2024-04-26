@@ -41,6 +41,30 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                    <groupId>md.fuel.api</groupId>
+                    <artifactId>rest-api</artifactId>
+                    <type>zip</type>
+                  <outputDirectory>target/</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
         <groupId>org.openapitools</groupId>
         <artifactId>openapi-generator-maven-plugin</artifactId>
         <executions>
@@ -50,7 +74,7 @@
             </goals>
             <configuration>
               <generatorName>spring</generatorName>
-              <inputSpec>${project.basedir}/src/main/resources/REST-API.yaml</inputSpec>
+              <inputSpec>${project.basedir}/target/rest-api-${rest.api.version}/openapi.json</inputSpec>
               <apiPackage>md.fuel.bot.infrastructure.repository</apiPackage>
               <modelPackage>md.fuel.bot.infrastructure.repository</modelPackage>
               <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>

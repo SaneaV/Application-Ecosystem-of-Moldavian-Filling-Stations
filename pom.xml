@@ -48,6 +48,7 @@
 
     <!--INTERNAL PROJECTS-->
     <contract.generator.version>1.0.0</contract.generator.version>
+    <rest.api.version>1.0.0</rest.api.version>
 
     <!--TESTING-->
     <mockito.inline.version>5.2.0</mockito.inline.version>
@@ -69,6 +70,8 @@
     <maven.surefire.plugin.version>3.1.2</maven.surefire.plugin.version>
     <spotbugs.maven.plugin.version>4.7.3.5</spotbugs.maven.plugin.version>
     <maven.site.plugin.version>4.0.0-M9</maven.site.plugin.version>
+    <springdoc.openapi.maven.plugin.version>1.4</springdoc.openapi.maven.plugin.version>
+    <maven.assembly.plugin.version>3.7.1</maven.assembly.plugin.version>
   </properties>
 
   <repositories>
@@ -174,6 +177,12 @@
         <groupId>md.fuel.contract</groupId>
         <artifactId>contract-generator</artifactId>
         <version>${contract.generator.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>md.fuel.api</groupId>
+        <artifactId>rest-api</artifactId>
+        <version>${rest.api.version}</version>
+        <type>zip</type>
       </dependency>
       <dependency>
         <groupId>com.github.spotbugs</groupId>
@@ -285,6 +294,24 @@
           <groupId>org.openapitools</groupId>
           <artifactId>openapi-generator-maven-plugin</artifactId>
           <version>${openapi.generator.maven.plugin.version}</version>
+        </plugin>
+
+        <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring.boot.parent.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.springdoc</groupId>
+          <artifactId>springdoc-openapi-maven-plugin</artifactId>
+          <version>${springdoc.openapi.maven.plugin.version}</version>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${maven.assembly.plugin.version}</version>
         </plugin>
 
         <plugin>
