@@ -6,13 +6,13 @@ import md.fuel.bot.domain.Page;
 
 public interface FillingStationRepository {
 
-  Page<FillingStation> getAllFillingStation(double latitude, double longitude, double radius, int limitInRadius,
-      int limit, int offset);
+  Page<FillingStation> getAllFillingStation(double latitude, double longitude, double radius, int limitInRadius, int limit,
+      int offset);
 
   FillingStation getNearestFillingStation(double latitude, double longitude, double radius);
 
-  Page<FillingStation> getBestFuelPriceStation(double latitude, double longitude, double radius, int limitInRadius,
-      int limit, int offset, String fuelType);
+  Page<FillingStation> getBestFuelPriceStation(double latitude, double longitude, double radius, int limitInRadius, int limit,
+      int offset, String fuelType);
 
   String getUpdateTimestamp();
 

@@ -1,5 +1,6 @@
 package md.fuel.bot.telegram;
 
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import md.fuel.bot.telegram.command.DispatcherCommand;
 import md.fuel.bot.telegram.configuration.TelegramBotConfiguration;
@@ -12,6 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
+@Slf4j
 @Component
 public class FillingStationTelegramBot extends SpringWebhookBot {
 
@@ -38,6 +40,7 @@ public class FillingStationTelegramBot extends SpringWebhookBot {
           execute((SendLocation) message);
         }
       } catch (TelegramApiException e) {
+        log.error("There was an error sending the message");
         throw new InfrastructureException(ERROR_DESCRIPTION);
       }
     });

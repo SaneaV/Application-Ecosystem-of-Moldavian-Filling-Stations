@@ -47,11 +47,11 @@ public class AnreApiStubIT {
     void shouldReturnStubbedAnreFuelPrices() {
       final FuelPrice result = anreApiStub.getAnrePrices();
 
-      assertThat(result.date()).isEqualTo(LocalDate.now().toString());
-      assertThat(result.petrol()).isExactlyInstanceOf(Double.class);
-      assertThat(result.petrol()).isLessThan(50);
-      assertThat(result.diesel()).isExactlyInstanceOf(Double.class);
-      assertThat(result.diesel()).isLessThan(50);
+      assertThat(result.getDate()).isEqualTo(LocalDate.now().toString());
+      assertThat(result.getPetrol()).isExactlyInstanceOf(Double.class);
+      assertThat(result.getPetrol()).isLessThan(50);
+      assertThat(result.getDiesel()).isExactlyInstanceOf(Double.class);
+      assertThat(result.getDiesel()).isLessThan(50);
     }
   }
 

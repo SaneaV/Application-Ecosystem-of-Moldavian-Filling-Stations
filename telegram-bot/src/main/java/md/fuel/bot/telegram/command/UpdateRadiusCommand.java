@@ -7,6 +7,7 @@ import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyb
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.facade.UserDataFacade;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
@@ -14,6 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class UpdateRadiusCommand implements Command {
@@ -26,6 +28,8 @@ public class UpdateRadiusCommand implements Command {
   public List<? super PartialBotApiMethod<?>> execute(Update update) {
     final Message message = update.getMessage();
     final Long userId = message.getFrom().getId();
+    log.info("Update radius for user with id = {}", userId);
+
     final String newRadius = message.getText();
 
     userDataFacade.updateRadius(userId, Double.parseDouble(newRadius));

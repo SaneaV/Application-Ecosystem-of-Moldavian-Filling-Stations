@@ -152,9 +152,9 @@ public class AnreApiIT {
 
     final FuelPrice result = anreApi.getAnrePrices();
 
-    assertThat(result.petrol()).isEqualTo(26.76);
-    assertThat(result.diesel()).isEqualTo(24.5);
-    assertThat(result.date()).isEqualTo("2023-09-19");
+    assertThat(result.getPetrol()).isEqualTo(26.76);
+    assertThat(result.getDiesel()).isEqualTo(24.5);
+    assertThat(result.getDate()).isEqualTo("2023-09-19");
   }
 
   @ParameterizedTest

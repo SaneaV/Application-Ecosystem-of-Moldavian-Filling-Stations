@@ -4,9 +4,11 @@ import static java.util.Objects.isNull;
 import static lombok.AccessLevel.PRIVATE;
 
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.domain.FillingStation;
 import org.springframework.data.util.Pair;
 
+@Slf4j
 @NoArgsConstructor(access = PRIVATE)
 public class MessageConverter {
 
@@ -18,10 +20,11 @@ public class MessageConverter {
   private static final String FUEL_PART_MESSAGE = "%s %s: %s lei\n";
 
   public static String toMessage(FillingStation fillingStation) {
+    log.debug("Convert data about filling station into the text");
     final StringBuilder message = new StringBuilder()
-        .append(String.format(START_PART_MESSAGE, fillingStation.name()));
+        .append(String.format(START_PART_MESSAGE, fillingStation.getName()));
 
-    fillingStation.prices().forEach((fuelName, fuelPrice) -> {
+    fillingStation.getPrices().forEach((fuelName, fuelPrice) -> {
       final Pair<String, Double> priceIndicator = getPriceIndicator(fuelPrice);
       final String priceMessage = String.format(FUEL_PART_MESSAGE, priceIndicator.getFirst(), fuelName,
           priceIndicator.getSecond());
@@ -34,8 +37,9 @@ public class MessageConverter {
   }
 
   public static String toMessage(FillingStation fillingStation, String fuelType) {
+    log.debug("Convert data about filling station and fuel type = {} into the text", fuelType);
     final Pair<String, Double> priceIndicator = getSpecificFuelTypePriceIndicator(fillingStation, fuelType);
-    return String.format(START_PART_MESSAGE, fillingStation.name())
+    return String.format(START_PART_MESSAGE, fillingStation.getName())
         + String.format(FUEL_PART_MESSAGE, priceIndicator.getFirst(), fuelType, priceIndicator.getSecond())
         + String.format(LAST_PART_MESSAGE, FillingStation.timestamp);
   }
@@ -45,6 +49,6 @@ public class MessageConverter {
   }
 
   private static Pair<String, Double> getSpecificFuelTypePriceIndicator(FillingStation fillingStation, String fuelType) {
-    return getPriceIndicator(fillingStation.prices().get(fuelType));
+    return getPriceIndicator(fillingStation.getPrices().get(fuelType));
   }
 }

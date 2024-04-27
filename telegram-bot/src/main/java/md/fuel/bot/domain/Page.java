@@ -2,9 +2,13 @@ package md.fuel.bot.domain;
 
 import java.io.Serializable;
 import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-public record Page<T>(
-    int totalResults,
-    List<T> items) implements Serializable {
+@Getter
+@RequiredArgsConstructor
+public class Page<T> implements Serializable {
 
+  private final int totalResults;
+  private final List<T> items;
 }

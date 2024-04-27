@@ -202,7 +202,7 @@ public class FillingStationFacadeTest {
     final double dieselPrice = 10.0;
     final String date = LocalDate.now().toString();
     final FuelPrice fuelPrice = new FuelPrice(petrolPrice, dieselPrice, date);
-    final FuelPriceDto fuelPriceDto = new FuelPriceDto(petrolPrice, dieselPrice, date);
+    final FuelPriceDto fuelPriceDto = new FuelPriceDto(date, petrolPrice, dieselPrice);
 
     when(fillingStationService.getAnrePrices()).thenReturn(fuelPrice);
     when(fillingStationDtoMapper.toDto(any(FuelPrice.class))).thenReturn(fuelPriceDto);
@@ -242,8 +242,8 @@ public class FillingStationFacadeTest {
     verify(fillingStationDtoMapper).toDto(anyList(), anyInt());
     verify(fillingStationService).getTotalNumberOfFillingStations();
 
-    assertThat(page.totalResults()).isEqualTo(numberOfStations);
-    assertThat(page.items()).containsExactly(fillingStationDto, fillingStationDto);
+    assertThat(page.getTotalResults()).isEqualTo(numberOfStations);
+    assertThat(page.getItems()).containsExactly(fillingStationDto, fillingStationDto);
   }
 
   @Test
@@ -273,8 +273,8 @@ public class FillingStationFacadeTest {
     verify(fillingStationDtoMapper).toDto(anyList(), anyInt());
     verify(fillingStationService).getTotalNumberOfFillingStations();
 
-    assertThat(result.totalResults()).isEqualTo(numberOfStations);
-    assertThat(result.items()).containsExactly(fillingStationDto, fillingStationDto);
+    assertThat(result.getTotalResults()).isEqualTo(numberOfStations);
+    assertThat(result.getItems()).containsExactly(fillingStationDto, fillingStationDto);
   }
 
   private LimitFillingStationCriteria buildCriteria(int limitInRadius) {

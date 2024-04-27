@@ -6,6 +6,7 @@ import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_REQUEST;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.infrastructure.event.UserBlockedEvent;
 import md.fuel.bot.telegram.FillingStationTelegramBot;
 import md.fuel.bot.telegram.configuration.RequestRateValidator;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class BotController {
@@ -49,6 +51,7 @@ public class BotController {
     }
 
     if (KICKED_STATUS.equalsIgnoreCase(update.getMyChatMember().getNewChatMember().getStatus())) {
+      log.info("Trigger event to delete user due to bot blocking");
       final Long userId = update.getMyChatMember().getFrom().getId();
       final UserBlockedEvent userBlockedEvent = new UserBlockedEvent(this, userId);
       applicationEventPublisher.publishEvent(userBlockedEvent);

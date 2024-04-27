@@ -6,12 +6,14 @@ import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyb
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.facade.UserDataFacade;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class StartCommand implements Command {
@@ -30,6 +32,7 @@ public class StartCommand implements Command {
   @Override
   public List<? super PartialBotApiMethod<?>> execute(Update update) {
     final Long userId = update.getMessage().getFrom().getId();
+    log.info("Add new user with id = {}", userId);
     userDataFacade.addNewUser(userId);
 
     final SendMessage message = sendMessage(update, MESSAGE, getMainMenuKeyboard());

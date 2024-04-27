@@ -26,9 +26,4 @@ public class GatewayError {
   private String description;
   @Schema(description = "Error recoverable status.", example = "true", requiredMode = REQUIRED)
   private boolean recoverable;
-
-  /*
-      Always null, present for backward compatibility
-  */
-  private static String DETAILS = null;
 }

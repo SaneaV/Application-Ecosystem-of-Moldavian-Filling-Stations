@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.api.domain.FillingStation;
 import md.fuel.api.domain.FuelType;
 import md.fuel.api.domain.criteria.BaseFillingStationCriteria;
@@ -26,6 +27,7 @@ import md.fuel.api.rest.request.LimitFillingStationRequest;
 import md.fuel.api.rest.request.PageRequest;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FillingStationFacadeImpl implements FillingStationFacade {
@@ -45,6 +47,8 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
   @Override
   public PageDto<FillingStationDto> getPageOfFillingStations(LimitFillingStationRequest limitFillingStationRequest,
       PageRequest pageRequest) {
+    log.info("Fetching page of filling stations");
+
     final LimitFillingStationCriteria criteria = criteriaMapper.toEntity(limitFillingStationRequest, pageRequest);
 
     checkLimit(criteria.getLimitInRadius());
@@ -57,6 +61,8 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
   @Override
   public List<FillingStationDto> getAllFillingStations(LimitFillingStationRequest request) {
+    log.info("Fetching list of filling stations");
+
     final LimitFillingStationCriteria criteria = criteriaMapper.toEntity(request);
 
     checkLimit(criteria.getLimitInRadius());
@@ -67,6 +73,8 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
   @Override
   public FillingStationDto getNearestFillingStation(BaseFillingStationRequest request) {
+    log.info("Fetching data about nearest filling stations");
+
     final BaseFillingStationCriteria criteria = criteriaMapper.toEntity(request);
     final FillingStation fillingStation = fillingStationService.getNearestFillingStation(criteria);
     return fillingStationDtoMapper.toDto(fillingStation);
@@ -74,6 +82,8 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
   @Override
   public List<FillingStationDto> getBestFuelPrice(LimitFillingStationRequest request, String fuelType) {
+    log.info("Fetching list of filling stations with best {} price", fuelType);
+
     final LimitFillingStationCriteria criteria = criteriaMapper.toEntity(request);
 
     checkLimit(criteria.getLimitInRadius());
@@ -85,6 +95,8 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
   @Override
   public PageDto<FillingStationDto> getPageOfBestFuelPrices(LimitFillingStationRequest limitFillingStationRequest,
       PageRequest pageRequest, String fuelType) {
+    log.info("Fetching page of filling stations with best {} price", fuelType.toLowerCase());
+
     final LimitFillingStationCriteria criteria = criteriaMapper.toEntity(limitFillingStationRequest, pageRequest);
 
     checkLimit(criteria.getLimitInRadius());
@@ -97,6 +109,8 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
   @Override
   public ZonedDateTime getLastUpdateTimestamp() {
+    log.info("Fetching last data update");
+
     if (isNull(FillingStation.TIMESTAMP)) {
       throw new EntityNotFoundException(ERROR_UPDATE_MESSAGE, ERROR_UPDATE_REASON_CODE);
     }
@@ -105,6 +119,8 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
   @Override
   public List<String> getAvailableFuelTypes() {
+    log.info("Fetching all available fuel types");
+
     return Arrays.stream(FuelType.values())
         .map(FuelType::getDescription)
         .toList();
@@ -112,11 +128,15 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
   @Override
   public FuelPriceDto getAnrePrices() {
+    log.info("Fetching info about official ANRE prices");
+
     return fillingStationDtoMapper.toDto(fillingStationService.getAnrePrices());
   }
 
   private void checkLimit(int limit) {
     if (limit <= 0) {
+      log.error("User specified limit is less or equal to 0");
+
       throw new InvalidRequestException(ERROR_LIMIT_MESSAGE, ERROR_LIMIT_REASON_CODE);
     }
   }

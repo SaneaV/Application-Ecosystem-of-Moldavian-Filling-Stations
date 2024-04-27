@@ -7,6 +7,7 @@ import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyb
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
@@ -18,6 +19,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+@Slf4j
 @Component
 public class BestFuelInRadiusCommand implements Command {
 
@@ -29,7 +31,7 @@ public class BestFuelInRadiusCommand implements Command {
   public BestFuelInRadiusCommand(FillingStationFacade fillingStationFacade, UserDataFacade userDataFacade) {
     this.fillingStationFacade = fillingStationFacade;
     this.userDataFacade = userDataFacade;
-    COMMAND = fillingStationFacade.getSupportedFuelTypes().fuelTypes();
+    COMMAND = fillingStationFacade.getSupportedFuelTypes().getFuelTypes();
   }
 
   @Override
@@ -37,10 +39,12 @@ public class BestFuelInRadiusCommand implements Command {
     final Message message = update.getMessage();
     final long userId = message.getFrom().getId();
     final long chatId = message.getChatId();
+    log.info("Get all filling stations in radius with best fuel price for user = {}", userId);
+
     final String fuelType = message.getText();
     final UserDataDto userData = userDataFacade.getUserData(userId);
-    final List<FillingStation> bestPriceFillingStations = fillingStationFacade.getBestFuelPrice(userData.latitude(),
-        userData.longitude(), userData.radius(), FILLING_STATIONS_LIMIT, FILLING_STATIONS_LIMIT, fuelType);
+    final List<FillingStation> bestPriceFillingStations = fillingStationFacade.getBestFuelPrice(userData.getLatitude(),
+        userData.getLongitude(), userData.getRadius(), FILLING_STATIONS_LIMIT, FILLING_STATIONS_LIMIT, fuelType);
 
     final List<? super PartialBotApiMethod<?>> messages = populateMessageMap(bestPriceFillingStations, fuelType, chatId);
     setReplyKeyboard(messages);
@@ -53,7 +57,7 @@ public class BestFuelInRadiusCommand implements Command {
     bestPriceFillingStations.forEach(fuelStation -> {
       final String messageText = toMessage(fuelStation, fuelType);
       final SendMessage fuelStationMessage = sendMessage(chatId, messageText);
-      final SendLocation fuelStationLocation = sendLocation(chatId, fuelStation.latitude(), fuelStation.longitude());
+      final SendLocation fuelStationLocation = sendLocation(chatId, fuelStation.getLatitude(), fuelStation.getLongitude());
       messages.add(fuelStationMessage);
       messages.add(fuelStationLocation);
     });

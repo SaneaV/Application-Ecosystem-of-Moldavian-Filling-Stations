@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.domain.FuelType;
 import md.fuel.bot.domain.Page;
@@ -28,6 +29,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class FillingStationRepositoryImpl implements FillingStationRepository {
@@ -44,6 +46,8 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
       key = "new org.springframework.cache.interceptor.SimpleKey(#latitude, #longitude, #radius)")
   public Page<FillingStation> getAllFillingStation(double latitude, double longitude, double radius, int limitInRadius, int limit,
       int offset) {
+    log.info("Fetching list of filling stations from API");
+
     final List<Object> parameters = asList(latitude, longitude, radius, limitInRadius, BASE_SORTING_PARAM, limit, offset);
     final URI uri = resolve(ALL_FILLING_STATIONS_PAGE_PATH, apiConfiguration, parameters);
 
@@ -63,6 +67,8 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
   @Cacheable(value = TELEGRAM_BOT_CACHE, cacheManager = "jCacheCacheManager",
       key = "new org.springframework.cache.interceptor.SimpleKey(#latitude, #longitude, #radius, \"nearest\")")
   public FillingStation getNearestFillingStation(double latitude, double longitude, double radius) {
+    log.info("Fetching nearest filling stations from API");
+
     final List<Object> parameters = asList(latitude, longitude, radius);
     final URI uri = resolve(NEAREST_PATH, apiConfiguration, parameters);
 
@@ -82,6 +88,8 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
       key = "new org.springframework.cache.interceptor.SimpleKey(#latitude, #longitude, #radius, #fuelType)")
   public Page<FillingStation> getBestFuelPriceStation(double latitude, double longitude, double radius, int limitInRadius,
       int limit, int offset, String fuelType) {
+    log.info("Fetching list of filling stations with best fuel price from API");
+
     final List<Object> parameters = asList(latitude, longitude, radius, limitInRadius, BASE_SORTING_PARAM, limit, offset);
     final URI uri = resolve(BEST_FUEL_PRICE_PAGE_PATH, apiConfiguration, parameters, fuelType);
 
@@ -100,6 +108,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
   @Override
   @Cacheable(value = TELEGRAM_BOT_CACHE, cacheManager = "jCacheCacheManager")
   public String getUpdateTimestamp() {
+    log.info("Fetching last modification timestamp from API");
     final URI uri = resolve(LAST_UPDATE_PATH, apiConfiguration, emptyList());
 
     return webClient.get()
@@ -115,6 +124,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
 
   @Override
   public FuelType getSupportedFuelTypes() {
+    log.info("Fetching supported fuel type from API");
     final URI uri = resolve(FUEL_TYPE_PATH, apiConfiguration, emptyList());
 
     return webClient.get()

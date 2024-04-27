@@ -2,12 +2,14 @@ package md.fuel.api.infrastructure.aspect;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.api.domain.FillingStation;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 @Aspect
+@Slf4j
 @Component
 public class AnreTimestampAspect {
 
@@ -16,6 +18,10 @@ public class AnreTimestampAspect {
 
   @After("execution(* md.fuel.api.infrastructure.repository.AnreApiImpl.getFillingStationsInfo())")
   public void setAnreTimestamp() {
-    FillingStation.TIMESTAMP = FORMATTER.format(LocalDateTime.now());
+    final String timestamp = FORMATTER.format(LocalDateTime.now());
+
+    log.info("Set new ANRE timestamp: {}", timestamp);
+
+    FillingStation.TIMESTAMP = timestamp;
   }
 }

@@ -30,10 +30,10 @@ public class UserDataDtoMapperTest {
 
     final UserDataDto result = userDataDtoMapper.toDto(userData);
 
-    assertThat(result.id()).isEqualTo(userData.getId());
-    assertThat(result.radius()).isEqualTo(userData.getRadius());
-    assertThat(result.latitude()).isEqualTo(userData.getLatitude());
-    assertThat(result.longitude()).isEqualTo(userData.getLongitude());
+    assertThat(result.getId()).isEqualTo(userData.getId());
+    assertThat(result.getRadius()).isEqualTo(userData.getRadius());
+    assertThat(result.getLatitude()).isEqualTo(userData.getLatitude());
+    assertThat(result.getLongitude()).isEqualTo(userData.getLongitude());
   }
 
   @Test

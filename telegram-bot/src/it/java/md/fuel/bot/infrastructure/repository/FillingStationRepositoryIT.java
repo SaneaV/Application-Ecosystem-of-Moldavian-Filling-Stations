@@ -109,8 +109,8 @@ public class FillingStationRepositoryIT {
     final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
         OFFSET);
 
-    assertThat(result.totalResults()).isEqualTo(1);
-    assertThat(result.items().get(0)).usingRecursiveComparison().isEqualTo(FILLING_STATION);
+    assertThat(result.getTotalResults()).isEqualTo(1);
+    assertThat(result.getItems().get(0)).usingRecursiveComparison().isEqualTo(FILLING_STATION);
   }
 
   @Test
@@ -139,8 +139,8 @@ public class FillingStationRepositoryIT {
     final Page<FillingStation> result = repository.getBestFuelPriceStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
         OFFSET, "Petrol");
 
-    assertThat(result.totalResults()).isEqualTo(1);
-    assertThat(result.items().get(0)).usingRecursiveComparison().isEqualTo(FILLING_STATION);
+    assertThat(result.getTotalResults()).isEqualTo(1);
+    assertThat(result.getItems().get(0)).usingRecursiveComparison().isEqualTo(FILLING_STATION);
   }
 
   @Test
@@ -168,7 +168,7 @@ public class FillingStationRepositoryIT {
             .withBody(FUEL_TYPES_RESPONSE)));
 
     final FuelType result = repository.getSupportedFuelTypes();
-    assertThat(result.fuelTypes()).containsExactlyElementsOf(expected);
+    assertThat(result.getFuelTypes()).containsExactlyElementsOf(expected);
   }
 
   private static final String XML_GATEWAY_ERROR_RESPONSE = """
@@ -235,8 +235,8 @@ public class FillingStationRepositoryIT {
     final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
         OFFSET);
 
-    assertThat(result.totalResults()).isEqualTo(0);
-    assertThat(result.items()).hasSize(0);
+    assertThat(result.getTotalResults()).isEqualTo(0);
+    assertThat(result.getItems()).hasSize(0);
   }
 
   @Test
@@ -251,7 +251,7 @@ public class FillingStationRepositoryIT {
     final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
         OFFSET);
 
-    assertThat(result.totalResults()).isEqualTo(0);
-    assertThat(result.items()).hasSize(0);
+    assertThat(result.getTotalResults()).isEqualTo(0);
+    assertThat(result.getItems()).hasSize(0);
   }
 }

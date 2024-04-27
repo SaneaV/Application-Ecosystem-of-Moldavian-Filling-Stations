@@ -8,6 +8,7 @@ import static md.fuel.bot.telegram.utils.MessageUtil.sendMessage;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
@@ -19,6 +20,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class AllFillingStationInRadiusCommand implements Command {
@@ -32,10 +34,12 @@ public class AllFillingStationInRadiusCommand implements Command {
   public List<? super PartialBotApiMethod<?>> execute(Update update) {
     final Message message = update.getMessage();
     final long userId = message.getFrom().getId();
+    log.info("Get all filling stations in radius for user = {}", userId);
+
     final long chatId = message.getChatId();
     final UserDataDto userData = userDataFacade.getUserData(userId);
-    final List<FillingStation> allFillingStations = fillingStationFacade.getAllFillingStations(userData.latitude(),
-        userData.longitude(), userData.radius(), FILLING_STATIONS_LIMIT, FILLING_STATIONS_LIMIT);
+    final List<FillingStation> allFillingStations = fillingStationFacade.getAllFillingStations(userData.getLatitude(),
+        userData.getLongitude(), userData.getRadius(), FILLING_STATIONS_LIMIT, FILLING_STATIONS_LIMIT);
 
     return populateMessageMap(allFillingStations, chatId);
   }
@@ -45,7 +49,7 @@ public class AllFillingStationInRadiusCommand implements Command {
     allFillingStations.forEach(fillingStation -> {
       final String messageText = toMessage(fillingStation);
       final SendMessage fillingStationMessage = sendMessage(chatId, messageText);
-      final SendLocation fillingStationLocation = sendLocation(chatId, fillingStation.latitude(), fillingStation.longitude());
+      final SendLocation fillingStationLocation = sendLocation(chatId, fillingStation.getLatitude(), fillingStation.getLongitude());
       messages.add(fillingStationMessage);
       messages.add(fillingStationLocation);
     });

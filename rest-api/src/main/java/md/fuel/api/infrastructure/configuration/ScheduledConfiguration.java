@@ -3,6 +3,7 @@ package md.fuel.api.infrastructure.configuration;
 import static md.fuel.api.infrastructure.configuration.EhcacheConfiguration.ANRE_CACHE;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.api.infrastructure.repository.AnreApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.CacheEvict;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+@Slf4j
 @Configuration
 @EnableScheduling
 @RequiredArgsConstructor
@@ -20,11 +22,14 @@ public class ScheduledConfiguration {
 
   @Scheduled(fixedDelayString = "#{${cache.expiry.time} * 60000}", initialDelayString = "0")
   public void fetchFillingStationData() {
+    log.info("Schedule: Clear anre cache");
     clearCache();
+    log.info("Schedule: Fetch filling stations data");
     anreApi.getFillingStationsInfo();
   }
 
   @CacheEvict(value = ANRE_CACHE, cacheManager = "jCacheCacheManager")
   private void clearCache() {
+    log.info("Clear anre cache");
   }
 }

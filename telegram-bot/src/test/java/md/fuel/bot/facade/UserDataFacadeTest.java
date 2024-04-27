@@ -109,10 +109,10 @@ public class UserDataFacadeTest {
 
     verify(userDataService).getUserData(anyLong());
     verify(userDataDtoMapper).toDto(any());
-    assertThat(result.id()).isEqualTo(userData.getId());
-    assertThat(result.latitude()).isEqualTo(userData.getLatitude());
-    assertThat(result.longitude()).isEqualTo(userData.getLongitude());
-    assertThat(result.radius()).isEqualTo(userData.getRadius());
+    assertThat(result.getId()).isEqualTo(userData.getId());
+    assertThat(result.getLatitude()).isEqualTo(userData.getLatitude());
+    assertThat(result.getLongitude()).isEqualTo(userData.getLongitude());
+    assertThat(result.getRadius()).isEqualTo(userData.getRadius());
   }
 
   @Test

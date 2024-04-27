@@ -96,8 +96,8 @@ public class AllFillingStationInRadiusCommandTest {
     assertThat(sendMessage.getText()).isEqualTo(messageText);
     assertThat(sendMessage.getChatId()).isEqualTo(Long.toString(chatId));
     assertThat(sendLocation.getChatId()).isEqualTo(Long.toString(chatId));
-    assertThat(sendLocation.getLatitude()).isEqualTo(fillingStation.latitude());
-    assertThat(sendLocation.getLongitude()).isEqualTo(fillingStation.longitude());
+    assertThat(sendLocation.getLatitude()).isEqualTo(fillingStation.getLatitude());
+    assertThat(sendLocation.getLongitude()).isEqualTo(fillingStation.getLongitude());
 
     verify(userDataFacade).getUserData(anyLong());
     verify(fillingStationFacade).getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt());

@@ -6,7 +6,9 @@ import static java.lang.Math.sin;
 import static lombok.AccessLevel.PRIVATE;
 
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @NoArgsConstructor(access = PRIVATE)
 public class DistanceCalculator {
 
@@ -21,6 +23,10 @@ public class DistanceCalculator {
 
   public static double calculateMeters(double userLatitude, double userLongitude, double stationLatitude,
       double stationLongitude) {
+    log.debug(
+        "Calculate distance in meters for user coordinates (x = {}, y = {}) and filling station coordinates (x = {}, y = {})",
+        userLatitude, userLongitude, stationLatitude, stationLongitude);
+
     double x = userLatitude * decimalDegreesToRadians;
     double y = stationLatitude * decimalDegreesToRadians;
     return acos(sin(x) * sin(y) + cos(x) * cos(y) * cos(decimalDegreesToRadians * (userLongitude - stationLongitude)))

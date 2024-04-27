@@ -15,7 +15,7 @@ import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 public interface PageMapper {
 
   default <T> Page<T> toEntity(Result<?> result, Class<T> targerClass) {
-    final List<?> sourceData = result.items();
+    final List<?> sourceData = result.getItems();
 
     if (Objects.isNull(sourceData) || sourceData.isEmpty()) {
       return new Page<>(0, emptyList());
@@ -42,6 +42,6 @@ public interface PageMapper {
         .map(targerClass::cast)
         .toList();
 
-    return new Page<>(result.totalResults(), targetItems);
+    return new Page<>(result.getTotalResults(), targetItems);
   }
 }

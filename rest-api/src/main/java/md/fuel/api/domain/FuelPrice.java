@@ -1,7 +1,14 @@
 package md.fuel.api.domain;
 
 import java.io.Serializable;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-public record FuelPrice(Double petrol, Double diesel, String date) implements Serializable {
+@Getter
+@RequiredArgsConstructor
+public class FuelPrice implements Serializable {
 
+  private final Double petrol;
+  private final Double diesel;
+  private final String date;
 }

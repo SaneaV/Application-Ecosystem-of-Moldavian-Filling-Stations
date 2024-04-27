@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import javax.cache.CacheManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.api.domain.FillingStation;
 import md.fuel.api.domain.FuelPrice;
 import md.fuel.api.domain.FuelType;
@@ -30,6 +31,7 @@ import md.fuel.api.infrastructure.repository.AnreApi;
 import md.fuel.api.rest.request.SortingQuery;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class FillingStationServiceImpl implements FillingStationService {
@@ -50,9 +52,9 @@ public class FillingStationServiceImpl implements FillingStationService {
   private static final HashMap<FuelType, Function<FillingStation, Double>> FUEL_TYPE_FUNCTION_HASH_MAP = new HashMap<>();
 
   static {
-    FUEL_TYPE_FUNCTION_HASH_MAP.put(PETROL, FillingStation::petrol);
-    FUEL_TYPE_FUNCTION_HASH_MAP.put(DIESEL, FillingStation::diesel);
-    FUEL_TYPE_FUNCTION_HASH_MAP.put(GAS, FillingStation::gas);
+    FUEL_TYPE_FUNCTION_HASH_MAP.put(PETROL, FillingStation::getPetrol);
+    FUEL_TYPE_FUNCTION_HASH_MAP.put(DIESEL, FillingStation::getDiesel);
+    FUEL_TYPE_FUNCTION_HASH_MAP.put(GAS, FillingStation::getGas);
   }
 
   private final AnreApi anreApi;
@@ -63,15 +65,20 @@ public class FillingStationServiceImpl implements FillingStationService {
     final double latitude = criteria.getLatitude();
     final double longitude = criteria.getLongitude();
     final double radius = criteria.getRadius();
+    log.info("Fetching list of filling stations in radius ({} meters) with centre point x = {}, y = {}", radius, longitude,
+        latitude);
 
     final List<FillingStation> fillingStations = anreApi.getFillingStationsInfo().stream()
-        .filter(s -> isWithinRadius(latitude, longitude, s.latitude(), s.longitude(), radius)
-            && checkCorrectPrice(s.petrol(), s.diesel(), s.gas()))
+        .filter(s -> isWithinRadius(latitude, longitude, s.getLatitude(), s.getLongitude(), radius)
+            && checkCorrectPrice(s.getPetrol(), s.getDiesel(), s.getGas()))
         .collect(toList());
 
     checkLimit(fillingStations.size(), criteria.getLimitInRadius());
 
     if (fillingStations.isEmpty()) {
+      log.info("No filling stations were found in the specified radius ({} meters) with centre point x = {}, y = {}", radius,
+          longitude, latitude);
+
       throw new EntityNotFoundException(ERROR_NO_FILLING_STATION_NEAR_YOU, ERROR_NOT_FOUND_REASON_CODE);
     }
 
@@ -83,10 +90,11 @@ public class FillingStationServiceImpl implements FillingStationService {
   public FillingStation getNearestFillingStation(BaseFillingStationCriteria criteria) {
     final double latitude = criteria.getLatitude();
     final double longitude = criteria.getLongitude();
+    log.info("Fetching nearest filling stations for coordinates x = {}, y = {}", longitude, latitude);
 
     return anreApi.getFillingStationsInfo().stream()
-        .filter(s -> checkCorrectPrice(s.petrol(), s.diesel(), s.gas()))
-        .min(comparing(s -> calculateMeters(latitude, longitude, s.latitude(), s.longitude())))
+        .filter(s -> checkCorrectPrice(s.getPetrol(), s.getDiesel(), s.getGas()))
+        .min(comparing(s -> calculateMeters(latitude, longitude, s.getLatitude(), s.getLongitude())))
         .orElseThrow(() -> new EntityNotFoundException(ERROR_NO_FILLING_STATION_NEAR_YOU, ERROR_NOT_FOUND_REASON_CODE));
   }
 
@@ -96,9 +104,12 @@ public class FillingStationServiceImpl implements FillingStationService {
     final double latitude = criteria.getLatitude();
     final double longitude = criteria.getLongitude();
     final double radius = criteria.getRadius();
+    log.info(
+        "Fetching list of filling stations in radius ({} meters) with centre point x = {}, y = {} with best fuel price for {}",
+        radius, longitude, latitude, fuelType);
 
     final List<FillingStation> filterByDistanceList = anreApi.getFillingStationsInfo().stream()
-        .filter(s -> isWithinRadius(latitude, longitude, s.latitude(), s.longitude(), radius) && !isNull(
+        .filter(s -> isWithinRadius(latitude, longitude, s.getLatitude(), s.getLongitude(), radius) && !isNull(
             fillingStationFunction.apply(s)) && !Objects.equals(fillingStationFunction.apply(s), ZERO_PRICE_PRIMITIVE))
         .toList();
 
@@ -116,23 +127,32 @@ public class FillingStationServiceImpl implements FillingStationService {
 
   @Override
   public FuelPrice getAnrePrices() {
+    log.info("Fetching official fuel prices");
+
     return anreApi.getAnrePrices();
   }
 
   @Override
   public int getTotalNumberOfFillingStations() {
     try {
+      log.info("Fetching total number of available filling stations");
+
       if (cacheManager.getCache(ANRE_CACHE).iterator().next().getValue() instanceof List<?> list) {
         return list.size();
       }
     } catch (RuntimeException exception) {
+      log.info("Something went from during the request to the cache manager on get total number of filling stations");
+
       throw new InfrastructureException(ERROR_CAN_NOT_READ_CACHE, ERROR_CAN_NOT_READ_CACHE_REASON_CODE);
     }
+    log.info("Something went from during the request to the cache manager on get total number of filling stations");
     throw new InfrastructureException(ERROR_CAN_NOT_READ_CACHE, ERROR_CAN_NOT_READ_CACHE_REASON_CODE);
   }
 
   private double getMinimalFuelPrice(List<FillingStation> filteredFillingStationsList,
       Function<FillingStation, Double> fillingStationFunction, String fuelType) {
+    log.info("Find minimal price for fuel type - {} in the list with size {}", fuelType, filteredFillingStationsList.size());
+
     return filteredFillingStationsList.stream()
         .mapToDouble(fillingStationFunction::apply)
         .min()
@@ -141,9 +161,13 @@ public class FillingStationServiceImpl implements FillingStationService {
   }
 
   private Function<FillingStation, Double> getFuelType(String fuelType) {
+    log.info("Find fuel type from the request - {} in the map", fuelType);
+
     try {
       return FUEL_TYPE_FUNCTION_HASH_MAP.get(FuelType.valueOf(fuelType.toUpperCase()));
     } catch (IllegalArgumentException e) {
+      log.info("Fuel type from the request - {} not found in the map", fuelType);
+
       throw new EntityNotFoundException(ERROR_INVALID_FUEL_TYPE, ERROR_NOT_FOUND_REASON_CODE);
     }
   }
@@ -157,6 +181,8 @@ public class FillingStationServiceImpl implements FillingStationService {
   }
 
   private List<Comparator<FillingStation>> getComparators(List<SortingQuery> sortingQuery, double latitude, double longitude) {
+    log.info("Find comparator for the request {}", sortingQuery.toString());
+
     return sortingQuery.stream()
         .map(query -> FillingStation.getComparator(query, latitude, longitude))
         .collect(toList());
@@ -174,6 +200,8 @@ public class FillingStationServiceImpl implements FillingStationService {
 
   private void checkLimit(int numberOfFillingStations, int limit) {
     if (numberOfFillingStations > limit) {
+      log.info("The number of filling stations found ({}) exceeds the limit ({})", numberOfFillingStations, limit);
+
       throw new InvalidRequestException(String.format(ERROR_FOUND_MORE_THAN_LIMIT, limit), ERROR_EXCEED_LIMIT_REASON_CODE);
     }
   }

@@ -6,5 +6,5 @@ api-configuration:
   base-path: ${anre.api.path:https://api.iharta.md/anre/public}
 
   paths:
-    all-filling-stations: /
-    today-fuel-price: /plafon/
+    all-filling-stations:
+    today-fuel-price: plafon/

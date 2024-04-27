@@ -33,12 +33,12 @@ public class FillingStationDtoMapperTest {
 
     final FillingStationDto result = fillingStationDtoMapper.toDto(fillingStation);
 
-    assertThat(result.name()).isEqualTo(fillingStation.name());
-    assertThat(result.petrol()).isEqualTo(fillingStation.petrol());
-    assertThat(result.diesel()).isEqualTo(fillingStation.diesel());
-    assertThat(result.gas()).isEqualTo(fillingStation.gas());
-    assertThat(result.latitude()).isEqualTo(fillingStation.latitude());
-    assertThat(result.longitude()).isEqualTo(fillingStation.longitude());
+    assertThat(result.getName()).isEqualTo(fillingStation.getName());
+    assertThat(result.getPetrol()).isEqualTo(fillingStation.getPetrol());
+    assertThat(result.getDiesel()).isEqualTo(fillingStation.getDiesel());
+    assertThat(result.getGas()).isEqualTo(fillingStation.getGas());
+    assertThat(result.getLatitude()).isEqualTo(fillingStation.getLatitude());
+    assertThat(result.getLongitude()).isEqualTo(fillingStation.getLongitude());
   }
 
   @Test
@@ -51,12 +51,12 @@ public class FillingStationDtoMapperTest {
 
     assertThat(result).hasSize(1);
     final FillingStationDto fillingStationDto = result.get(0);
-    assertThat(fillingStationDto.name()).isEqualTo(fillingStation.name());
-    assertThat(fillingStationDto.petrol()).isEqualTo(fillingStation.petrol());
-    assertThat(fillingStationDto.diesel()).isEqualTo(fillingStation.diesel());
-    assertThat(fillingStationDto.gas()).isEqualTo(fillingStation.gas());
-    assertThat(fillingStationDto.latitude()).isEqualTo(fillingStation.latitude());
-    assertThat(fillingStationDto.longitude()).isEqualTo(fillingStation.longitude());
+    assertThat(fillingStationDto.getName()).isEqualTo(fillingStation.getName());
+    assertThat(fillingStationDto.getPetrol()).isEqualTo(fillingStation.getPetrol());
+    assertThat(fillingStationDto.getDiesel()).isEqualTo(fillingStation.getDiesel());
+    assertThat(fillingStationDto.getGas()).isEqualTo(fillingStation.getGas());
+    assertThat(fillingStationDto.getLatitude()).isEqualTo(fillingStation.getLatitude());
+    assertThat(fillingStationDto.getLongitude()).isEqualTo(fillingStation.getLongitude());
   }
 
   @Test
@@ -67,9 +67,9 @@ public class FillingStationDtoMapperTest {
 
     final FuelPriceDto result = fillingStationDtoMapper.toDto(fuelPrice);
 
-    assertThat(result.petrol()).isEqualTo(fuelPrice.petrol());
-    assertThat(result.diesel()).isEqualTo(fuelPrice.diesel());
-    assertThat(result.date()).isEqualTo(fuelPrice.date());
+    assertThat(result.getPetrol()).isEqualTo(fuelPrice.getPetrol());
+    assertThat(result.getDiesel()).isEqualTo(fuelPrice.getDiesel());
+    assertThat(result.getDate()).isEqualTo(fuelPrice.getDate());
   }
 
   @Test
@@ -81,14 +81,14 @@ public class FillingStationDtoMapperTest {
 
     final PageDto<FillingStationDto> result = fillingStationDtoMapper.toDto(singletonList(fillingStation), numberOfItems);
 
-    assertThat(result.totalResults()).isEqualTo(numberOfItems);
-    final FillingStationDto fillingStationDto = result.items().get(0);
-    assertThat(fillingStationDto.name()).isEqualTo(fillingStation.name());
-    assertThat(fillingStationDto.petrol()).isEqualTo(fillingStation.petrol());
-    assertThat(fillingStationDto.diesel()).isEqualTo(fillingStation.diesel());
-    assertThat(fillingStationDto.gas()).isEqualTo(fillingStation.gas());
-    assertThat(fillingStationDto.latitude()).isEqualTo(fillingStation.latitude());
-    assertThat(fillingStationDto.longitude()).isEqualTo(fillingStation.longitude());
+    assertThat(result.getTotalResults()).isEqualTo(numberOfItems);
+    final FillingStationDto fillingStationDto = result.getItems().get(0);
+    assertThat(fillingStationDto.getName()).isEqualTo(fillingStation.getName());
+    assertThat(fillingStationDto.getPetrol()).isEqualTo(fillingStation.getPetrol());
+    assertThat(fillingStationDto.getDiesel()).isEqualTo(fillingStation.getDiesel());
+    assertThat(fillingStationDto.getGas()).isEqualTo(fillingStation.getGas());
+    assertThat(fillingStationDto.getLatitude()).isEqualTo(fillingStation.getLatitude());
+    assertThat(fillingStationDto.getLongitude()).isEqualTo(fillingStation.getLongitude());
   }
 
   @Test

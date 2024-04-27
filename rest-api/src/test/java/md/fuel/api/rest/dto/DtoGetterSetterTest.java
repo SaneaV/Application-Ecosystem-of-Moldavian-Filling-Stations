@@ -16,8 +16,7 @@ public class DtoGetterSetterTest extends GetterSetterTest {
   private static final double DEFAULT_DOUBLE = 0.0D;
 
   public static Stream<Arguments> getData() {
-    return Stream.of(
-        Arguments.of(
+    return Stream.of(Arguments.of(
             new FillingStationDto(EMPTY, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE)));
   }
 

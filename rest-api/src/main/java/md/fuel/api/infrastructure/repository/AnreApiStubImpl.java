@@ -13,6 +13,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.api.domain.FillingStation;
 import md.fuel.api.domain.FuelPrice;
 import md.fuel.api.infrastructure.exception.model.InfrastructureException;
@@ -21,6 +22,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @ConditionalOnProperty(value = "app.anre-stub.enabled", havingValue = "true")
 public class AnreApiStubImpl implements AnreApi {
@@ -44,14 +46,16 @@ public class AnreApiStubImpl implements AnreApi {
   @Override
   @Cacheable(value = ANRE_CACHE, cacheManager = "jCacheCacheManager")
   public List<FillingStation> getFillingStationsInfo() {
+    log.info("Fetching all filling stations info from the local file");
     if (FILLING_STATIONS.size() != 0) {
+      log.info("Return loaded data");
       return FILLING_STATIONS;
     }
 
     try (InputStream is = this.getClass().getResourceAsStream(fileName)) {
       final List<FillingStationApi> fillingStationApis = objectMapper.readValue(is, new TypeReference<>() {
       });
-
+      log.info("Read data from the file");
       final List<FillingStation> fillingStations = fillingStationApis.stream()
           .map(mapper::toEntity)
           .toList();
@@ -66,6 +70,8 @@ public class AnreApiStubImpl implements AnreApi {
   @Override
   @Cacheable(value = ANRE_PRICE_CACHE, cacheManager = "jCacheCacheManager")
   public FuelPrice getAnrePrices() {
+    log.info("Fetching dummy prices for fuel");
+
     final String date = LocalDate.now().toString();
 
     return new FuelPrice(getRandomDouble(), getRandomDouble(), date);

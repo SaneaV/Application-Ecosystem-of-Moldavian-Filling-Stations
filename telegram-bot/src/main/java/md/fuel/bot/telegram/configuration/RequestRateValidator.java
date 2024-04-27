@@ -1,10 +1,12 @@
 package md.fuel.bot.telegram.configuration;
 
 import com.github.benmanes.caffeine.cache.LoadingCache;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.telegram.exception.model.ClientRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class RequestRateValidator {
 
@@ -22,6 +24,7 @@ public class RequestRateValidator {
 
   public void validateRequest(Long userId) {
     if (isMaximumRequestsPerSecondExceeded(userId)) {
+      log.debug("User {} exceeded request limit", userId);
       throw new ClientRequestException(ERROR_MESSAGE_LIMIT_EXCEEDED);
     }
   }

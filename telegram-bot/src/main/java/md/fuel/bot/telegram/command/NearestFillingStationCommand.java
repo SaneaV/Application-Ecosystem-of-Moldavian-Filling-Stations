@@ -9,6 +9,7 @@ import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyb
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
@@ -20,6 +21,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class NearestFillingStationCommand implements Command {
@@ -33,14 +35,17 @@ public class NearestFillingStationCommand implements Command {
   public List<? super PartialBotApiMethod<?>> execute(Update update) {
     final Message message = update.getMessage();
     final long userId = message.getFrom().getId();
+    log.info("Get nearest filling station for user = {}", userId);
+
     final long chatId = message.getChatId();
     final UserDataDto userData = userDataFacade.getUserData(userId);
-    final FillingStation nearestFuelStation = fillingStationFacade.getNearestFillingStation(userData.latitude(),
-        userData.longitude(), userData.radius());
+    final FillingStation nearestFuelStation = fillingStationFacade.getNearestFillingStation(userData.getLatitude(),
+        userData.getLongitude(), userData.getRadius());
 
     final String fuelStationTextMessage = toMessage(nearestFuelStation);
     final SendMessage fuelStationMessage = sendMessage(chatId, fuelStationTextMessage, getMainMenuKeyboard());
-    final SendLocation fuelStationLocation = sendLocation(chatId, nearestFuelStation.latitude(), nearestFuelStation.longitude());
+    final SendLocation fuelStationLocation = sendLocation(chatId, nearestFuelStation.getLatitude(),
+        nearestFuelStation.getLongitude());
 
     return asList(fuelStationMessage, fuelStationLocation);
   }

@@ -3,6 +3,7 @@ package md.fuel.api.infrastructure.utils;
 import static lombok.AccessLevel.PRIVATE;
 
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.locationtech.proj4j.CRSFactory;
 import org.locationtech.proj4j.CoordinateReferenceSystem;
 import org.locationtech.proj4j.CoordinateTransform;
@@ -10,6 +11,7 @@ import org.locationtech.proj4j.CoordinateTransformFactory;
 import org.locationtech.proj4j.ProjCoordinate;
 import org.locationtech.proj4j.util.Pair;
 
+@Slf4j
 @NoArgsConstructor(access = PRIVATE)
 public class CoordinateConverter {
 
@@ -31,6 +33,8 @@ public class CoordinateConverter {
   }
 
   public static Pair<Double, Double> convertWgs84ToUtm(double x, double y) {
+    log.debug("Convert WGS84 x = {} and y = {} to UTM", x, y);
+
     final ProjCoordinate result = new ProjCoordinate();
     COORDINATE_TRANSFORM.transform(new ProjCoordinate(x, y), result);
     return new Pair<>(result.x, result.y);

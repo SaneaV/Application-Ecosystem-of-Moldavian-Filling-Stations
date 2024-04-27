@@ -31,12 +31,12 @@ public class AnreApiMapperTest {
 
     final FillingStation result = anreApiMapper.toEntity(fillingStationApi);
 
-    assertThat(result.name()).isEqualTo(fillingStationApi.getName());
-    assertThat(result.petrol()).isEqualTo(fillingStationApi.getPetrol());
-    assertThat(result.diesel()).isEqualTo(fillingStationApi.getDiesel());
-    assertThat(result.gas()).isEqualTo(fillingStationApi.getGas());
-    assertThat(result.longitude()).isEqualTo(fillingStationApi.getCoordinates().fst());
-    assertThat(result.latitude()).isEqualTo(fillingStationApi.getCoordinates().snd());
+    assertThat(result.getName()).isEqualTo(fillingStationApi.getName());
+    assertThat(result.getPetrol()).isEqualTo(fillingStationApi.getPetrol());
+    assertThat(result.getDiesel()).isEqualTo(fillingStationApi.getDiesel());
+    assertThat(result.getGas()).isEqualTo(fillingStationApi.getGas());
+    assertThat(result.getLongitude()).isEqualTo(fillingStationApi.getCoordinates().fst());
+    assertThat(result.getLatitude()).isEqualTo(fillingStationApi.getCoordinates().snd());
   }
 
   @Test
@@ -54,12 +54,12 @@ public class AnreApiMapperTest {
 
     final FillingStation result = anreApiMapper.toEntity(fillingStationApi);
 
-    assertThat(result.name()).isEqualTo(fillingStationApi.getName());
-    assertThat(result.petrol()).isNull();
-    assertThat(result.diesel()).isNull();
-    assertThat(result.gas()).isNull();
-    assertThat(result.longitude()).isEqualTo(fillingStationApi.getCoordinates().fst());
-    assertThat(result.latitude()).isEqualTo(fillingStationApi.getCoordinates().snd());
+    assertThat(result.getName()).isEqualTo(fillingStationApi.getName());
+    assertThat(result.getPetrol()).isNull();
+    assertThat(result.getDiesel()).isNull();
+    assertThat(result.getGas()).isNull();
+    assertThat(result.getLongitude()).isEqualTo(fillingStationApi.getCoordinates().fst());
+    assertThat(result.getLatitude()).isEqualTo(fillingStationApi.getCoordinates().snd());
   }
 
   @Test
@@ -77,8 +77,8 @@ public class AnreApiMapperTest {
 
     final FuelPrice result = anreApiMapper.toEntity(fuelPrice);
 
-    assertThat(result.petrol()).isEqualTo(fuelPrice.getPetrol());
-    assertThat(result.diesel()).isEqualTo(fuelPrice.getDiesel());
-    assertThat(result.date()).isEqualTo(fuelPrice.getDate());
+    assertThat(result.getPetrol()).isEqualTo(fuelPrice.getPetrol());
+    assertThat(result.getDiesel()).isEqualTo(fuelPrice.getDiesel());
+    assertThat(result.getDate()).isEqualTo(fuelPrice.getDate());
   }
 }

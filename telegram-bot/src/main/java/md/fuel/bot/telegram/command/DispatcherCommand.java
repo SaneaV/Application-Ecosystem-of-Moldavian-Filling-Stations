@@ -2,11 +2,13 @@ package md.fuel.bot.telegram.command;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DispatcherCommand {
@@ -21,10 +23,12 @@ public class DispatcherCommand {
     final String message = update.getMessage().getText();
 
     if (update.getMessage().hasLocation()) {
+      log.info("Update user location");
       return updateCoordinatesCommand.execute(update);
     }
 
     if (message.length() != 0 && isDouble(message)) {
+      log.info("Update user radius");
       return updateRadiusCommand.execute(update);
     }
 

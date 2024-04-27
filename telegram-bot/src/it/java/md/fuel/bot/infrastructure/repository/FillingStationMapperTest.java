@@ -23,7 +23,7 @@ public class FillingStationMapperTest {
   void shouldReturnDefaultDoublesOnNullsFromFillingStationDto() {
     final FillingStationDto fillingStationDto = new FillingStationDto(EMPTY, null, null, null, null, null);
     final FillingStation result = mapper.toEntity(fillingStationDto);
-    assertThat(result.latitude()).isEqualTo(0.0d);
-    assertThat(result.longitude()).isEqualTo(0.0d);
+    assertThat(result.getLatitude()).isEqualTo(0.0d);
+    assertThat(result.getLongitude()).isEqualTo(0.0d);
   }
 }

@@ -127,7 +127,7 @@ public class FillingStationServiceTest {
     assertThat(allFillingStations.size()).isEqualTo(10);
 
     final List<String> fillingStationsName = allFillingStations.stream()
-        .map(FillingStation::name)
+        .map(FillingStation::getName)
         .toList();
     assertThat(fillingStationsName).doesNotContain(FILLING_STATION_IN_ANOTHER_LOCATION);
 
@@ -164,7 +164,7 @@ public class FillingStationServiceTest {
     assertThat(allFillingStations.size()).isEqualTo(8);
 
     final List<String> fillingStationsName = allFillingStations.stream()
-        .map(FillingStation::name)
+        .map(FillingStation::getName)
         .toList();
     assertThat(fillingStationsName).doesNotContain(FILLING_STATION_IN_ANOTHER_LOCATION);
 
@@ -180,7 +180,7 @@ public class FillingStationServiceTest {
     when(anreApi.getFillingStationsInfo()).thenReturn(fillingStations);
 
     final FillingStation nearestFillingStation = fillingStationService.getNearestFillingStation(criteria);
-    assertThat(nearestFillingStation.name()).isEqualTo(FILLING_STATION_IN_ANOTHER_LOCATION);
+    assertThat(nearestFillingStation.getName()).isEqualTo(FILLING_STATION_IN_ANOTHER_LOCATION);
 
     verify(anreApi).getFillingStationsInfo();
   }
@@ -197,7 +197,7 @@ public class FillingStationServiceTest {
     final List<FillingStation> bestFuelPrice = fillingStationService.getBestFuelPrice(criteria, fuelType);
 
     final List<String> fillingStationsName = bestFuelPrice.stream()
-        .map(FillingStation::name)
+        .map(FillingStation::getName)
         .toList();
 
     assertThat(bestFuelPrice.size()).isEqualTo(2);
@@ -234,7 +234,7 @@ public class FillingStationServiceTest {
     verify(anreApi).getFillingStationsInfo();
 
     assertThat(ascResult).hasSize(5);
-    assertThat(ascResult.get(index).name()).isEqualTo(stationName);
+    assertThat(ascResult.get(index).getName()).isEqualTo(stationName);
   }
 
   @Test
@@ -255,11 +255,11 @@ public class FillingStationServiceTest {
     verify(anreApi).getFillingStationsInfo();
 
     assertThat(ascResult).hasSize(5);
-    assertThat(ascResult.get(0).name()).isEqualTo(NEAREST_FILLING_STATION.name());
-    assertThat(ascResult.get(1).name()).isEqualTo(FIRST_NAME_FILLING_STATION.name());
-    assertThat(ascResult.get(2).name()).isEqualTo(BEST_DIESEL_FILLING_STATION.name());
-    assertThat(ascResult.get(3).name()).isEqualTo(BEST_GAS_FILLING_STATION.name());
-    assertThat(ascResult.get(4).name()).isEqualTo(BEST_PETROL_FILLING_STATION.name());
+    assertThat(ascResult.get(0).getName()).isEqualTo(NEAREST_FILLING_STATION.getName());
+    assertThat(ascResult.get(1).getName()).isEqualTo(FIRST_NAME_FILLING_STATION.getName());
+    assertThat(ascResult.get(2).getName()).isEqualTo(BEST_DIESEL_FILLING_STATION.getName());
+    assertThat(ascResult.get(3).getName()).isEqualTo(BEST_GAS_FILLING_STATION.getName());
+    assertThat(ascResult.get(4).getName()).isEqualTo(BEST_PETROL_FILLING_STATION.getName());
   }
 
   @Test
@@ -280,11 +280,11 @@ public class FillingStationServiceTest {
     verify(anreApi).getFillingStationsInfo();
 
     assertThat(ascResult).hasSize(5);
-    assertThat(ascResult.get(4).name()).isEqualTo(NEAREST_FILLING_STATION.name());
-    assertThat(ascResult.get(3).name()).isEqualTo(FIRST_NAME_FILLING_STATION.name());
-    assertThat(ascResult.get(2).name()).isEqualTo(BEST_DIESEL_FILLING_STATION.name());
-    assertThat(ascResult.get(1).name()).isEqualTo(BEST_GAS_FILLING_STATION.name());
-    assertThat(ascResult.get(0).name()).isEqualTo(BEST_PETROL_FILLING_STATION.name());
+    assertThat(ascResult.get(4).getName()).isEqualTo(NEAREST_FILLING_STATION.getName());
+    assertThat(ascResult.get(3).getName()).isEqualTo(FIRST_NAME_FILLING_STATION.getName());
+    assertThat(ascResult.get(2).getName()).isEqualTo(BEST_DIESEL_FILLING_STATION.getName());
+    assertThat(ascResult.get(1).getName()).isEqualTo(BEST_GAS_FILLING_STATION.getName());
+    assertThat(ascResult.get(0).getName()).isEqualTo(BEST_PETROL_FILLING_STATION.getName());
   }
 
   @Test
@@ -378,21 +378,21 @@ public class FillingStationServiceTest {
 
   private static Stream<Arguments> getComparatorParameters() {
     return Stream.of(
-        Arguments.of("name", ASC, 0, FIRST_NAME_FILLING_STATION.name()),
-        Arguments.of("name", null, 0, FIRST_NAME_FILLING_STATION.name()),
-        Arguments.of("name", DESC, 4, FIRST_NAME_FILLING_STATION.name()),
-        Arguments.of("petrol", ASC, 0, BEST_PETROL_FILLING_STATION.name()),
-        Arguments.of("petrol", null, 0, BEST_PETROL_FILLING_STATION.name()),
-        Arguments.of("petrol", DESC, 4, BEST_PETROL_FILLING_STATION.name()),
-        Arguments.of("diesel", ASC, 0, BEST_DIESEL_FILLING_STATION.name()),
-        Arguments.of("diesel", null, 0, BEST_DIESEL_FILLING_STATION.name()),
-        Arguments.of("diesel", DESC, 4, BEST_DIESEL_FILLING_STATION.name()),
-        Arguments.of("gas", ASC, 0, BEST_GAS_FILLING_STATION.name()),
-        Arguments.of("gas", null, 0, BEST_GAS_FILLING_STATION.name()),
-        Arguments.of("gas", DESC, 4, BEST_GAS_FILLING_STATION.name()),
-        Arguments.of("distance", ASC, 0, NEAREST_FILLING_STATION.name()),
-        Arguments.of("distance", null, 0, NEAREST_FILLING_STATION.name()),
-        Arguments.of("distance", DESC, 4, NEAREST_FILLING_STATION.name())
+        Arguments.of("name", ASC, 0, FIRST_NAME_FILLING_STATION.getName()),
+        Arguments.of("name", null, 0, FIRST_NAME_FILLING_STATION.getName()),
+        Arguments.of("name", DESC, 4, FIRST_NAME_FILLING_STATION.getName()),
+        Arguments.of("petrol", ASC, 0, BEST_PETROL_FILLING_STATION.getName()),
+        Arguments.of("petrol", null, 0, BEST_PETROL_FILLING_STATION.getName()),
+        Arguments.of("petrol", DESC, 4, BEST_PETROL_FILLING_STATION.getName()),
+        Arguments.of("diesel", ASC, 0, BEST_DIESEL_FILLING_STATION.getName()),
+        Arguments.of("diesel", null, 0, BEST_DIESEL_FILLING_STATION.getName()),
+        Arguments.of("diesel", DESC, 4, BEST_DIESEL_FILLING_STATION.getName()),
+        Arguments.of("gas", ASC, 0, BEST_GAS_FILLING_STATION.getName()),
+        Arguments.of("gas", null, 0, BEST_GAS_FILLING_STATION.getName()),
+        Arguments.of("gas", DESC, 4, BEST_GAS_FILLING_STATION.getName()),
+        Arguments.of("distance", ASC, 0, NEAREST_FILLING_STATION.getName()),
+        Arguments.of("distance", null, 0, NEAREST_FILLING_STATION.getName()),
+        Arguments.of("distance", DESC, 4, NEAREST_FILLING_STATION.getName())
     );
   }
 

@@ -42,7 +42,7 @@ public class AnrePriceControllerIT {
   @DisplayName("Should return all filling stations in specified radius")
   void shouldReturnAllFillingStations() throws Exception {
     final String date = LocalDate.now().toString();
-    final FuelPriceDto fuelPriceDto = new FuelPriceDto(10.0, 10.0, date);
+    final FuelPriceDto fuelPriceDto = new FuelPriceDto(date, 10.0, 10.0);
     when(fillingStationFacade.getAnrePrices()).thenReturn(fuelPriceDto);
 
     mockMvc.perform(get("/price")

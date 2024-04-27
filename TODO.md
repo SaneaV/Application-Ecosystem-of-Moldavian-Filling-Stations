@@ -32,6 +32,7 @@
 - [X] [API] Add an endpoint to request the official fuel price from ANRE.
 - [X] [API] Move `limit` and `offset` logic on the service layer.
 - [X] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
+- [X] [CORE] Add SL4FJ logging in a project.
 
 ## Features
 
@@ -40,11 +41,11 @@
 - [ ] [EXTERNAL] Add custom JWT token library.
 - [ ] [CORE] Create a Kafka-Statistics module to collect data about the cities from which the request is made (implement through
   aspects and Thymeleaf).
-- [ ] [CORE] Add SL4FJ logging in a project.
 - [ ] [API] Add auditable for controllers (save data in database).
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [CORE] Add Actuator.
 - [ ] [CORE] Add SonarQube.
+- [ ] [TELEGRAM] Add holder for user and chat information.
 
 ## Food For Thought
 

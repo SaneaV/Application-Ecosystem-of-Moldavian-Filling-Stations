@@ -4,7 +4,9 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.util.List;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, CharSequence> {
 
   private List<String> acceptedValues;
@@ -18,6 +20,8 @@ public class ValueOfEnumValidator implements ConstraintValidator<ValueOfEnum, Ch
 
   @Override
   public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
+    log.debug("Validate that {} is valid enum type ({})", value, acceptedValues);
+
     if (value == null) {
       return false;
     }

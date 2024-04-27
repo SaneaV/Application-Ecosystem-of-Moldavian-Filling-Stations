@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 public class SpecificFuelInRadiusCommandTest {
 
@@ -26,13 +27,17 @@ public class SpecificFuelInRadiusCommandTest {
   @DisplayName("Should return specific fuel in radius message")
   void shouldReturnSpecificFuelInRadiusMessage() {
     final long chatId = 20L;
+    final long userId = 20L;
 
     final Update update = new Update();
     final Message message = new Message();
+    final User from = new User();
     final Chat chat = new Chat();
 
     chat.setId(chatId);
+    from.setId(userId);
     message.setChat(chat);
+    message.setFrom(from);
     update.setMessage(message);
 
     final List<SendMessage> messages = specificFuelInRadiusCommand.execute(update).stream()

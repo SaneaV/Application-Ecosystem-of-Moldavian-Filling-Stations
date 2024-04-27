@@ -95,8 +95,8 @@ public class NearestFillingStationCommandTest {
     assertThat(sendMessage.getChatId()).isEqualTo(Long.toString(chatId));
     assertThat(sendMessage.getReplyMarkup()).isEqualTo(getMainMenuKeyboard());
     assertThat(sendLocation.getChatId()).isEqualTo(Long.toString(chatId));
-    assertThat(sendLocation.getLatitude()).isEqualTo(fillingStationDto.latitude());
-    assertThat(sendLocation.getLongitude()).isEqualTo(fillingStationDto.longitude());
+    assertThat(sendLocation.getLatitude()).isEqualTo(fillingStationDto.getLatitude());
+    assertThat(sendLocation.getLongitude()).isEqualTo(fillingStationDto.getLongitude());
 
     verify(userDataFacade).getUserData(anyLong());
     verify(fillingStationFacade).getNearestFillingStation(anyDouble(), anyDouble(), anyDouble());

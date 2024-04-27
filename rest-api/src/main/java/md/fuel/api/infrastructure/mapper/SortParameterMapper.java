@@ -5,8 +5,10 @@ import static md.fuel.api.rest.request.SortOrder.ASC;
 import static md.fuel.api.rest.request.SortOrder.DESC;
 
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import md.fuel.api.rest.request.SortingQuery;
 
+@Slf4j
 @NoArgsConstructor(access = PRIVATE)
 public class SortParameterMapper {
 
@@ -22,6 +24,7 @@ public class SortParameterMapper {
         return new SortingQuery(sortParam.substring(1), ASC);
       }
       default -> {
+        log.info("Sort parameter {} without sort order mapped to ascending", sortParam);
         return new SortingQuery(sortParam, ASC);
       }
     }
