@@ -7,9 +7,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.telegram.FillingStationTelegramBot;
-import md.fuel.bot.telegram.configuration.RequestRateValidator;
+import md.fuel.bot.infrastructure.configuration.RequestRateValidator;
 import md.fuel.bot.telegram.exception.TelegramExceptionWrappingStrategy;
+import md.fuel.bot.telegram.validation.UserStatusValidatorImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +27,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @ExtendWith(SpringExtension.class)
-@Import({TelegramExceptionWrappingStrategy.class})
+@Import({TelegramExceptionWrappingStrategy.class, ChatInfoHolder.class, UserStatusValidatorImpl.class})
 @WebMvcTest(BotController.class)
 public class BotControllerIT {
 
@@ -35,6 +37,9 @@ public class BotControllerIT {
       {
           "message": {
               "chat": {
+                  "id": 12345
+              },
+              "from": {
                   "id": 12345
               }
           }

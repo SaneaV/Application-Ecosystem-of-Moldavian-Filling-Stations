@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.exception.model;
+package md.fuel.bot.infrastructure.exception.model;
 
 import lombok.Getter;
 

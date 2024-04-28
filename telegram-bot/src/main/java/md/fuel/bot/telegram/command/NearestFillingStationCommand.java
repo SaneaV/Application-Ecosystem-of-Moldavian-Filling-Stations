@@ -13,12 +13,12 @@ import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
+import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.telegram.dto.UserDataDto;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
@@ -30,14 +30,14 @@ public class NearestFillingStationCommand implements Command {
 
   private final FillingStationFacade fillingStationFacade;
   private final UserDataFacade userDataFacade;
+  private final ChatInfoHolder chatInfoHolder;
 
   @Override
   public List<? super PartialBotApiMethod<?>> execute(Update update) {
-    final Message message = update.getMessage();
-    final long userId = message.getFrom().getId();
+    final long userId = chatInfoHolder.getUserId();
     log.info("Get nearest filling station for user = {}", userId);
 
-    final long chatId = message.getChatId();
+    final long chatId = chatInfoHolder.getChatId();
     final UserDataDto userData = userDataFacade.getUserData(userId);
     final FillingStation nearestFuelStation = fillingStationFacade.getNearestFillingStation(userData.getLatitude(),
         userData.getLongitude(), userData.getRadius());

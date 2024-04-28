@@ -10,16 +10,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.stream.Stream;
+import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.infrastructure.configuration.RequestRateValidator;
 import md.fuel.bot.infrastructure.exception.GatewayErrorDescription;
+import md.fuel.bot.infrastructure.exception.model.ClientRequestException;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.bot.infrastructure.exception.model.GatewayPassThroughException;
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import md.fuel.bot.infrastructure.repository.GatewayError;
 import md.fuel.bot.telegram.FillingStationTelegramBot;
 import md.fuel.bot.telegram.command.BestFuelInRadiusCommand;
-import md.fuel.bot.telegram.configuration.RequestRateValidator;
 import md.fuel.bot.telegram.exception.TelegramExceptionWrappingStrategy;
-import md.fuel.bot.telegram.exception.model.ClientRequestException;
+import md.fuel.bot.telegram.validation.UserStatusValidatorImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +38,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ExtendWith(SpringExtension.class)
-@Import({TelegramExceptionWrappingStrategy.class})
+@Import({TelegramExceptionWrappingStrategy.class, ChatInfoHolder.class, UserStatusValidatorImpl.class})
 @WebMvcTest(BotController.class)
 public class GlobalExceptionHandlerIT {
 
@@ -48,6 +50,9 @@ public class GlobalExceptionHandlerIT {
       {
           "message": {
               "chat": {
+                  "id": 12345
+              },
+              "from": {
                   "id": 12345
               }
           }

@@ -9,10 +9,10 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.facade.UserDataFacade;
+import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
@@ -23,18 +23,18 @@ public class UpdateRadiusCommand implements Command {
   private static final String MESSAGE = "New radius set!";
 
   private final UserDataFacade userDataFacade;
+  private final ChatInfoHolder chatInfoHolder;
 
   @Override
   public List<? super PartialBotApiMethod<?>> execute(Update update) {
-    final Message message = update.getMessage();
-    final Long userId = message.getFrom().getId();
+    final long userId = chatInfoHolder.getUserId();
     log.info("Update radius for user with id = {}", userId);
 
-    final String newRadius = message.getText();
+    final String newRadius = update.getMessage().getText();
 
     userDataFacade.updateRadius(userId, Double.parseDouble(newRadius));
 
-    final SendMessage sendMessage = sendMessage(update, MESSAGE, getMainMenuKeyboard());
+    final SendMessage sendMessage = sendMessage(chatInfoHolder.getChatId(), MESSAGE, getMainMenuKeyboard());
     return singletonList(sendMessage);
   }
 

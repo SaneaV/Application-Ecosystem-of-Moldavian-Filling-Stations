@@ -1,5 +1,6 @@
 package md.fuel.bot.telegram.command;
 
+import static java.util.Collections.emptyList;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyDouble;
@@ -15,16 +16,14 @@ import java.util.Map;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
+import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.telegram.dto.UserDataDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Chat;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
 
 public class NearestFillingStationCommandTest {
 
@@ -39,6 +38,8 @@ public class NearestFillingStationCommandTest {
       📊 Last price update: %s""";
   private static final String GREEN_CIRCLE = "🟢";
   private static final String RED_CIRCLE = "🔴";
+  private static final long CHAT_ID = 20L;
+  private static final long USER_ID = 10L;
 
   private final NearestFillingStationCommand nearestFillingStationCommand;
   private final FillingStationFacade fillingStationFacade;
@@ -47,14 +48,17 @@ public class NearestFillingStationCommandTest {
   public NearestFillingStationCommandTest() {
     this.fillingStationFacade = mock(FillingStationFacade.class);
     this.userDataFacade = mock(UserDataFacade.class);
-    this.nearestFillingStationCommand = new NearestFillingStationCommand(fillingStationFacade, userDataFacade);
+    final ChatInfoHolder chatInfoHolder = new ChatInfoHolder();
+    chatInfoHolder.setChatInfo(USER_ID, CHAT_ID);
+
+    BestFuelInRadiusCommand.COMMAND = emptyList();
+
+    this.nearestFillingStationCommand = new NearestFillingStationCommand(fillingStationFacade, userDataFacade, chatInfoHolder);
   }
 
   @Test
   @DisplayName("Should return nearest filling station in radius message")
   void shouldReturnNearestFillingStationInRadiusMessage() {
-    final long chatId = 20L;
-    final long userId = 10L;
     final String fuelStationName = "Filling Station Name";
     final double petrol = 10;
     final double gas = 30;
@@ -67,21 +71,12 @@ public class NearestFillingStationCommandTest {
     priceMap.put("Diesel", null);
     priceMap.put("Gas", gas);
 
-    final User user = new User();
     final Update update = new Update();
-    final Message message = new Message();
-    final Chat chat = new Chat();
     final FillingStation fillingStationDto = new FillingStation(fuelStationName, priceMap, latitude, longitude);
     FillingStation.timestamp = LocalDateTime.now().toString();
     final UserDataDto userDataDto = new UserDataDto(defaultLongValue, defaultDoubleValue, defaultDoubleValue, defaultDoubleValue);
     final String messageText = String.format(FILLING_STATION_MESSAGE, fuelStationName, GREEN_CIRCLE, petrol, RED_CIRCLE, 0.0,
         GREEN_CIRCLE, gas, FillingStation.timestamp);
-
-    user.setId(userId);
-    chat.setId(chatId);
-    message.setFrom(user);
-    message.setChat(chat);
-    update.setMessage(message);
 
     when(userDataFacade.getUserData(anyLong())).thenReturn(userDataDto);
     when(fillingStationFacade.getNearestFillingStation(anyDouble(), anyDouble(), anyDouble())).thenReturn(fillingStationDto);
@@ -92,9 +87,9 @@ public class NearestFillingStationCommandTest {
     final SendMessage sendMessage = (SendMessage) sendMessagesAndLocations.get(0);
     final SendLocation sendLocation = (SendLocation) sendMessagesAndLocations.get(1);
     assertThat(sendMessage.getText()).isEqualTo(messageText);
-    assertThat(sendMessage.getChatId()).isEqualTo(Long.toString(chatId));
+    assertThat(sendMessage.getChatId()).isEqualTo(Long.toString(CHAT_ID));
     assertThat(sendMessage.getReplyMarkup()).isEqualTo(getMainMenuKeyboard());
-    assertThat(sendLocation.getChatId()).isEqualTo(Long.toString(chatId));
+    assertThat(sendLocation.getChatId()).isEqualTo(Long.toString(CHAT_ID));
     assertThat(sendLocation.getLatitude()).isEqualTo(fillingStationDto.getLatitude());
     assertThat(sendLocation.getLongitude()).isEqualTo(fillingStationDto.getLongitude());
 

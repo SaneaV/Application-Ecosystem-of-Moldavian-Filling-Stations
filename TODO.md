@@ -33,6 +33,7 @@
 - [X] [API] Move `limit` and `offset` logic on the service layer.
 - [X] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
 - [X] [CORE] Add SL4FJ logging in a project.
+- [X] [TELEGRAM] Add holder for user and chat information.
 
 ## Features
 
@@ -45,7 +46,8 @@
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [CORE] Add Actuator.
 - [ ] [CORE] Add SonarQube.
-- [ ] [TELEGRAM] Add holder for user and chat information.
+- [ ] [TELEGRAM] Get rid of the limit of 10 filling stations in the radius and replace it with CallBackQuery with arrows (forward
+  and backward).
 
 ## Food For Thought
 
@@ -57,4 +59,3 @@
   stations)
 - UI component for displaying statistics on REST and Telegram requests based on the Kafka-Statistics module.
 - Java Swing applications that query the state of a component through the Spring Boot Actuator (Live Health Check Monitoring).
-- Get rid of the limit of 10 filling stations in the radius and replace it with CallBackQuery with arrows (forward and backward).

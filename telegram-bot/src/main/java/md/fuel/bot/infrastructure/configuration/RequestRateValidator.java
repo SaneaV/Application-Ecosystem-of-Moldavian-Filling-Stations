@@ -1,8 +1,8 @@
-package md.fuel.bot.telegram.configuration;
+package md.fuel.bot.infrastructure.configuration;
 
 import com.github.benmanes.caffeine.cache.LoadingCache;
 import lombok.extern.slf4j.Slf4j;
-import md.fuel.bot.telegram.exception.model.ClientRequestException;
+import md.fuel.bot.infrastructure.exception.model.ClientRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

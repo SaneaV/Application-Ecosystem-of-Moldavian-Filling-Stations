@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.facade.UserDataFacade;
+import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -28,14 +29,15 @@ public class StartCommand implements Command {
       If you want to change your coordinates, just send your location.""";
 
   private final UserDataFacade userDataFacade;
+  private final ChatInfoHolder chatInfoHolder;
 
   @Override
   public List<? super PartialBotApiMethod<?>> execute(Update update) {
-    final Long userId = update.getMessage().getFrom().getId();
+    final long userId = chatInfoHolder.getUserId();
     log.info("Add new user with id = {}", userId);
     userDataFacade.addNewUser(userId);
 
-    final SendMessage message = sendMessage(update, MESSAGE, getMainMenuKeyboard());
+    final SendMessage message = sendMessage(chatInfoHolder.getChatId(), MESSAGE, getMainMenuKeyboard());
     return singletonList(message);
   }
 

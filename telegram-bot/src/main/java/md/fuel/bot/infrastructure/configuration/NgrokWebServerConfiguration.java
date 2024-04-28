@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.configuration;
+package md.fuel.bot.infrastructure.configuration;
 
 import com.github.alexdlaird.ngrok.NgrokClient;
 import com.github.alexdlaird.ngrok.conf.JavaNgrokConfig;

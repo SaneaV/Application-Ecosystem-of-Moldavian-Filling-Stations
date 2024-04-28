@@ -22,14 +22,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.context.request.WebRequest;
 
 @Component
 @ConditionalOnProperty(name = "app.error.strategy", havingValue = "XML")
 public class XmlGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleRuntimeException(RuntimeException exception, WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleRuntimeException(RuntimeException exception) {
     final GatewayErrorDescription error = new GatewayErrorDescription();
     final GatewayError gatewayError = buildGatewayError(ERROR_REASON_INTERNAL_ERROR, exception.getMessage());
     error.getErrors().addError(gatewayError);
@@ -38,8 +37,7 @@ public class XmlGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleEntityNotFoundException(EntityNotFoundException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleEntityNotFoundException(EntityNotFoundException exception) {
     final GatewayErrorDescription error = new GatewayErrorDescription();
     final GatewayError gatewayError = buildGatewayError(exception.getReasonCode(), exception.getMessage());
     error.getErrors().addError(gatewayError);
@@ -48,8 +46,7 @@ public class XmlGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception) {
     final GatewayErrorDescription error = new GatewayErrorDescription();
     final GatewayError gatewayError = buildGatewayError(exception.getReasonCode(), exception.getMessage());
     error.getErrors().addError(gatewayError);
@@ -58,8 +55,7 @@ public class XmlGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
     final GatewayErrorDescription error = new GatewayErrorDescription();
     final List<FieldError> fieldErrors = exception.getFieldErrors();
 
@@ -72,8 +68,7 @@ public class XmlGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception) {
     final GatewayErrorDescription error = new GatewayErrorDescription();
     final GatewayError gatewayError = buildGatewayError(ERROR_REASON_CONSTRAINT_ERROR, exception.getMessage());
     error.getErrors().addError(gatewayError);
@@ -82,8 +77,7 @@ public class XmlGatewayErrorWrappingStrategy implements ErrorWrappingStrategy {
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleInfrastructureException(InfrastructureException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleInfrastructureException(InfrastructureException exception) {
     final GatewayErrorDescription error = new GatewayErrorDescription();
     final GatewayError gatewayError = buildGatewayError(exception.getReasonCode(), exception.getMessage());
     error.getErrors().addError(gatewayError);

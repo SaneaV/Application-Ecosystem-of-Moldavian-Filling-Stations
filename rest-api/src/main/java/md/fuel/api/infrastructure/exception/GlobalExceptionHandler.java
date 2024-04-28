@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
 @Slf4j
 @ControllerAdvice
@@ -20,43 +19,38 @@ public class GlobalExceptionHandler {
   private final ErrorWrappingStrategy errorWrappingStrategy;
 
   @ExceptionHandler(RuntimeException.class)
-  public ResponseEntity<ErrorDescriptionResponse> handleRuntimeException(RuntimeException exception, WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleRuntimeException(RuntimeException exception) {
     log.info("Exception handler caught RuntimeException");
-    return errorWrappingStrategy.handleRuntimeException(exception, request);
+    return errorWrappingStrategy.handleRuntimeException(exception);
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
-  public ResponseEntity<ErrorDescriptionResponse> handleEntityNotFoundException(EntityNotFoundException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleEntityNotFoundException(EntityNotFoundException exception) {
     log.info("Exception handler caught EntityNotFoundException");
-    return errorWrappingStrategy.handleEntityNotFoundException(exception, request);
+    return errorWrappingStrategy.handleEntityNotFoundException(exception);
   }
 
   @ExceptionHandler(InvalidRequestException.class)
-  public ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception) {
     log.info("Exception handler caught InvalidRequestException");
-    return errorWrappingStrategy.handleInvalidRequestException(exception, request);
+    return errorWrappingStrategy.handleInvalidRequestException(exception);
   }
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<ErrorDescriptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
     log.info("Exception handler caught MethodArgumentNotValidException");
-    return errorWrappingStrategy.handleMethodArgumentNotValidException(exception, request);
+    return errorWrappingStrategy.handleMethodArgumentNotValidException(exception);
   }
 
   @ExceptionHandler(ConstraintViolationException.class)
-  public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception) {
     log.info("Exception handler caught ConstraintViolationException");
-    return errorWrappingStrategy.handleConstraintViolationException(exception, request);
+    return errorWrappingStrategy.handleConstraintViolationException(exception);
   }
 
   @ExceptionHandler(InfrastructureException.class)
-  public ResponseEntity<ErrorDescriptionResponse> handleInfrastructureException(InfrastructureException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleInfrastructureException(InfrastructureException exception) {
     log.info("Exception handler caught InfrastructureException");
-    return errorWrappingStrategy.handleInfrastructureException(exception, request);
+    return errorWrappingStrategy.handleInfrastructureException(exception);
   }
 }

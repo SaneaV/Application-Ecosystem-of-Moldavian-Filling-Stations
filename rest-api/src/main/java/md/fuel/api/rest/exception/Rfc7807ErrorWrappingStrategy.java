@@ -22,14 +22,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.context.request.WebRequest;
 
 @Component
 @ConditionalOnProperty(name = "app.error.strategy", havingValue = "RFC7807")
 public class Rfc7807ErrorWrappingStrategy implements ErrorWrappingStrategy {
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleRuntimeException(RuntimeException exception, WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleRuntimeException(RuntimeException exception) {
     final RfcErrorDescription error = RfcErrorDescription.builder()
         .status(INTERNAL_SERVER_ERROR.value())
         .title(INTERNAL_SERVER_ERROR.getReasonPhrase())
@@ -43,24 +42,21 @@ public class Rfc7807ErrorWrappingStrategy implements ErrorWrappingStrategy {
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleEntityNotFoundException(EntityNotFoundException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleEntityNotFoundException(EntityNotFoundException exception) {
     final RfcErrorDescription error = buildRfcErrorDescription(exception.getStatus().value(), exception.getReasonCode(),
         exception.getMessage());
     return buildResponseEntity(exception.getStatus(), error);
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleInvalidRequestException(InvalidRequestException exception) {
     final RfcErrorDescription error = buildRfcErrorDescription(exception.getStatus().value(), exception.getReasonCode(),
         exception.getMessage());
     return buildResponseEntity(exception.getStatus(), error);
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
 
     final List<RfcError> rfcErrors = exception.getFieldErrors().stream()
         .map(e -> RfcError.builder()
@@ -81,16 +77,14 @@ public class Rfc7807ErrorWrappingStrategy implements ErrorWrappingStrategy {
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleConstraintViolationException(ConstraintViolationException exception) {
     final RfcErrorDescription error = buildRfcErrorDescription(BAD_REQUEST.value(), ERROR_REASON_CONSTRAINT_ERROR,
         exception.getMessage());
     return buildResponseEntity(BAD_REQUEST, error);
   }
 
   @Override
-  public ResponseEntity<ErrorDescriptionResponse> handleInfrastructureException(InfrastructureException exception,
-      WebRequest request) {
+  public ResponseEntity<ErrorDescriptionResponse> handleInfrastructureException(InfrastructureException exception) {
     final RfcErrorDescription error = buildRfcErrorDescription(exception.getStatus().value(), exception.getReasonCode(),
         exception.getMessage());
     return buildResponseEntity(exception.getStatus(), error);

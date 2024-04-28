@@ -11,12 +11,12 @@ import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
+import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.telegram.dto.UserDataDto;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
@@ -27,26 +27,28 @@ public class BestFuelInRadiusCommand implements Command {
 
   private final FillingStationFacade fillingStationFacade;
   private final UserDataFacade userDataFacade;
+  private final ChatInfoHolder chatInfoHolder;
 
-  public BestFuelInRadiusCommand(FillingStationFacade fillingStationFacade, UserDataFacade userDataFacade) {
+  public BestFuelInRadiusCommand(FillingStationFacade fillingStationFacade, UserDataFacade userDataFacade,
+      ChatInfoHolder chatInfoHolder) {
     this.fillingStationFacade = fillingStationFacade;
     this.userDataFacade = userDataFacade;
+    this.chatInfoHolder = chatInfoHolder;
     COMMAND = fillingStationFacade.getSupportedFuelTypes().getFuelTypes();
   }
 
   @Override
   public List<? super PartialBotApiMethod<?>> execute(Update update) {
-    final Message message = update.getMessage();
-    final long userId = message.getFrom().getId();
-    final long chatId = message.getChatId();
+    final long userId = chatInfoHolder.getUserId();
     log.info("Get all filling stations in radius with best fuel price for user = {}", userId);
 
-    final String fuelType = message.getText();
+    final String fuelType = update.getMessage().getText();
     final UserDataDto userData = userDataFacade.getUserData(userId);
     final List<FillingStation> bestPriceFillingStations = fillingStationFacade.getBestFuelPrice(userData.getLatitude(),
         userData.getLongitude(), userData.getRadius(), FILLING_STATIONS_LIMIT, FILLING_STATIONS_LIMIT, fuelType);
 
-    final List<? super PartialBotApiMethod<?>> messages = populateMessageMap(bestPriceFillingStations, fuelType, chatId);
+    final List<? super PartialBotApiMethod<?>> messages = populateMessageMap(bestPriceFillingStations, fuelType,
+        chatInfoHolder.getChatId());
     setReplyKeyboard(messages);
     return messages;
   }
