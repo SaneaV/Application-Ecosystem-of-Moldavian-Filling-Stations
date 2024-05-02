@@ -3,6 +3,7 @@ package md.fuel.bot.infrastructure.repository;
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static java.lang.Integer.MAX_VALUE;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -39,10 +40,7 @@ public class FillingStationRepositoryIT {
   private static final String CONTENT_TYPE = "Content-Type";
   private static final Double LATITUDE = 46.328803;
   private static final Double LONGITUDE = 28.965323;
-  private static final int LIMIT_IN_RADIUS = 10;
   private static final Double RADIUS = 5000.0;
-  private static final int LIMIT = 10;
-  private static final int OFFSET = 10;
   private static final Map<String, Double> PRICE_MAP = Map.of("Petrol", 25.75, "Diesel", 22.3, "Gas", 13.45);
   private static final FillingStation FILLING_STATION = new FillingStation("Fortress", PRICE_MAP, 46.34746746138542,
       28.947447953963454);
@@ -101,13 +99,13 @@ public class FillingStationRepositoryIT {
   @DisplayName("Should return page of filling stations")
   void shouldReturnPageOfFillingStations() {
     wireMock.stubFor(get(urlEqualTo(
-        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&sorting=-distance&limit=10&offset=10"))
+        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=" + MAX_VALUE
+            + "&sorting=+distance&limit=" + MAX_VALUE + "&offset=0"))
         .willReturn(aResponse()
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .withBody(PAGE_FILLING_STATIONS_RESPONSE)));
 
-    final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
-        OFFSET);
+    final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS);
 
     assertThat(result.getTotalResults()).isEqualTo(1);
     assertThat(result.getItems().get(0)).usingRecursiveComparison().isEqualTo(FILLING_STATION);
@@ -131,13 +129,13 @@ public class FillingStationRepositoryIT {
   @DisplayName("Should return page of best fuel price filling stations")
   void shouldReturnPageOfBestFuelPriceFillingStations() {
     wireMock.stubFor(get(urlEqualTo(
-        "/page/filling-station/Petrol?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&sorting=-distance&limit=10&offset=10"))
+        "/page/filling-station/Petrol?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=" + MAX_VALUE
+            + "&sorting=+distance&limit=" + MAX_VALUE + "&offset=0"))
         .willReturn(aResponse()
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .withBody(PAGE_FILLING_STATIONS_RESPONSE)));
 
-    final Page<FillingStation> result = repository.getBestFuelPriceStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
-        OFFSET, "Petrol");
+    final Page<FillingStation> result = repository.getBestFuelPriceStation(LATITUDE, LONGITUDE, RADIUS, "Petrol");
 
     assertThat(result.getTotalResults()).isEqualTo(1);
     assertThat(result.getItems().get(0)).usingRecursiveComparison().isEqualTo(FILLING_STATION);
@@ -227,13 +225,13 @@ public class FillingStationRepositoryIT {
   @DisplayName("Should return empty page on empty list")
   void shouldReturnEmptyPageOnEmptyList() {
     wireMock.stubFor(get(urlEqualTo(
-        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&sorting=-distance&limit=10&offset=10"))
+        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=" + MAX_VALUE
+            + "&sorting=+distance&limit=" + MAX_VALUE + "&offset=0"))
         .willReturn(aResponse()
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .withBody(EMPTY_PAGE_FILLING_STATIONS_RESPONSE)));
 
-    final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
-        OFFSET);
+    final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS);
 
     assertThat(result.getTotalResults()).isEqualTo(0);
     assertThat(result.getItems()).hasSize(0);
@@ -243,13 +241,13 @@ public class FillingStationRepositoryIT {
   @DisplayName("Should return empty page on null list")
   void shouldReturnEmptyPageOnNullList() {
     wireMock.stubFor(get(urlEqualTo(
-        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=10&sorting=-distance&limit=10&offset=10"))
+        "/page/filling-station?latitude=46.328803&longitude=28.965323&radius=5000.0&limit_in_radius=" + MAX_VALUE
+            + "&sorting=+distance&limit=" + MAX_VALUE + "&offset=0"))
         .willReturn(aResponse()
             .withHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
             .withBody(NULL_PAGE_FILLING_STATIONS_RESPONSE)));
 
-    final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS, LIMIT_IN_RADIUS, LIMIT,
-        OFFSET);
+    final Page<FillingStation> result = repository.getAllFillingStation(LATITUDE, LONGITUDE, RADIUS);
 
     assertThat(result.getTotalResults()).isEqualTo(0);
     assertThat(result.getItems()).hasSize(0);

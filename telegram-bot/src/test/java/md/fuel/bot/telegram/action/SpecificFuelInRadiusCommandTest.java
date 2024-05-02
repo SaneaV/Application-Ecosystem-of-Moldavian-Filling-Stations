@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.command;
+package md.fuel.bot.telegram.action;
 
 import static java.util.Collections.emptyList;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getFuelTypeKeyboard;
@@ -6,6 +6,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.telegram.action.command.BestFuelInRadiusCommand;
+import md.fuel.bot.telegram.action.command.SpecificFuelInRadiusCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

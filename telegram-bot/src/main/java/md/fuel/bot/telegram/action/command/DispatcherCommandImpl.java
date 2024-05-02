@@ -1,9 +1,10 @@
-package md.fuel.bot.telegram.command;
+package md.fuel.bot.telegram.action.command;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
+import md.fuel.bot.telegram.action.DispatcherCommand;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -11,7 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DispatcherCommand {
+public class DispatcherCommandImpl implements DispatcherCommand {
 
   private static final String COMMAND_NOT_FOUND = "I don't understand your command, use the menu buttons.";
 

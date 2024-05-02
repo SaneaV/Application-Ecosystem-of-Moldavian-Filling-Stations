@@ -1,6 +1,5 @@
-package md.fuel.bot.telegram.command;
+package md.fuel.bot.telegram.action.command;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static md.fuel.bot.telegram.utils.MessageUtil.sendMessage;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
@@ -13,15 +12,21 @@ import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Location;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class UpdateCoordinatesCommand implements Command {
+public class StartCommand implements Command {
 
-  private static final String MESSAGE = "New coordinates set!";
+  private static final String COMMAND = "/start";
+  private static final String MESSAGE = """
+      Welcome!
+      To start working with bot, you can select any element from the menu.
+
+      If you want to change the search radius, just send it to me (in kilometres, e.g. 0.5 (500 metres), 1 (1000 metres)).
+
+      If you want to change your coordinates, just send your location.""";
 
   private final UserDataFacade userDataFacade;
   private final ChatInfoHolder chatInfoHolder;
@@ -29,17 +34,15 @@ public class UpdateCoordinatesCommand implements Command {
   @Override
   public List<? super PartialBotApiMethod<?>> execute(Update update) {
     final long userId = chatInfoHolder.getUserId();
-    log.info("Update coordinates for user with id = {}", userId);
-    final Location userLocation = update.getMessage().getLocation();
+    log.info("Add new user with id = {}", userId);
+    userDataFacade.addNewUser(userId);
 
-    userDataFacade.updateCoordinates(userId, userLocation.getLatitude(), userLocation.getLongitude());
-
-    final SendMessage sendMessage = sendMessage(chatInfoHolder.getChatId(), MESSAGE, getMainMenuKeyboard());
-    return singletonList(sendMessage);
+    final SendMessage message = sendMessage(chatInfoHolder.getChatId(), MESSAGE, getMainMenuKeyboard());
+    return singletonList(message);
   }
 
   @Override
   public List<String> getCommands() {
-    return emptyList();
+    return singletonList(COMMAND);
   }
 }

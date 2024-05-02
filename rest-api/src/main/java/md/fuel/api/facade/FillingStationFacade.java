@@ -20,7 +20,8 @@ public interface FillingStationFacade {
 
   List<FillingStationDto> getBestFuelPrice(LimitFillingStationRequest request, String fuelType);
 
-  PageDto<FillingStationDto> getPageOfBestFuelPrices(LimitFillingStationRequest limitFillingStationRequest, PageRequest pageRequest,
+  PageDto<FillingStationDto> getPageOfBestFuelPrices(LimitFillingStationRequest limitFillingStationRequest,
+      PageRequest pageRequest,
       String fuelType);
 
   ZonedDateTime getLastUpdateTimestamp();

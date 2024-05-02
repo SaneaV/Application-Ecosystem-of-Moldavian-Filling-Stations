@@ -1,17 +1,19 @@
 package md.fuel.bot.facade;
 
-import java.util.List;
 import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.domain.FuelType;
 
 public interface FillingStationFacade {
 
-  List<FillingStation> getAllFillingStations(double latitude, double longitude, double radius, int limitInRadius, int limit);
+  FillingStation getAllFillingStations(double latitude, double longitude, double radius, int offset);
 
   FillingStation getNearestFillingStation(double latitude, double longitude, double radius);
 
-  List<FillingStation> getBestFuelPrice(double latitude, double longitude, double radius, int limitInRadius, int limit,
-      String fuelType);
+  FillingStation getBestFuelPrice(double latitude, double longitude, double radius, String fuelType, int offset);
 
   FuelType getSupportedFuelTypes();
+
+  boolean hasNext(double latitude, double longitude, double radius, int offset);
+
+  boolean hasNext(double latitude, double longitude, double radius, int offset, String fuelType);
 }

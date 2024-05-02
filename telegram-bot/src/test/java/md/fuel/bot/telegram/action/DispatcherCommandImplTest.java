@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.command;
+package md.fuel.bot.telegram.action;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -13,6 +13,10 @@ import static wiremock.com.github.jknack.handlebars.internal.lang3.StringUtils.E
 
 import java.util.List;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
+import md.fuel.bot.telegram.action.command.Command;
+import md.fuel.bot.telegram.action.command.DispatcherCommandImpl;
+import md.fuel.bot.telegram.action.command.UpdateCoordinatesCommand;
+import md.fuel.bot.telegram.action.command.UpdateRadiusCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -20,20 +24,20 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class DispatcherCommandTest {
+public class DispatcherCommandImplTest {
 
   private static final String COMMAND_NOT_FOUND = "I don't understand your command, use the menu buttons.";
 
-  private final DispatcherCommand dispatcherCommand;
+  private final DispatcherCommandImpl dispatcherCommandImpl;
   private final UpdateRadiusCommand updateRadiusCommand;
   private final UpdateCoordinatesCommand updateCoordinatesCommand;
   private final Command command;
 
-  public DispatcherCommandTest() {
+  public DispatcherCommandImplTest() {
     this.updateRadiusCommand = mock(UpdateRadiusCommand.class);
     this.updateCoordinatesCommand = mock(UpdateCoordinatesCommand.class);
     this.command = mock(Command.class);
-    this.dispatcherCommand = new DispatcherCommand(singletonList(command), updateRadiusCommand, updateCoordinatesCommand);
+    this.dispatcherCommandImpl = new DispatcherCommandImpl(singletonList(command), updateRadiusCommand, updateCoordinatesCommand);
   }
 
   @Test
@@ -47,7 +51,7 @@ public class DispatcherCommandTest {
     when(message.hasLocation()).thenReturn(true);
     when(updateCoordinatesCommand.execute(update)).thenReturn(singletonList(sendMessage));
 
-    final List<? super BotApiMethod<?>> messages = dispatcherCommand.getMessages(update);
+    final List<? super BotApiMethod<?>> messages = dispatcherCommandImpl.getMessages(update);
 
     verify(update, times(2)).getMessage();
     verify(message).hasLocation();
@@ -69,7 +73,7 @@ public class DispatcherCommandTest {
     when(message.getText()).thenReturn("10.0");
     when(updateRadiusCommand.execute(update)).thenReturn(singletonList(sendMessage));
 
-    final List<? super BotApiMethod<?>> messages = dispatcherCommand.getMessages(update);
+    final List<? super BotApiMethod<?>> messages = dispatcherCommandImpl.getMessages(update);
 
     verify(update, times(2)).getMessage();
     verify(message).hasLocation();
@@ -93,7 +97,7 @@ public class DispatcherCommandTest {
     when(command.getCommands()).thenReturn(singletonList(textCommand));
     when(command.execute(any())).thenReturn(singletonList(sendMessage));
 
-    final List<? super BotApiMethod<?>> messages = dispatcherCommand.getMessages(update);
+    final List<? super BotApiMethod<?>> messages = dispatcherCommandImpl.getMessages(update);
 
     verify(update, times(2)).getMessage();
     verify(message).hasLocation();
@@ -115,7 +119,7 @@ public class DispatcherCommandTest {
     when(command.getCommands()).thenReturn(singletonList("textCommand"));
     when(message.getText()).thenReturn("command");
 
-    assertThatThrownBy(() -> dispatcherCommand.getMessages(update))
+    assertThatThrownBy(() -> dispatcherCommandImpl.getMessages(update))
         .isInstanceOf(EntityNotFoundException.class)
         .hasMessage(COMMAND_NOT_FOUND);
 
@@ -133,7 +137,7 @@ public class DispatcherCommandTest {
     when(update.getMessage()).thenReturn(message);
     when(message.getText()).thenReturn(EMPTY);
 
-    assertThatThrownBy(() -> dispatcherCommand.getMessages(update))
+    assertThatThrownBy(() -> dispatcherCommandImpl.getMessages(update))
         .isInstanceOf(EntityNotFoundException.class)
         .hasMessage(COMMAND_NOT_FOUND);
 
@@ -152,7 +156,7 @@ public class DispatcherCommandTest {
     when(message.getText()).thenReturn("command");
     when(command.getCommands()).thenReturn(emptyList());
 
-    assertThatThrownBy(() -> dispatcherCommand.getMessages(update))
+    assertThatThrownBy(() -> dispatcherCommandImpl.getMessages(update))
         .isInstanceOf(EntityNotFoundException.class)
         .hasMessage(COMMAND_NOT_FOUND);
 

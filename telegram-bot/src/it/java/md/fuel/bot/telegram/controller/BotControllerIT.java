@@ -11,6 +11,7 @@ import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.telegram.FillingStationTelegramBot;
 import md.fuel.bot.infrastructure.configuration.RequestRateValidator;
 import md.fuel.bot.telegram.exception.TelegramExceptionWrappingStrategy;
+import md.fuel.bot.telegram.utils.ChatInfoUtil;
 import md.fuel.bot.telegram.validation.UserStatusValidatorImpl;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @ExtendWith(SpringExtension.class)
-@Import({TelegramExceptionWrappingStrategy.class, ChatInfoHolder.class, UserStatusValidatorImpl.class})
+@Import({TelegramExceptionWrappingStrategy.class, ChatInfoHolder.class, UserStatusValidatorImpl.class, ChatInfoUtil.class})
 @WebMvcTest(BotController.class)
 public class BotControllerIT {
 

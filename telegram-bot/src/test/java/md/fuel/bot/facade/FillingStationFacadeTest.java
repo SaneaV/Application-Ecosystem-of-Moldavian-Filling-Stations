@@ -4,7 +4,6 @@ import static java.util.Arrays.asList;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyDouble;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -26,7 +25,7 @@ public class FillingStationFacadeTest {
   private static final String DIESEL = "Diesel";
   private static final String GAS = "Gas";
   private static final Double DEFAULT_DOUBLE = 10.0;
-  private static final int DEFAULT_INT = 10;
+  private static final int DEFAULT_INT = 0;
   private static final FillingStation FILLING_STATION_1 = new FillingStation("name1",
       Map.of(PETROL, DEFAULT_DOUBLE, DIESEL, DEFAULT_DOUBLE, GAS, DEFAULT_DOUBLE), DEFAULT_DOUBLE, DEFAULT_DOUBLE);
   private static final FillingStation FILLING_STATION_2 = new FillingStation("name2",
@@ -47,15 +46,13 @@ public class FillingStationFacadeTest {
   @DisplayName("Should return list of all filling stations")
   void shouldReturnListOfAllFillingStation() {
     when(repository.getUpdateTimestamp()).thenReturn(TIMESTAMP);
-    when(repository.getAllFillingStation(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt(), anyInt())).thenReturn(
-        FILLING_STATIONS_PAGE);
+    when(repository.getAllFillingStation(anyDouble(), anyDouble(), anyDouble())).thenReturn(FILLING_STATIONS_PAGE);
 
-    final List<FillingStation> result = facade.getAllFillingStations(DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE,
-        DEFAULT_INT, DEFAULT_INT);
+    final FillingStation result = facade.getAllFillingStations(DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_INT);
 
-    assertThat(result).isEqualTo(FILLING_STATIONS_LIST);
+    assertThat(result).isEqualTo(FILLING_STATIONS_LIST.get(DEFAULT_INT));
     assertThat(FillingStation.timestamp).isEqualTo(TIMESTAMP);
-    verify(repository).getAllFillingStation(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt(), anyInt());
+    verify(repository).getAllFillingStation(anyDouble(), anyDouble(), anyDouble());
     verify(repository).getUpdateTimestamp();
     FillingStation.timestamp = null;
   }
@@ -79,15 +76,14 @@ public class FillingStationFacadeTest {
   @DisplayName("Should return list of best fuel price stations")
   void shouldReturnListOfBestFuelPriceFillingStations() {
     when(repository.getUpdateTimestamp()).thenReturn(TIMESTAMP);
-    when(repository.getBestFuelPriceStation(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt(), anyInt(),
-        anyString())).thenReturn(FILLING_STATIONS_PAGE);
+    when(repository.getBestFuelPriceStation(anyDouble(), anyDouble(), anyDouble(), anyString())).thenReturn(
+        FILLING_STATIONS_PAGE);
 
-    final List<FillingStation> result = facade.getBestFuelPrice(DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE,
-        DEFAULT_INT, DEFAULT_INT, EMPTY);
+    final FillingStation result = facade.getBestFuelPrice(DEFAULT_DOUBLE, DEFAULT_DOUBLE, DEFAULT_DOUBLE, EMPTY, DEFAULT_INT);
 
-    assertThat(result).isEqualTo(FILLING_STATIONS_LIST);
+    assertThat(result).isEqualTo(FILLING_STATIONS_LIST.get(DEFAULT_INT));
     assertThat(FillingStation.timestamp).isEqualTo(TIMESTAMP);
-    verify(repository).getBestFuelPriceStation(anyDouble(), anyDouble(), anyDouble(), anyInt(), anyInt(), anyInt(), anyString());
+    verify(repository).getBestFuelPriceStation(anyDouble(), anyDouble(), anyDouble(), anyString());
     verify(repository).getUpdateTimestamp();
     FillingStation.timestamp = null;
   }

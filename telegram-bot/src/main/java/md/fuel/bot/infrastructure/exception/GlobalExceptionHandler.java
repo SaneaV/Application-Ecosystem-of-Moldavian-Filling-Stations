@@ -20,7 +20,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<BotApiMethod<?>> handleRuntimeException(RuntimeException exception) {
-    log.info("Exception handler caught RuntimeException");
+    log.info("Exception handler caught RuntimeException: {}", exception.getMessage());
     return errorWrappingStrategy.handleRuntimeException(exception);
   }
 

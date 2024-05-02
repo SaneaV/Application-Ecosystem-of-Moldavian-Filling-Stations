@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.command;
+package md.fuel.bot.telegram.action.command;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;

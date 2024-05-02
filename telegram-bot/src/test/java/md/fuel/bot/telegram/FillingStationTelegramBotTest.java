@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
-import md.fuel.bot.telegram.command.DispatcherCommand;
+import md.fuel.bot.telegram.action.ActionHandler;
 import md.fuel.bot.telegram.configuration.TelegramBotConfiguration;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -38,9 +38,9 @@ public class FillingStationTelegramBotTest {
   class FillingStationTelegramBotTestWithInjection {
 
     @Mock
-    private DispatcherCommand dispatcherCommand;
-    @Mock
     private TelegramBotConfiguration telegramBotConfiguration;
+    @Mock
+    private ActionHandler actionHandler;
     @Spy
     @InjectMocks
     private FillingStationTelegramBot fillingStationTelegramBot;
@@ -52,12 +52,12 @@ public class FillingStationTelegramBotTest {
       final Message message = mock(Message.class);
       final SendMessage sendMessage = new SendMessage();
 
-      when(dispatcherCommand.getMessages(update)).thenReturn(singletonList(sendMessage));
+      when(actionHandler.execute(update)).thenReturn(singletonList(sendMessage));
       doReturn(message).when(fillingStationTelegramBot).execute(any(SendMessage.class));
 
       final BotApiMethod<?> botApiMethod = fillingStationTelegramBot.onWebhookUpdateReceived(update);
 
-      verify(dispatcherCommand).getMessages(any());
+      verify(actionHandler).execute(any());
 
       assertThat(botApiMethod).isNull();
     }
@@ -69,12 +69,12 @@ public class FillingStationTelegramBotTest {
       final Message message = mock(Message.class);
       final SendLocation sendLocation = new SendLocation();
 
-      when(dispatcherCommand.getMessages(update)).thenReturn(singletonList(sendLocation));
+      when(actionHandler.execute(update)).thenReturn(singletonList(sendLocation));
       doReturn(message).when(fillingStationTelegramBot).execute(any(SendLocation.class));
 
       final BotApiMethod<?> botApiMethod = fillingStationTelegramBot.onWebhookUpdateReceived(update);
 
-      verify(dispatcherCommand).getMessages(any());
+      verify(actionHandler).execute(any());
 
       assertThat(botApiMethod).isNull();
     }
@@ -85,13 +85,13 @@ public class FillingStationTelegramBotTest {
       final Update update = mock(Update.class);
       final SendLocation sendLocation = new SendLocation();
 
-      when(dispatcherCommand.getMessages(update)).thenReturn(singletonList(sendLocation));
+      when(actionHandler.execute(update)).thenReturn(singletonList(sendLocation));
       doThrow(TelegramApiException.class).when(fillingStationTelegramBot).execute(any(SendLocation.class));
 
       assertThatThrownBy(() -> fillingStationTelegramBot.onWebhookUpdateReceived(update))
           .isInstanceOf(InfrastructureException.class);
 
-      verify(dispatcherCommand).getMessages(any());
+      verify(actionHandler).execute(any());
     }
   }
 
@@ -106,13 +106,13 @@ public class FillingStationTelegramBotTest {
     private final TelegramBotConfiguration telegramBotConfiguration;
 
     FillingStationTelegramBotTestWithoutInjection() {
-      final DispatcherCommand dispatcherCommand = mock(DispatcherCommand.class);
       final SetWebhook setWebhook = mock(SetWebhook.class);
+      final ActionHandler actionHandler = mock(ActionHandler.class);
       this.telegramBotConfiguration = new TelegramBotConfiguration();
       telegramBotConfiguration.setBotName(BOT_NAME);
       telegramBotConfiguration.setBotToken(BOT_TOKEN);
       telegramBotConfiguration.setWebhook(WEBHOOK);
-      this.fillingStationTelegramBot = new FillingStationTelegramBot(setWebhook, dispatcherCommand, telegramBotConfiguration);
+      this.fillingStationTelegramBot = new FillingStationTelegramBot(setWebhook, actionHandler, telegramBotConfiguration);
     }
 
     @Test

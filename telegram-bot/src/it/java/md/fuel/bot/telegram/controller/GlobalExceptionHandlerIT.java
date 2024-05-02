@@ -19,8 +19,9 @@ import md.fuel.bot.infrastructure.exception.model.GatewayPassThroughException;
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
 import md.fuel.bot.infrastructure.repository.GatewayError;
 import md.fuel.bot.telegram.FillingStationTelegramBot;
-import md.fuel.bot.telegram.command.BestFuelInRadiusCommand;
+import md.fuel.bot.telegram.action.command.BestFuelInRadiusCommand;
 import md.fuel.bot.telegram.exception.TelegramExceptionWrappingStrategy;
+import md.fuel.bot.telegram.utils.ChatInfoUtil;
 import md.fuel.bot.telegram.validation.UserStatusValidatorImpl;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -38,7 +39,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 @ExtendWith(SpringExtension.class)
-@Import({TelegramExceptionWrappingStrategy.class, ChatInfoHolder.class, UserStatusValidatorImpl.class})
+@Import({TelegramExceptionWrappingStrategy.class, ChatInfoHolder.class, UserStatusValidatorImpl.class, ChatInfoUtil.class})
 @WebMvcTest(BotController.class)
 public class GlobalExceptionHandlerIT {
 

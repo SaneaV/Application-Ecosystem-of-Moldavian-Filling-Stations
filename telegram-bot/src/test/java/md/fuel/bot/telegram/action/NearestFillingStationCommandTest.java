@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.command;
+package md.fuel.bot.telegram.action;
 
 import static java.util.Collections.emptyList;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
@@ -17,6 +17,8 @@ import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.telegram.action.command.BestFuelInRadiusCommand;
+import md.fuel.bot.telegram.action.command.NearestFillingStationCommand;
 import md.fuel.bot.telegram.dto.UserDataDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

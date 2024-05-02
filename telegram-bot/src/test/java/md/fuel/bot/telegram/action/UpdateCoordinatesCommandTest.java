@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.command;
+package md.fuel.bot.telegram.action;
 
 import static java.util.Collections.emptyList;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
@@ -9,43 +9,49 @@ import static org.mockito.Mockito.verify;
 import java.util.List;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.telegram.action.command.BestFuelInRadiusCommand;
+import md.fuel.bot.telegram.action.command.UpdateCoordinatesCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Location;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class StartCommandTest {
+public class UpdateCoordinatesCommandTest {
 
-  private static final String COMMAND = "/start";
-  private static final String MESSAGE = """
-      Welcome!
-      To start working with bot, you can select any element from the menu.
-
-      If you want to change the search radius, just send it to me (in kilometres, e.g. 0.5 (500 metres), 1 (1000 metres)).
-
-      If you want to change your coordinates, just send your location.""";
+  private static final String MESSAGE = "New coordinates set!";
   private static final long CHAT_ID = 20L;
   private static final long USER_ID = 10L;
 
+  private final UpdateCoordinatesCommand updateCoordinatesCommand;
   private final UserDataFacade userDataFacade;
-  private final StartCommand startCommand;
 
-  public StartCommandTest() {
-    BestFuelInRadiusCommand.COMMAND = emptyList();
-
+  public UpdateCoordinatesCommandTest() {
     this.userDataFacade = mock(UserDataFacade.class);
     final ChatInfoHolder chatInfoHolder = new ChatInfoHolder();
     chatInfoHolder.setChatInfo(USER_ID, CHAT_ID);
 
-    this.startCommand = new StartCommand(userDataFacade, chatInfoHolder);
+    BestFuelInRadiusCommand.COMMAND = emptyList();
+
+    this.updateCoordinatesCommand = new UpdateCoordinatesCommand(userDataFacade, chatInfoHolder);
   }
 
   @Test
-  @DisplayName("Should return welcome message")
-  void shouldReturnWelcomeMessage() {
-    final Update update = new Update();
+  @DisplayName("Should return coordinates updated message")
+  void shouldReturnCoordinatesUpdatedMessage() {
+    final double coordinates = 10.0;
 
-    final List<SendMessage> messages = startCommand.execute(update).stream()
+    final Update update = new Update();
+    final Message message = new Message();
+    final Location location = new Location();
+
+    location.setLatitude(coordinates);
+    location.setLongitude(coordinates);
+    message.setLocation(location);
+    update.setMessage(message);
+
+    final List<SendMessage> messages = updateCoordinatesCommand.execute(update).stream()
         .map(m -> (SendMessage) m)
         .toList();
 
@@ -55,13 +61,13 @@ public class StartCommandTest {
     assertThat(sendMessage.getChatId()).isEqualTo(Long.toString(CHAT_ID));
     assertThat(sendMessage.getReplyMarkup()).isEqualTo(getMainMenuKeyboard());
 
-    verify(userDataFacade).addNewUser(USER_ID);
+    verify(userDataFacade).updateCoordinates(USER_ID, coordinates, coordinates);
   }
 
   @Test
   @DisplayName("Should return command")
   void shouldReturnCommand() {
-    final List<String> commands = startCommand.getCommands();
-    assertThat(commands).containsExactly(COMMAND);
+    final List<String> commands = updateCoordinatesCommand.getCommands();
+    assertThat(commands).isEmpty();
   }
 }

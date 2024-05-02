@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.command;
+package md.fuel.bot.telegram.action;
 
 import static java.util.Collections.emptyList;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
@@ -9,43 +9,45 @@ import static org.mockito.Mockito.verify;
 import java.util.List;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.telegram.action.command.BestFuelInRadiusCommand;
+import md.fuel.bot.telegram.action.command.StartCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class UpdateRadiusCommandTest {
+public class StartCommandTest {
 
-  private static final String MESSAGE = "New radius set!";
+  private static final String COMMAND = "/start";
+  private static final String MESSAGE = """
+      Welcome!
+      To start working with bot, you can select any element from the menu.
+
+      If you want to change the search radius, just send it to me (in kilometres, e.g. 0.5 (500 metres), 1 (1000 metres)).
+
+      If you want to change your coordinates, just send your location.""";
   private static final long CHAT_ID = 20L;
   private static final long USER_ID = 10L;
 
-  private final UpdateRadiusCommand updateRadiusCommand;
   private final UserDataFacade userDataFacade;
+  private final StartCommand startCommand;
 
-  public UpdateRadiusCommandTest() {
+  public StartCommandTest() {
+    BestFuelInRadiusCommand.COMMAND = emptyList();
+
     this.userDataFacade = mock(UserDataFacade.class);
     final ChatInfoHolder chatInfoHolder = new ChatInfoHolder();
     chatInfoHolder.setChatInfo(USER_ID, CHAT_ID);
 
-    BestFuelInRadiusCommand.COMMAND = emptyList();
-
-    this.updateRadiusCommand = new UpdateRadiusCommand(userDataFacade, chatInfoHolder);
+    this.startCommand = new StartCommand(userDataFacade, chatInfoHolder);
   }
 
   @Test
-  @DisplayName("Should return radius updated message")
-  void shouldReturnRadiusUpdatedMessage() {
-    final double radius = 10.0;
-
+  @DisplayName("Should return welcome message")
+  void shouldReturnWelcomeMessage() {
     final Update update = new Update();
-    final Message message = new Message();
 
-    message.setText(Double.toString(radius));
-    update.setMessage(message);
-
-    final List<SendMessage> messages = updateRadiusCommand.execute(update).stream()
+    final List<SendMessage> messages = startCommand.execute(update).stream()
         .map(m -> (SendMessage) m)
         .toList();
 
@@ -55,13 +57,13 @@ public class UpdateRadiusCommandTest {
     assertThat(sendMessage.getChatId()).isEqualTo(Long.toString(CHAT_ID));
     assertThat(sendMessage.getReplyMarkup()).isEqualTo(getMainMenuKeyboard());
 
-    verify(userDataFacade).updateRadius(USER_ID, radius);
+    verify(userDataFacade).addNewUser(USER_ID);
   }
 
   @Test
   @DisplayName("Should return command")
   void shouldReturnCommand() {
-    final List<String> commands = updateRadiusCommand.getCommands();
-    assertThat(commands).isEmpty();
+    final List<String> commands = startCommand.getCommands();
+    assertThat(commands).containsExactly(COMMAND);
   }
 }

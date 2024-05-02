@@ -6,7 +6,6 @@ import static java.util.stream.Collectors.toList;
 import static md.fuel.api.domain.FuelType.DIESEL;
 import static md.fuel.api.domain.FuelType.GAS;
 import static md.fuel.api.domain.FuelType.PETROL;
-import static md.fuel.api.infrastructure.configuration.EhcacheConfiguration.ANRE_CACHE;
 import static md.fuel.api.infrastructure.utils.DistanceCalculator.calculateMeters;
 import static md.fuel.api.infrastructure.utils.DistanceCalculator.isWithinRadius;
 import static md.fuel.api.infrastructure.utils.MultiComparator.sort;
@@ -16,7 +15,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
-import javax.cache.CacheManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.api.domain.FillingStation;
@@ -25,7 +23,6 @@ import md.fuel.api.domain.FuelType;
 import md.fuel.api.domain.criteria.BaseFillingStationCriteria;
 import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
-import md.fuel.api.infrastructure.exception.model.InfrastructureException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 import md.fuel.api.infrastructure.repository.AnreApi;
 import md.fuel.api.rest.request.SortingQuery;
@@ -45,8 +42,6 @@ public class FillingStationServiceImpl implements FillingStationService {
   private static final String ERROR_NO_FUEL_IN_STOCK =
       "Filling stations within the specified radius do not have %s in stock. Increase the search radius.";
   private static final String ERROR_INVALID_FUEL_TYPE = "Invalid fuel type.";
-  private static final String ERROR_CAN_NOT_READ_CACHE = "Can't read value from ANRE cache";
-  private static final String ERROR_CAN_NOT_READ_CACHE_REASON_CODE = "CAN_NOT_READ_CACHE";
 
   private static final double ZERO_PRICE_PRIMITIVE = 0D;
   private static final HashMap<FuelType, Function<FillingStation, Double>> FUEL_TYPE_FUNCTION_HASH_MAP = new HashMap<>();
@@ -58,7 +53,6 @@ public class FillingStationServiceImpl implements FillingStationService {
   }
 
   private final AnreApi anreApi;
-  private final CacheManager cacheManager;
 
   @Override
   public List<FillingStation> getAllFillingStations(LimitFillingStationCriteria criteria) {
@@ -83,7 +77,7 @@ public class FillingStationServiceImpl implements FillingStationService {
     }
 
     sort(fillingStations, getComparators(criteria.getSorting(), latitude, longitude));
-    return filterByOffsetAndLimit(fillingStations, criteria.getPageLimit(), criteria.getPageOffset());
+    return fillingStations;
   }
 
   @Override
@@ -122,7 +116,7 @@ public class FillingStationServiceImpl implements FillingStationService {
     checkLimit(filterByPriceList.size(), criteria.getLimitInRadius());
 
     sort(filterByPriceList, getComparators(criteria.getSorting(), latitude, longitude));
-    return filterByOffsetAndLimit(filterByPriceList, criteria.getPageLimit(), criteria.getPageOffset());
+    return filterByPriceList;
   }
 
   @Override
@@ -130,23 +124,6 @@ public class FillingStationServiceImpl implements FillingStationService {
     log.info("Fetching official fuel prices");
 
     return anreApi.getAnrePrices();
-  }
-
-  @Override
-  public int getTotalNumberOfFillingStations() {
-    try {
-      log.info("Fetching total number of available filling stations");
-
-      if (cacheManager.getCache(ANRE_CACHE).iterator().next().getValue() instanceof List<?> list) {
-        return list.size();
-      }
-    } catch (RuntimeException exception) {
-      log.info("Something went from during the request to the cache manager on get total number of filling stations");
-
-      throw new InfrastructureException(ERROR_CAN_NOT_READ_CACHE, ERROR_CAN_NOT_READ_CACHE_REASON_CODE);
-    }
-    log.info("Something went from during the request to the cache manager on get total number of filling stations");
-    throw new InfrastructureException(ERROR_CAN_NOT_READ_CACHE, ERROR_CAN_NOT_READ_CACHE_REASON_CODE);
   }
 
   private double getMinimalFuelPrice(List<FillingStation> filteredFillingStationsList,
@@ -186,16 +163,6 @@ public class FillingStationServiceImpl implements FillingStationService {
     return sortingQuery.stream()
         .map(query -> FillingStation.getComparator(query, latitude, longitude))
         .collect(toList());
-  }
-
-  private List<FillingStation> filterByOffsetAndLimit(List<FillingStation> fillingStations, Integer limit, Integer offset) {
-    if (isNull(limit) || isNull(offset)) {
-      return fillingStations;
-    }
-    return fillingStations.stream()
-        .skip(offset)
-        .limit(limit)
-        .toList();
   }
 
   private void checkLimit(int numberOfFillingStations, int limit) {

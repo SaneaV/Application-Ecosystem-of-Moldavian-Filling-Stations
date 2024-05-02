@@ -232,7 +232,6 @@ public class FillingStationFacadeTest {
     when(criteriaMapper.toEntity(any(), any())).thenReturn(buildCriteria(10));
     when(fillingStationService.getAllFillingStations(any())).thenReturn(fillingStations);
     when(fillingStationDtoMapper.toDto(anyList(), anyInt())).thenReturn(expected);
-    when(fillingStationService.getTotalNumberOfFillingStations()).thenReturn(numberOfStations);
 
     final PageDto<FillingStationDto> page = fillingStationFacade.getPageOfFillingStations(limitFillingStationRequest,
         pageRequest);
@@ -240,7 +239,6 @@ public class FillingStationFacadeTest {
     verify(criteriaMapper).toEntity(any(), any());
     verify(fillingStationService).getAllFillingStations(any());
     verify(fillingStationDtoMapper).toDto(anyList(), anyInt());
-    verify(fillingStationService).getTotalNumberOfFillingStations();
 
     assertThat(page.getTotalResults()).isEqualTo(numberOfStations);
     assertThat(page.getItems()).containsExactly(fillingStationDto, fillingStationDto);
@@ -263,15 +261,12 @@ public class FillingStationFacadeTest {
     when(criteriaMapper.toEntity(any(), any())).thenReturn(buildCriteria(10));
     when(fillingStationService.getBestFuelPrice(any(), anyString())).thenReturn(fillingStations);
     when(fillingStationDtoMapper.toDto(anyList(), anyInt())).thenReturn(expected);
-    when(fillingStationService.getTotalNumberOfFillingStations()).thenReturn(numberOfStations);
 
-    final PageDto<FillingStationDto> result = fillingStationFacade.getPageOfBestFuelPrices(request, pageRequest,
-        FUEL_TYPE);
+    final PageDto<FillingStationDto> result = fillingStationFacade.getPageOfBestFuelPrices(request, pageRequest, FUEL_TYPE);
 
     verify(criteriaMapper).toEntity(any(), any());
     verify(fillingStationService).getBestFuelPrice(any(), anyString());
     verify(fillingStationDtoMapper).toDto(anyList(), anyInt());
-    verify(fillingStationService).getTotalNumberOfFillingStations();
 
     assertThat(result.getTotalResults()).isEqualTo(numberOfStations);
     assertThat(result.getItems()).containsExactly(fillingStationDto, fillingStationDto);

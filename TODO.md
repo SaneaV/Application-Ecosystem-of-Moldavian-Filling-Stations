@@ -34,6 +34,7 @@
 - [X] [TELEGRAM] Remove user from a database in case he blocked telegram bot.
 - [X] [CORE] Add SL4FJ logging in a project.
 - [X] [TELEGRAM] Add holder for user and chat information.
+- [X] [TELEGRAM] Get rid of the limit of 10 filling stations in the radius and replace it with CallBackQuery with arrows.
 
 ## Features
 
@@ -46,8 +47,6 @@
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [CORE] Add Actuator.
 - [ ] [CORE] Add SonarQube.
-- [ ] [TELEGRAM] Get rid of the limit of 10 filling stations in the radius and replace it with CallBackQuery with arrows (forward
-  and backward).
 
 ## Food For Thought
 

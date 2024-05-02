@@ -1,5 +1,6 @@
 package md.fuel.bot.infrastructure.repository;
 
+import static java.lang.Integer.MAX_VALUE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static md.fuel.bot.infrastructure.configuration.EhcacheConfiguration.TELEGRAM_BOT_CACHE;
@@ -34,7 +35,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class FillingStationRepositoryImpl implements FillingStationRepository {
 
-  private static final String BASE_SORTING_PARAM = "-distance";
+  private static final String BASE_SORTING_PARAM = "+distance";
+  private static final int DEFAULT_OFFSET = 0;
 
   private final WebClient webClient;
   private final FillingStationMapper mapper;
@@ -44,11 +46,10 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
   @Override
   @Cacheable(value = TELEGRAM_BOT_CACHE, cacheManager = "jCacheCacheManager",
       key = "new org.springframework.cache.interceptor.SimpleKey(#latitude, #longitude, #radius)")
-  public Page<FillingStation> getAllFillingStation(double latitude, double longitude, double radius, int limitInRadius, int limit,
-      int offset) {
+  public Page<FillingStation> getAllFillingStation(double latitude, double longitude, double radius) {
     log.info("Fetching list of filling stations from API");
 
-    final List<Object> parameters = asList(latitude, longitude, radius, limitInRadius, BASE_SORTING_PARAM, limit, offset);
+    final List<Object> parameters = asList(latitude, longitude, radius, MAX_VALUE, BASE_SORTING_PARAM, MAX_VALUE, DEFAULT_OFFSET);
     final URI uri = resolve(ALL_FILLING_STATIONS_PAGE_PATH, apiConfiguration, parameters);
 
     return webClient.get()
@@ -86,11 +87,10 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
   @Override
   @Cacheable(value = TELEGRAM_BOT_CACHE, cacheManager = "jCacheCacheManager",
       key = "new org.springframework.cache.interceptor.SimpleKey(#latitude, #longitude, #radius, #fuelType)")
-  public Page<FillingStation> getBestFuelPriceStation(double latitude, double longitude, double radius, int limitInRadius,
-      int limit, int offset, String fuelType) {
+  public Page<FillingStation> getBestFuelPriceStation(double latitude, double longitude, double radius, String fuelType) {
     log.info("Fetching list of filling stations with best fuel price from API");
 
-    final List<Object> parameters = asList(latitude, longitude, radius, limitInRadius, BASE_SORTING_PARAM, limit, offset);
+    final List<Object> parameters = asList(latitude, longitude, radius, MAX_VALUE, BASE_SORTING_PARAM, MAX_VALUE, DEFAULT_OFFSET);
     final URI uri = resolve(BEST_FUEL_PRICE_PAGE_PATH, apiConfiguration, parameters, fuelType);
 
     return webClient.get()

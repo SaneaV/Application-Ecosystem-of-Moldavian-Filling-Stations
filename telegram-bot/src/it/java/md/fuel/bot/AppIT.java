@@ -3,7 +3,7 @@ package md.fuel.bot;
 import md.fuel.bot.infrastructure.configuration.PrepareAppConfig;
 import md.fuel.bot.infrastructure.configuration.NgrokWebServerTestConfiguration;
 import md.fuel.bot.infrastructure.repository.FillingStationRepository;
-import md.fuel.bot.telegram.command.BestFuelInRadiusCommand;
+import md.fuel.bot.telegram.action.command.BestFuelInRadiusCommand;
 import md.fuel.bot.telegram.configuration.SetWebhookCall;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

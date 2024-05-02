@@ -53,10 +53,10 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
     checkLimit(criteria.getLimitInRadius());
     final List<FillingStation> fillingStations = fillingStationService.getAllFillingStations(criteria);
+    final List<FillingStation> filteredFillingStations = filterByOffsetAndLimit(fillingStations, criteria.getPageLimit(),
+        criteria.getPageOffset());
 
-    final int totalFillingStations = fillingStationService.getTotalNumberOfFillingStations();
-
-    return fillingStationDtoMapper.toDto(fillingStations, totalFillingStations);
+    return fillingStationDtoMapper.toDto(filteredFillingStations, fillingStations.size());
   }
 
   @Override
@@ -101,10 +101,10 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
 
     checkLimit(criteria.getLimitInRadius());
     final List<FillingStation> fillingStations = fillingStationService.getBestFuelPrice(criteria, fuelType);
+    final List<FillingStation> filteredFillingStations = filterByOffsetAndLimit(fillingStations, criteria.getPageLimit(),
+        criteria.getPageOffset());
 
-    final int totalFillingStations = fillingStationService.getTotalNumberOfFillingStations();
-
-    return fillingStationDtoMapper.toDto(fillingStations, totalFillingStations);
+    return fillingStationDtoMapper.toDto(filteredFillingStations, fillingStations.size());
   }
 
   @Override
@@ -131,6 +131,16 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
     log.info("Fetching info about official ANRE prices");
 
     return fillingStationDtoMapper.toDto(fillingStationService.getAnrePrices());
+  }
+
+  private List<FillingStation> filterByOffsetAndLimit(List<FillingStation> fillingStations, Integer limit, Integer offset) {
+    if (isNull(limit) || isNull(offset)) {
+      return fillingStations;
+    }
+    return fillingStations.stream()
+        .skip(offset)
+        .limit(limit)
+        .toList();
   }
 
   private void checkLimit(int limit) {

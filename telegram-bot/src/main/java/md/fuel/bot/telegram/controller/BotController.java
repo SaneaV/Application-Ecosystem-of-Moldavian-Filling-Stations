@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.infrastructure.configuration.RequestRateValidator;
 import md.fuel.bot.telegram.FillingStationTelegramBot;
+import md.fuel.bot.telegram.utils.ChatInfoUtil;
 import md.fuel.bot.telegram.validation.UserStatusValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,24 +26,21 @@ public class BotController {
   private final FillingStationTelegramBot fillingStationTelegramBot;
   private final RequestRateValidator requestRateValidator;
   private final UserStatusValidator userStatusValidator;
+  private final ChatInfoUtil chatInfoUtil;
   private final ChatInfoHolder chatInfoHolder;
 
   @PostMapping(value = "/callback/${telegram.bot-token}")
   public ResponseEntity<BotApiMethod<?>> onUpdateReceived(@RequestBody Update update) {
-    if (isNull(update.getMessage()) && userStatusValidator.checkIfUserBlockedBot(update)) {
+    if (isNull(update.getMessage())
+        && !update.hasCallbackQuery()
+        && userStatusValidator.checkIfUserBlockedBot(update)) {
       return noContent().build();
     }
 
-    setChatInfo(update);
+    chatInfoUtil.setChatInfo(update);
     requestRateValidator.validateRequest(chatInfoHolder.getUserId());
 
     final BotApiMethod<?> botApiMethod = fillingStationTelegramBot.onWebhookUpdateReceived(update);
     return ok().body(botApiMethod);
-  }
-
-  private void setChatInfo(Update update) {
-    final Long userId = update.getMessage().getFrom().getId();
-    final Long chatId = update.getMessage().getChatId();
-    chatInfoHolder.setChatInfo(userId, chatId);
   }
 }
