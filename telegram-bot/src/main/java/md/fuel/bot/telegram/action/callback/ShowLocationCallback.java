@@ -13,6 +13,7 @@ import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.telegram.dto.UserDataDto;
+import md.telegram.lib.action.Callback;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
@@ -36,7 +37,7 @@ public class ShowLocationCallback implements Callback {
   private final CallbackHolder callbackHolder;
 
   @Override
-  public List<? super PartialBotApiMethod<?>> execute(CallbackQuery callbackQuery) {
+  public List<? extends PartialBotApiMethod<?>> execute(CallbackQuery callbackQuery) {
     final int command = Integer.parseInt(callbackHolder.getCallbackDataBy(COMMAND));
     final int currentOffset = Integer.parseInt(callbackHolder.getCallbackDataBy(OFFSET));
     final long userId = chatInfoHolder.getUserId();

@@ -14,6 +14,7 @@ import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.telegram.dto.UserDataDto;
 import md.fuel.bot.telegram.utils.MessageUtil;
+import md.telegram.lib.action.Callback;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -37,7 +38,7 @@ public class BackToTheListCallback implements Callback {
   private final CallbackHolder callbackHolder;
 
   @Override
-  public List<? super PartialBotApiMethod<?>> execute(CallbackQuery callbackQuery) {
+  public List<? extends PartialBotApiMethod<?>> execute(CallbackQuery callbackQuery) {
     final long userId = chatInfoHolder.getUserId();
     final int lastOffset = Integer.parseInt(callbackHolder.getCallbackDataBy(OFFSET));
     log.info("Go back to the filling station list for user = {} and offset = {}", userId, lastOffset);

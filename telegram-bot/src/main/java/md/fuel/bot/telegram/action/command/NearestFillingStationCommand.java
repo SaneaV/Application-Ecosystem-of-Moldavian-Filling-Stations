@@ -15,6 +15,7 @@ import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.telegram.dto.UserDataDto;
+import md.telegram.lib.action.Command;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
@@ -33,7 +34,7 @@ public class NearestFillingStationCommand implements Command {
   private final ChatInfoHolder chatInfoHolder;
 
   @Override
-  public List<? super PartialBotApiMethod<?>> execute(Update update) {
+  public List<? extends PartialBotApiMethod<?>> execute(Update update) {
     final long userId = chatInfoHolder.getUserId();
     log.info("Get nearest filling station for user = {}", userId);
 

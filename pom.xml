@@ -22,6 +22,7 @@
     <module>telegram-bot</module>
     <module>contract-generator</module>
     <module>report-aggregate</module>
+    <module>telegram-bot-lib</module>
   </modules>
 
   <properties>
@@ -49,10 +50,13 @@
     <!--INTERNAL PROJECTS-->
     <contract.generator.version>1.0.0</contract.generator.version>
     <rest.api.version>1.0.0</rest.api.version>
+    <telegram-bot-lib.version>1.0.0</telegram-bot-lib.version>
 
     <!--TESTING-->
     <mockito.inline.version>5.2.0</mockito.inline.version>
     <wiremock.version>2.35.0</wiremock.version>
+    <mockito-junit-jupiter.version>5.11.0</mockito-junit-jupiter.version>
+    <assertj-core.version>3.25.3</assertj-core.version>
 
     <!--DATABASE-->
     <h2.version>2.2.220</h2.version>
@@ -179,6 +183,11 @@
         <version>${contract.generator.version}</version>
       </dependency>
       <dependency>
+        <groupId>md.telegram.lib</groupId>
+        <artifactId>telegram-bot-lib</artifactId>
+        <version>${telegram-bot-lib.version}</version>
+      </dependency>
+      <dependency>
         <groupId>md.fuel.api</groupId>
         <artifactId>rest-api</artifactId>
         <version>${rest.api.version}</version>
@@ -247,6 +256,18 @@
             <artifactId>mockito-core</artifactId>
           </exclusion>
         </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>${mockito-junit-jupiter.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>${assertj-core.version}</version>
+        <scope>test</scope>
       </dependency>
     </dependencies>
   </dependencyManagement>

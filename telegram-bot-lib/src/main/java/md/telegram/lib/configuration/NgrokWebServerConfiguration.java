@@ -1,4 +1,4 @@
-package md.fuel.bot.infrastructure.configuration;
+package md.telegram.lib.configuration;
 
 import com.github.alexdlaird.ngrok.NgrokClient;
 import com.github.alexdlaird.ngrok.conf.JavaNgrokConfig;
@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(value = "ngrok.enabled", havingValue = "true")
 public class NgrokWebServerConfiguration {
 
-  @Value("${server.port}")
+  @Value("${server.port:8080}")
   private String serverPort;
 
   @Value("${ngrok.token}")

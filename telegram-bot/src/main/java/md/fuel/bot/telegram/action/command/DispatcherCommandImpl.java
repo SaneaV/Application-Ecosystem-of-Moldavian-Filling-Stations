@@ -4,9 +4,10 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
-import md.fuel.bot.telegram.action.DispatcherCommand;
+import md.telegram.lib.action.Command;
+import md.telegram.lib.action.DispatcherCommand;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
@@ -20,7 +21,7 @@ public class DispatcherCommandImpl implements DispatcherCommand {
   private final UpdateRadiusCommand updateRadiusCommand;
   private final UpdateCoordinatesCommand updateCoordinatesCommand;
 
-  public List<? super BotApiMethod<?>> getMessages(Update update) {
+  public List<? extends PartialBotApiMethod<?>> getMessages(Update update) {
     final String message = update.getMessage().getText();
 
     if (update.getMessage().hasLocation()) {

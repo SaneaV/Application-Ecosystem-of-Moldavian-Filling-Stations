@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.configuration;
+package md.telegram.lib.configuration;
 
 import com.github.alexdlaird.ngrok.protocol.Tunnel;
 import lombok.RequiredArgsConstructor;

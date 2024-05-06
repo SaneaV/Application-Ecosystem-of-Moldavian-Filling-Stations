@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.telegram.lib.action.Command;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -24,7 +25,7 @@ public class SpecificFuelInRadiusCommand implements Command {
   private static final String MESSAGE = "Select the desired type of fuel.";
 
   @Override
-  public List<? super PartialBotApiMethod<?>> execute(Update update) {
+  public List<? extends PartialBotApiMethod<?>> execute(Update update) {
     final long chatId = chatInfoHolder.getChatId();
     log.info("Display reply keyboard with available fuel types for user = {}", chatId);
 

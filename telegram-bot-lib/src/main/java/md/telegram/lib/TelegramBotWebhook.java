@@ -1,30 +1,26 @@
-package md.fuel.bot.telegram;
+package md.telegram.lib;
 
 import lombok.extern.slf4j.Slf4j;
-import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
-import md.fuel.bot.telegram.action.ActionHandler;
-import md.fuel.bot.telegram.configuration.TelegramBotConfiguration;
+import md.telegram.lib.action.ActionHandler;
+import md.telegram.lib.configuration.TelegramBotConfiguration;
+import md.telegram.lib.exception.TelegramException;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendLocation;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 @Slf4j
 @Component
-public class FillingStationTelegramBot extends SpringWebhookBot {
+public class TelegramBotWebhook extends SpringWebhookBot {
 
   private static final String ERROR_DESCRIPTION = "An error occurred during message sending.";
 
   private final TelegramBotConfiguration telegramBotConfiguration;
   private final ActionHandler actionHandler;
 
-  public FillingStationTelegramBot(SetWebhook setWebhook, ActionHandler actionHandler,
+  public TelegramBotWebhook(SetWebhook setWebhook, ActionHandler actionHandler,
       TelegramBotConfiguration telegramBotConfiguration) {
     super(setWebhook, telegramBotConfiguration.getBotToken());
     this.actionHandler = actionHandler;
@@ -35,21 +31,12 @@ public class FillingStationTelegramBot extends SpringWebhookBot {
   public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
     actionHandler.execute(update).forEach(message -> {
       try {
-        if (message instanceof SendMessage m) {
-          execute(m);
-        }
-        if (message instanceof SendLocation m) {
-          execute(m);
-        }
-        if (message instanceof EditMessageText m) {
-          execute(m);
-        }
-        if (message instanceof DeleteMessage m) {
+        if (message instanceof BotApiMethod<?> m) {
           execute(m);
         }
       } catch (TelegramApiException e) {
         log.error("There was an error sending the message");
-        throw new InfrastructureException(ERROR_DESCRIPTION);
+        throw new TelegramException(ERROR_DESCRIPTION);
       }
     });
     return null;

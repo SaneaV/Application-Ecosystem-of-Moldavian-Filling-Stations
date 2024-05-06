@@ -13,6 +13,7 @@ import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.telegram.dto.UserDataDto;
+import md.telegram.lib.action.Command;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -41,7 +42,7 @@ public class BestFuelInRadiusCommand implements Command {
   }
 
   @Override
-  public List<? super PartialBotApiMethod<?>> execute(Update update) {
+  public List<? extends PartialBotApiMethod<?>> execute(Update update) {
     final long userId = chatInfoHolder.getUserId();
     final long chatId = chatInfoHolder.getChatId();
     log.info("Get all filling stations in radius with best fuel price for user = {}", userId);

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.telegram.lib.action.Command;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -26,7 +27,7 @@ public class UpdateRadiusCommand implements Command {
   private final ChatInfoHolder chatInfoHolder;
 
   @Override
-  public List<? super PartialBotApiMethod<?>> execute(Update update) {
+  public List<? extends PartialBotApiMethod<?>> execute(Update update) {
     final long userId = chatInfoHolder.getUserId();
     log.info("Update radius for user with id = {}", userId);
 

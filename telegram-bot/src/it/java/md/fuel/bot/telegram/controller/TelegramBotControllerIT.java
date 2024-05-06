@@ -8,11 +8,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
-import md.fuel.bot.telegram.FillingStationTelegramBot;
 import md.fuel.bot.infrastructure.configuration.RequestRateValidator;
-import md.fuel.bot.telegram.exception.TelegramExceptionWrappingStrategy;
+import md.fuel.bot.telegram.exception.TelegramWrappingStrategyImpl;
 import md.fuel.bot.telegram.utils.ChatInfoUtil;
 import md.fuel.bot.telegram.validation.UserStatusValidatorImpl;
+import md.telegram.lib.TelegramBotWebhook;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,9 +28,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @ExtendWith(SpringExtension.class)
-@Import({TelegramExceptionWrappingStrategy.class, ChatInfoHolder.class, UserStatusValidatorImpl.class, ChatInfoUtil.class})
-@WebMvcTest(BotController.class)
-public class BotControllerIT {
+@Import({TelegramWrappingStrategyImpl.class, ChatInfoHolder.class, UserStatusValidatorImpl.class, ChatInfoUtil.class})
+@WebMvcTest(TelegramBotController.class)
+public class TelegramBotControllerIT {
 
   private static final String BOT_PATH = "/callback/%s";
 
@@ -54,7 +54,7 @@ public class BotControllerIT {
   private MockMvc mockMvc;
 
   @MockBean
-  private FillingStationTelegramBot fillingStationTelegramBot;
+  private TelegramBotWebhook fillingStationTelegramBot;
 
   @MockBean
   private RequestRateValidator requestRateValidator;

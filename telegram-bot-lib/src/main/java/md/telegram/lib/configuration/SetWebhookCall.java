@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.configuration;
+package md.telegram.lib.configuration;
 
 import static org.springframework.http.HttpHeaders.ACCEPT;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;

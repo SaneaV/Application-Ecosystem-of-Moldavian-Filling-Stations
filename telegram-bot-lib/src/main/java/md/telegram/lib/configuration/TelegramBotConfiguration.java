@@ -1,4 +1,4 @@
-package md.fuel.bot.telegram.configuration;
+package md.telegram.lib.configuration;
 
 import lombok.Getter;
 import lombok.Setter;

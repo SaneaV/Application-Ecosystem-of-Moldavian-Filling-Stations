@@ -13,6 +13,7 @@ import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.telegram.dto.UserDataDto;
+import md.telegram.lib.action.Callback;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -35,7 +36,7 @@ public class NextFillingStationCallback implements Callback {
   private final CallbackHolder callbackHolder;
 
   @Override
-  public List<? super PartialBotApiMethod<?>> execute(CallbackQuery callbackQuery) {
+  public List<? extends PartialBotApiMethod<?>> execute(CallbackQuery callbackQuery) {
     final long userId = chatInfoHolder.getUserId();
     final int nextOffset = Integer.parseInt(callbackHolder.getCallbackDataBy(OFFSET)) + 1;
     log.info("Get all filling stations (next page) in radius for user = {} and offset = {}", userId, nextOffset);

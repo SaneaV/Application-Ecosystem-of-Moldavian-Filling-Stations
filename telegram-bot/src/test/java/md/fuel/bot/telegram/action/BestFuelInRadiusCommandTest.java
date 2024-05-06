@@ -87,7 +87,7 @@ public class BestFuelInRadiusCommandTest {
     when(fillingStationFacade.getBestFuelPrice(anyDouble(), anyDouble(), anyDouble(), anyString(), anyInt())).thenReturn(
         fillingStation);
 
-    final List<? super PartialBotApiMethod<?>> sendMessagesAndLocations = bestFuelInRadiusCommand.execute(update);
+    final List<? extends PartialBotApiMethod<?>> sendMessagesAndLocations = bestFuelInRadiusCommand.execute(update);
 
     assertThat(sendMessagesAndLocations).hasSize(2);
     final SendMessage sendMessage = (SendMessage) sendMessagesAndLocations.get(0);

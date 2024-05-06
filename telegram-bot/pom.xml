@@ -63,10 +63,6 @@
       <artifactId>java-ngrok</artifactId>
     </dependency>
     <dependency>
-      <groupId>md.fuel.contract</groupId>
-      <artifactId>contract-generator</artifactId>
-    </dependency>
-    <dependency>
       <groupId>javax.cache</groupId>
       <artifactId>cache-api</artifactId>
     </dependency>
@@ -77,6 +73,16 @@
     <dependency>
       <groupId>com.github.ben-manes.caffeine</groupId>
       <artifactId>caffeine</artifactId>
+    </dependency>
+
+    <!--INTERNAL PROJECTS-->
+    <dependency>
+      <groupId>md.fuel.contract</groupId>
+      <artifactId>contract-generator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>md.telegram.lib</groupId>
+      <artifactId>telegram-bot-lib</artifactId>
     </dependency>
 
     <!--DATABASE-->

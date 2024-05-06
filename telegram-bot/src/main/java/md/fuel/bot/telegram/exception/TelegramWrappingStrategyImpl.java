@@ -5,20 +5,19 @@ import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyb
 
 import lombok.RequiredArgsConstructor;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
-import md.fuel.bot.infrastructure.exception.ErrorWrappingStrategy;
 import md.fuel.bot.infrastructure.exception.model.ClientRequestException;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.bot.infrastructure.exception.model.GatewayPassThroughException;
 import md.fuel.bot.infrastructure.exception.model.InfrastructureException;
+import md.telegram.lib.exception.TelegramException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @Component
 @RequiredArgsConstructor
-public class TelegramExceptionWrappingStrategy implements ErrorWrappingStrategy {
+public class TelegramWrappingStrategyImpl implements TelegramWrappingStrategy {
 
   private static final String UNKNOWN_ERROR = "Unknown error. Please contact bot administrator";
 
@@ -29,7 +28,12 @@ public class TelegramExceptionWrappingStrategy implements ErrorWrappingStrategy 
     return prepareErrorMessage(UNKNOWN_ERROR);
   }
 
-  @ExceptionHandler(EntityNotFoundException.class)
+  @Override
+  public ResponseEntity<BotApiMethod<?>> handleTelegramException(TelegramException exception) {
+    return prepareErrorMessage(exception.getMessage());
+  }
+
+  @Override
   public ResponseEntity<BotApiMethod<?>> handleEntityNotFoundException(EntityNotFoundException exception) {
     return prepareErrorMessage(exception.getMessage());
   }

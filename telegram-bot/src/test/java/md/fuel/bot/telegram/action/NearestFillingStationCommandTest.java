@@ -83,7 +83,7 @@ public class NearestFillingStationCommandTest {
     when(userDataFacade.getUserData(anyLong())).thenReturn(userDataDto);
     when(fillingStationFacade.getNearestFillingStation(anyDouble(), anyDouble(), anyDouble())).thenReturn(fillingStationDto);
 
-    final List<? super PartialBotApiMethod<?>> sendMessagesAndLocations = nearestFillingStationCommand.execute(update);
+    final List<? extends PartialBotApiMethod<?>> sendMessagesAndLocations = nearestFillingStationCommand.execute(update);
 
     assertThat(sendMessagesAndLocations).hasSize(2);
     final SendMessage sendMessage = (SendMessage) sendMessagesAndLocations.get(0);

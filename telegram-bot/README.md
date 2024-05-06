@@ -10,7 +10,6 @@ This bot uses telegram messenger for convenient interaction with filling station
     - [Flyway](#flyway)
         - [Clean](#clean)
         - [Migrate](#migrate)
-    - [Manual Ngrok Installation](#manual-ngrok-installation)
 - [Test](#test)
 - [Plugins](#plugins)
     - [Reports](#reports)
@@ -70,53 +69,10 @@ Setting up and installing a database using Docker.
     - `cd .\telegram-bot\`
     - `mvn flyway:migrate "-Dflyway.url=${DATABASE_URL}" "-Dflyway.user=${DATABASE_USERNAME}" "-Dflyway.password=${DATABASE_PASSWORD}"`
 
-## Manual Ngrok Installation
-
-+ Program installation: [ngrok](https://ngrok.com/download)
-
-1. Open ngrok.exe and write the command:
-
-```bash
-ngrok http 9090
-```
-
-+ Docker container: Fetch image from docker hub `docker pull ngrok/ngrok`
-
-1. Run docker image:
-
-`docker run -it -e NGROK_AUTHTOKEN=xyz ngrok/ngrok:latest http host.docker.internal:9090`
-
-(*command specific for Windows and macOS*)
-
-`xyz` - should be your ngrok token, you can take it from: [ngrok](https://dashboard.ngrok.com/get-started/setup)
-
-2. Copy URL with https from Forwarding line
-
-```text
-Forwarding http://27fs-299-323-0-285.ngrok.io                    
-Forwarding [this URL] -> https://27fs-299-323-0-285.ngrok.io <- [this URL]  
-```
-
-(OPTIONAL - manual approach to set up webhook) Paste the required parameters into the link and open it in a browser:
-
-```text
-https://api.telegram.org/bot[BOT_TOKEN]/setWebhook?url=[URL_FROM_OPTION_2]
-```
-
-If everything is correct, you will see the message:
-
-```text
-{"ok":true,"result":true,"description":"Webhook was set"}
-```
-
 # Environment Variables
 
 |     **Environment Variable**     |       **Optional**       | **Possible Values** | **Default Value** | **Description**                                                                                                 |
 |:--------------------------------:|:------------------------:|:-------------------:|:-----------------:|-----------------------------------------------------------------------------------------------------------------|
-|            BOT_TOKEN             |            No            | Telegram bot token  |     \<Empty\>     | Telegram bot token (you can take it from [Bot Father](https://t.me/BotFather))                                  |
-|          NGROK_ENABLED           |           Yes            |    `true/false`     |       true        | Enable/Disable automatic tunnel creation.                                                                       |
-|           NGROK_TOKEN            | Depends on NGROK_ENABLED |  Ngrok auth token   |     \<Empty\>     | If NGROK_ENABLED=true, you must specify a personal ngrok [token](https://dashboard.ngrok.com/get-started/setup) |
-|             WEBHOOK              | Depends on NGROK_ENABLED | HTTPS WebHook path  |     \<Empty\>     | HTTPS Webhook path that is connected to your telegram bot                                                       |
 |           DATABASE_URL           |            No            |    Database URL     |     \<Empty\>     | PostgreSQL connection URL                                                                                       |
 |        DATABASE_USERNAME         |            No            |  Database username  |     \<Empty\>     | PostgreSQL username                                                                                             |
 |        DATABASE_PASSWORD         |            No            |  Database password  |     \<Empty\>     | PostgreSQL user password                                                                                        |
@@ -201,8 +157,8 @@ After that, a convenient GUI screen will appear with a presentation of all bugs,
 # Important Notes
 
 - The Telegram bot can intercept (from rest-api service) in XML format and send errors to the user.
-- The default sorting of filling stations in the full list and the search for the best fuel occurs by distance 
-(the nearest filling station is always at the very bottom)
+- The default sorting of filling stations in the full list and the search for the best fuel occurs by distance
+(the nearest filling station is always the first in the result)
 
 # QA
 
@@ -221,10 +177,3 @@ the distance in the format received from API (EPSG:3857) and convert the user co
 the number of users is more than 700-800 people, it is more favourable to convert the coordinates received from ANRE
 and calculate the distance in EPSG:4326.<br>
 <sup>2</sup> - Cache retention time.
-
-2. (<b>Q</b>) Why is there a limit of 10 petrol stations within a specified radius (Specific for Telegram only)?
-
-(<b>A</b>) This is necessary to improve performance and also to avoid loading the system with large requests. The main
-idea of this bot is to find the best fuel price; in case you have more than 10 filling stations in the specified radius, it's
-better
-to go to the nearest one.

@@ -13,13 +13,13 @@ import static wiremock.com.github.jknack.handlebars.internal.lang3.StringUtils.E
 
 import java.util.List;
 import md.fuel.bot.infrastructure.exception.model.EntityNotFoundException;
-import md.fuel.bot.telegram.action.command.Command;
 import md.fuel.bot.telegram.action.command.DispatcherCommandImpl;
 import md.fuel.bot.telegram.action.command.UpdateCoordinatesCommand;
 import md.fuel.bot.telegram.action.command.UpdateRadiusCommand;
+import md.telegram.lib.action.Command;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -49,9 +49,10 @@ public class DispatcherCommandImplTest {
 
     when(update.getMessage()).thenReturn(message);
     when(message.hasLocation()).thenReturn(true);
-    when(updateCoordinatesCommand.execute(update)).thenReturn(singletonList(sendMessage));
 
-    final List<? super BotApiMethod<?>> messages = dispatcherCommandImpl.getMessages(update);
+    when(updateCoordinatesCommand.execute(update)).thenAnswer(invocation -> List.of((PartialBotApiMethod<?>) sendMessage));
+
+    final List<? extends PartialBotApiMethod<?>> messages = dispatcherCommandImpl.getMessages(update);
 
     verify(update, times(2)).getMessage();
     verify(message).hasLocation();
@@ -71,9 +72,9 @@ public class DispatcherCommandImplTest {
     when(update.getMessage()).thenReturn(message);
     when(message.hasLocation()).thenReturn(false);
     when(message.getText()).thenReturn("10.0");
-    when(updateRadiusCommand.execute(update)).thenReturn(singletonList(sendMessage));
+    when(updateRadiusCommand.execute(update)).thenAnswer(invocation -> List.of((PartialBotApiMethod<?>) sendMessage));
 
-    final List<? super BotApiMethod<?>> messages = dispatcherCommandImpl.getMessages(update);
+    final List<? extends PartialBotApiMethod<?>> messages = dispatcherCommandImpl.getMessages(update);
 
     verify(update, times(2)).getMessage();
     verify(message).hasLocation();
@@ -95,9 +96,9 @@ public class DispatcherCommandImplTest {
     when(message.hasLocation()).thenReturn(false);
     when(message.getText()).thenReturn(textCommand);
     when(command.getCommands()).thenReturn(singletonList(textCommand));
-    when(command.execute(any())).thenReturn(singletonList(sendMessage));
+    when(command.execute(update)).thenAnswer(invocation -> List.of((PartialBotApiMethod<?>) sendMessage));
 
-    final List<? super BotApiMethod<?>> messages = dispatcherCommandImpl.getMessages(update);
+    final List<? extends PartialBotApiMethod<?>> messages = dispatcherCommandImpl.getMessages(update);
 
     verify(update, times(2)).getMessage();
     verify(message).hasLocation();

@@ -83,7 +83,7 @@ public class AllFillingStationInRadiusCommandTest {
     when(userDataFacade.getUserData(anyLong())).thenReturn(userDataDto);
     when(fillingStationFacade.getAllFillingStations(anyDouble(), anyDouble(), anyDouble(), anyInt())).thenReturn(fillingStation);
 
-    final List<? super PartialBotApiMethod<?>> sendMessagesAndLocations = allFillingStationInRadiusCommand.execute(update);
+    final List<? extends PartialBotApiMethod<?>> sendMessagesAndLocations = allFillingStationInRadiusCommand.execute(update);
 
     assertThat(sendMessagesAndLocations).hasSize(1);
     final SendMessage sendMessage = (SendMessage) sendMessagesAndLocations.get(0);
