@@ -1,7 +1,5 @@
 package md.fuel.api.infrastructure.configuration;
 
-import static md.fuel.api.infrastructure.configuration.EhcacheConfiguration.ANRE_CACHE;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.api.infrastructure.repository.AnreApi;
@@ -20,7 +18,7 @@ public class ScheduledConfiguration {
 
   private final AnreApi anreApi;
 
-  @Scheduled(fixedDelayString = "#{${cache.expiry.time} * 60000}", initialDelayString = "0")
+  @Scheduled(fixedDelayString = "#{${app.caches.anre-json.expiry-time} * 60000}", initialDelayString = "0")
   public void fetchFillingStationData() {
     log.info("Schedule: Clear anre cache");
     clearCache();
@@ -28,7 +26,7 @@ public class ScheduledConfiguration {
     anreApi.getFillingStationsInfo();
   }
 
-  @CacheEvict(value = ANRE_CACHE, cacheManager = "jCacheCacheManager")
+  @CacheEvict(value = "anreCache", cacheManager = "jCacheCacheManager")
   private void clearCache() {
     log.info("Clear anre cache");
   }

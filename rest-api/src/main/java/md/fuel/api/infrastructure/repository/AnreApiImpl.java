@@ -1,7 +1,5 @@
 package md.fuel.api.infrastructure.repository;
 
-import static md.fuel.api.infrastructure.configuration.EhcacheConfiguration.ANRE_CACHE;
-import static md.fuel.api.infrastructure.configuration.EhcacheConfiguration.ANRE_PRICE_CACHE;
 import static md.fuel.api.infrastructure.configuration.PathUtils.resolve;
 import static md.fuel.api.infrastructure.configuration.ResourcePath.ALL_FILLING_STATION_PATH;
 import static md.fuel.api.infrastructure.configuration.ResourcePath.TODAY_FUEL_PRICE_PATH;
@@ -31,7 +29,7 @@ public class AnreApiImpl implements AnreApi {
   private final RetryWebClientConfiguration retryWebClientConfiguration;
 
   @Override
-  @Cacheable(value = ANRE_CACHE, cacheManager = "jCacheCacheManager")
+  @Cacheable(value = "anreCache", cacheManager = "jCacheCacheManager")
   public List<FillingStation> getFillingStationsInfo() {
     log.info("Fetching all filling stations info from the ANRE website");
     final URI uri = resolve(ALL_FILLING_STATION_PATH, apiConfiguration);
@@ -47,7 +45,7 @@ public class AnreApiImpl implements AnreApi {
   }
 
   @Override
-  @Cacheable(value = ANRE_PRICE_CACHE, cacheManager = "jCacheCacheManager")
+  @Cacheable(value = "anrePriceCache", cacheManager = "jCacheCacheManager")
   public FuelPrice getAnrePrices() {
     log.info("Fetching official ANRE prices for fuel");
     final URI uri = resolve(TODAY_FUEL_PRICE_PATH, apiConfiguration);

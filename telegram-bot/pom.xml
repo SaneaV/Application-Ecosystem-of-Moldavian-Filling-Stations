@@ -43,10 +43,6 @@
       <groupId>org.telegram</groupId>
       <artifactId>telegrambots-spring-boot-starter</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-cache</artifactId>
-    </dependency>
 
     <!--USEFUL TOOLS-->
     <dependency>
@@ -63,14 +59,6 @@
       <artifactId>java-ngrok</artifactId>
     </dependency>
     <dependency>
-      <groupId>javax.cache</groupId>
-      <artifactId>cache-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.ehcache</groupId>
-      <artifactId>ehcache</artifactId>
-    </dependency>
-    <dependency>
       <groupId>com.github.ben-manes.caffeine</groupId>
       <artifactId>caffeine</artifactId>
     </dependency>
@@ -83,6 +71,10 @@
     <dependency>
       <groupId>md.telegram.lib</groupId>
       <artifactId>telegram-bot-lib</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>md.cache.lib</groupId>
+      <artifactId>cache-lib</artifactId>
     </dependency>
 
     <!--DATABASE-->

@@ -35,7 +35,8 @@
 - [X] [CORE] Add SL4FJ logging in a project.
 - [X] [TELEGRAM] Add holder for user and chat information.
 - [X] [TELEGRAM] Get rid of the limit of 10 filling stations in the radius and replace it with CallBackQuery with arrows.
-- [X] [TELEGRAM-LIB] Extract telegram bot logic to the separate module
+- [X] [TELEGRAM-LIB] Extract telegram bot logic to the separate module.
+- [X] [CORE] Create cache common lib.
 
 ## Features
 

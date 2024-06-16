@@ -3,7 +3,6 @@ package md.fuel.bot.infrastructure.repository;
 import static java.lang.Integer.MAX_VALUE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static md.fuel.bot.infrastructure.configuration.EhcacheConfiguration.TELEGRAM_BOT_CACHE;
 import static md.fuel.bot.infrastructure.configuration.PathUtils.resolve;
 import static md.fuel.bot.infrastructure.configuration.ResourcePath.ALL_FILLING_STATIONS_PAGE_PATH;
 import static md.fuel.bot.infrastructure.configuration.ResourcePath.BEST_FUEL_PRICE_PAGE_PATH;
@@ -44,7 +43,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
   private final ApiConfiguration apiConfiguration;
 
   @Override
-  @Cacheable(value = TELEGRAM_BOT_CACHE, cacheManager = "jCacheCacheManager",
+  @Cacheable(value = "fuelStationSearchRequestCache", cacheManager = "jCacheCacheManager",
       key = "new org.springframework.cache.interceptor.SimpleKey(#latitude, #longitude, #radius)")
   public Page<FillingStation> getAllFillingStation(double latitude, double longitude, double radius) {
     log.info("Fetching list of filling stations from API");
@@ -65,7 +64,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
   }
 
   @Override
-  @Cacheable(value = TELEGRAM_BOT_CACHE, cacheManager = "jCacheCacheManager",
+  @Cacheable(value = "fuelStationSearchRequestCache", cacheManager = "jCacheCacheManager",
       key = "new org.springframework.cache.interceptor.SimpleKey(#latitude, #longitude, #radius, \"nearest\")")
   public FillingStation getNearestFillingStation(double latitude, double longitude, double radius) {
     log.info("Fetching nearest filling stations from API");
@@ -85,7 +84,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
   }
 
   @Override
-  @Cacheable(value = TELEGRAM_BOT_CACHE, cacheManager = "jCacheCacheManager",
+  @Cacheable(value = "fuelStationSearchRequestCache", cacheManager = "jCacheCacheManager",
       key = "new org.springframework.cache.interceptor.SimpleKey(#latitude, #longitude, #radius, #fuelType)")
   public Page<FillingStation> getBestFuelPriceStation(double latitude, double longitude, double radius, String fuelType) {
     log.info("Fetching list of filling stations with best fuel price from API");
@@ -106,7 +105,7 @@ public class FillingStationRepositoryImpl implements FillingStationRepository {
   }
 
   @Override
-  @Cacheable(value = TELEGRAM_BOT_CACHE, cacheManager = "jCacheCacheManager")
+  @Cacheable(value = "fuelStationSearchRequestCache", cacheManager = "jCacheCacheManager")
   public String getUpdateTimestamp() {
     log.info("Fetching last modification timestamp from API");
     final URI uri = resolve(LAST_UPDATE_PATH, apiConfiguration, emptyList());

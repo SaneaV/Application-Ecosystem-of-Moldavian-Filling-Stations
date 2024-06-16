@@ -3,7 +3,7 @@ api-configuration:
   time-duration: 5000
   retryable: 404, 429
 
-  base-path: ${anre.api.path:https://api.iharta.md/anre/public}
+  base-path: ${anre.api.path:https://api.ecarburanti.anre.md/public/}
 
   paths:
     all-filling-stations:

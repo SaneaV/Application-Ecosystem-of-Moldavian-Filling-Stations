@@ -23,6 +23,7 @@
     <module>contract-generator</module>
     <module>report-aggregate</module>
     <module>telegram-bot-lib</module>
+    <module>cache-lib</module>
   </modules>
 
   <properties>
@@ -51,6 +52,7 @@
     <contract.generator.version>1.0.0</contract.generator.version>
     <rest.api.version>1.0.0</rest.api.version>
     <telegram-bot-lib.version>1.0.0</telegram-bot-lib.version>
+    <cache-lib.version>1.0.0</cache-lib.version>
 
     <!--TESTING-->
     <mockito.inline.version>5.2.0</mockito.inline.version>
@@ -186,6 +188,11 @@
         <groupId>md.telegram.lib</groupId>
         <artifactId>telegram-bot-lib</artifactId>
         <version>${telegram-bot-lib.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>md.cache.lib</groupId>
+        <artifactId>cache-lib</artifactId>
+        <version>${cache-lib.version}</version>
       </dependency>
       <dependency>
         <groupId>md.fuel.api</groupId>

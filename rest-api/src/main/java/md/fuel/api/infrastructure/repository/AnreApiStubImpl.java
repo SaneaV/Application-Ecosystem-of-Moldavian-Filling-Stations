@@ -1,8 +1,5 @@
 package md.fuel.api.infrastructure.repository;
 
-import static md.fuel.api.infrastructure.configuration.EhcacheConfiguration.ANRE_CACHE;
-import static md.fuel.api.infrastructure.configuration.EhcacheConfiguration.ANRE_PRICE_CACHE;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -44,7 +41,7 @@ public class AnreApiStubImpl implements AnreApi {
   }
 
   @Override
-  @Cacheable(value = ANRE_CACHE, cacheManager = "jCacheCacheManager")
+  @Cacheable(value = "anreCache", cacheManager = "jCacheCacheManager")
   public List<FillingStation> getFillingStationsInfo() {
     log.info("Fetching all filling stations info from the local file");
     if (FILLING_STATIONS.size() != 0) {
@@ -68,7 +65,7 @@ public class AnreApiStubImpl implements AnreApi {
   }
 
   @Override
-  @Cacheable(value = ANRE_PRICE_CACHE, cacheManager = "jCacheCacheManager")
+  @Cacheable(value = "anrePriceCache", cacheManager = "jCacheCacheManager")
   public FuelPrice getAnrePrices() {
     log.info("Fetching dummy prices for fuel");
 
