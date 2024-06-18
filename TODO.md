@@ -37,6 +37,7 @@
 - [X] [TELEGRAM] Get rid of the limit of 10 filling stations in the radius and replace it with CallBackQuery with arrows.
 - [X] [TELEGRAM-LIB] Extract telegram bot logic to the separate module.
 - [X] [CORE] Create cache common lib.
+- [X] [CORE] Add Actuator.
 
 ## Features
 
@@ -47,7 +48,6 @@
   aspects and Thymeleaf).
 - [ ] [API] Add auditable for controllers (save data in database).
 - [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
-- [ ] [CORE] Add Actuator.
 - [ ] [CORE] Add SonarQube.
 
 ## Food For Thought

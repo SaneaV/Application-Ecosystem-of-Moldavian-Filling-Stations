@@ -120,6 +120,26 @@ In order to create Jacoco test coverage reports, you can run next commands:
     - Command: `mvn verify`
     - Output directory: `target/site/jacoco-merged-tests-coverage.exec/index.html`
 
+## Actuator
+
+In this project, Spring Boot Actuator is configured to provide access to essential endpoints:
+
+- `management.endpoints.web.exposure.include=health,env,metrics`
+- `management.endpoint.env.show-values=ALWAYS`: Displays all environment property values.
+
+These configurations ensure users have access to important application data. You can access the endpoints as follows:
+
+- Base URL: `http://localhost:9090/actuator`
+- Health: `http://localhost:9090/actuator/health`
+- Environment: `http://localhost:9090/actuator/env`
+- Metrics: `http://localhost:9090/actuator/metrics`
+
+For detailed paths:
+
+- Health path template: `http://localhost:9090/actuator/health/{*path}`
+- Environment property template: `http://localhost:9090/actuator/env/{toMatch}`
+- Specific metric template: `http://localhost:9090/actuator/metrics/{requiredMetricName}`
+
 ## Dependency Check
 
 In order to check for the presence of Vulnerable Dependencies in a project, you can use the following commands:

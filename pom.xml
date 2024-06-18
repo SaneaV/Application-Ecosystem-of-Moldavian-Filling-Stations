@@ -131,6 +131,11 @@
         <artifactId>telegrambots-spring-boot-starter</artifactId>
         <version>${telegrambots.spring.boot.starter.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+        <version>${spring.boot.parent.version}</version>
+      </dependency>
 
       <!--USEFUL TOOLS-->
       <dependency>
