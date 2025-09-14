@@ -12,6 +12,7 @@ import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.infrastructure.service.TranslatorService;
 import md.fuel.bot.telegram.dto.UserDataDto;
 import md.fuel.bot.telegram.utils.MessageUtil;
 import md.telegram.lib.action.Callback;
@@ -36,6 +37,7 @@ public class BackToTheListCallback implements Callback {
   private final UserDataFacade userDataFacade;
   private final ChatInfoHolder chatInfoHolder;
   private final CallbackHolder callbackHolder;
+  private final TranslatorService translatorService;
 
   @Override
   public List<? extends PartialBotApiMethod<?>> execute(CallbackQuery callbackQuery) {
@@ -46,6 +48,7 @@ public class BackToTheListCallback implements Callback {
     final long chatId = chatInfoHolder.getChatId();
 
     final UserDataDto userData = userDataFacade.getUserData(userId);
+    final String language = userData.getLanguage();
     final double latitude = userData.getLatitude();
     final double longitude = userData.getLongitude();
     final double radius = userData.getRadius();
@@ -59,14 +62,15 @@ public class BackToTheListCallback implements Callback {
     if (ALL_FILLING_STATIONS_IN_RADIUS.getCommandId() == command) {
       fillingStation = fillingStationFacade.getAllFillingStations(latitude, longitude, radius, lastOffset);
       hasNext = fillingStationFacade.hasNext(latitude, longitude, radius, lastOffset);
-      messageText = toMessage(fillingStation);
+      messageText = toMessage(fillingStation, translatorService, language);
     } else {
       fillingStation = fillingStationFacade.getBestFuelPrice(latitude, longitude, radius, fuelType, lastOffset);
       hasNext = fillingStationFacade.hasNext(latitude, longitude, radius, lastOffset, fuelType);
-      messageText = toMessage(fillingStation, fuelType);
+      messageText = toMessage(fillingStation, fuelType, translatorService, language);
     }
 
-    final InlineKeyboardMarkup replyKeyboard = getInlineKeyboardForAllFillingStations(command, lastOffset, hasNext);
+    final InlineKeyboardMarkup replyKeyboard = getInlineKeyboardForAllFillingStations(command, lastOffset, hasNext,
+        translatorService, language);
 
     final SendMessage sendMessage = MessageUtil.sendMessage(chatId, messageText, replyKeyboard);
     final DeleteMessage deleteMessage = deleteMessage(chatId, callbackHolder.getMessageId());

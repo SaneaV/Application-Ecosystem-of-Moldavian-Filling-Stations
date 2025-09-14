@@ -13,6 +13,7 @@ import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.infrastructure.service.TranslatorService;
 import md.fuel.bot.telegram.dto.UserDataDto;
 import md.telegram.lib.action.Command;
 import org.springframework.stereotype.Component;
@@ -26,13 +27,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 @RequiredArgsConstructor
 public class AllFillingStationInRadiusCommand implements Command {
 
-  public static final String COMMAND = "All filling stations";
+  public static final String COMMAND = "all-filling-stations.message";
 
   private static final int FIRST_MESSAGE_OFFSET = 0;
 
   private final FillingStationFacade fillingStationFacade;
   private final UserDataFacade userDataFacade;
   private final ChatInfoHolder chatInfoHolder;
+  private final TranslatorService translatorService;
 
   @Override
   public List<? extends PartialBotApiMethod<?>> execute(Update update) {
@@ -41,6 +43,7 @@ public class AllFillingStationInRadiusCommand implements Command {
     log.info("Get all filling stations in radius for user = {}", userId);
 
     final UserDataDto userData = userDataFacade.getUserData(userId);
+    final String language = userData.getLanguage();
     final double latitude = userData.getLatitude();
     final double longitude = userData.getLongitude();
     final double radius = userData.getRadius();
@@ -48,10 +51,10 @@ public class AllFillingStationInRadiusCommand implements Command {
         FIRST_MESSAGE_OFFSET);
     final boolean hasNext = fillingStationFacade.hasNext(latitude, longitude, radius, FIRST_MESSAGE_OFFSET);
 
-    final String messageText = toMessage(fillingStation);
+    final String messageText = toMessage(fillingStation, translatorService, language);
     final SendMessage fillingStationMessage = sendMessage(chatId, messageText);
     final InlineKeyboardMarkup inlineKeyboard = getInlineKeyboardForAllFillingStations(
-        ALL_FILLING_STATIONS_IN_RADIUS.getCommandId(), FIRST_MESSAGE_OFFSET, hasNext);
+        ALL_FILLING_STATIONS_IN_RADIUS.getCommandId(), FIRST_MESSAGE_OFFSET, hasNext, translatorService, language);
     fillingStationMessage.setReplyMarkup(inlineKeyboard);
 
     return List.of(fillingStationMessage);

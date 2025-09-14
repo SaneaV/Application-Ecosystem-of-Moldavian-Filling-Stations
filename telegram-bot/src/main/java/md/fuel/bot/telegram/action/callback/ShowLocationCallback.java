@@ -12,6 +12,7 @@ import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.infrastructure.service.TranslatorService;
 import md.fuel.bot.telegram.dto.UserDataDto;
 import md.telegram.lib.action.Callback;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,7 @@ public class ShowLocationCallback implements Callback {
   private final UserDataFacade userDataFacade;
   private final ChatInfoHolder chatInfoHolder;
   private final CallbackHolder callbackHolder;
+  private final TranslatorService translatorService;
 
   @Override
   public List<? extends PartialBotApiMethod<?>> execute(CallbackQuery callbackQuery) {
@@ -49,14 +51,16 @@ public class ShowLocationCallback implements Callback {
     final long chatId = chatInfoHolder.getChatId();
 
     final UserDataDto userData = userDataFacade.getUserData(userId);
+    final String language = userData.getLanguage();
     final double latitude = userData.getLatitude();
     final double longitude = userData.getLongitude();
     final double radius = userData.getRadius();
 
     final FillingStation fillingStation = getFillingStation(command, latitude, longitude, radius, fuelType, currentOffset);
 
-    final InlineKeyboardMarkup inlineKeyboardForLocation = getInlineKeyboardForLocation(command,
-        Integer.valueOf(callbackHolder.getCallbackDataBy(OFFSET)), callbackHolder.getCallbackDataBy(FUEL_TYPE));
+    final Integer offset = Integer.valueOf(callbackHolder.getCallbackDataBy(OFFSET));
+    final InlineKeyboardMarkup inlineKeyboardForLocation = getInlineKeyboardForLocation(command, offset, fuelType,
+        translatorService, language);
     final SendLocation fuelStationLocation = sendLocation(chatId, fillingStation.getLatitude(), fillingStation.getLongitude(),
         inlineKeyboardForLocation);
     final DeleteMessage deleteMessage = deleteMessage(chatId, callbackHolder.getMessageId());

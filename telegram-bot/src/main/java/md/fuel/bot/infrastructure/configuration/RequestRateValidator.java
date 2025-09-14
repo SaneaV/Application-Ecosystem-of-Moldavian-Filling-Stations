@@ -10,8 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestRateValidator {
 
-  private static final String ERROR_MESSAGE_LIMIT_EXCEEDED = """
-      You have made too many requests lately. Wait a couple of seconds and try again.""";
+  private static final String ERROR_MESSAGE_LIMIT_EXCEEDED = "error.too-many-requests.message";
 
   private final LoadingCache<Long, Integer> requestCountsPerUser;
   private final int maxRequestsPerSecond;

@@ -10,6 +10,7 @@ import lombok.Setter;
 public class UserData {
 
   private long id;
+  private String language;
   private double radius;
   private double latitude;
   private double longitude;

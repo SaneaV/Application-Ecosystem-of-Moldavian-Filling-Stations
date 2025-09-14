@@ -3,7 +3,6 @@ package md.fuel.bot.facade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.domain.FillingStation;
-import md.fuel.bot.domain.FuelType;
 import md.fuel.bot.infrastructure.repository.FillingStationRepository;
 import org.springframework.stereotype.Component;
 
@@ -44,13 +43,6 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
     return fillingStationRepository.getBestFuelPriceStation(latitude, longitude, radius, fuelType)
         .getItems()
         .get(offset);
-  }
-
-  @Override
-  public FuelType getSupportedFuelTypes() {
-    log.info("Fetch list of supported fuel types");
-
-    return fillingStationRepository.getSupportedFuelTypes();
   }
 
   @Override

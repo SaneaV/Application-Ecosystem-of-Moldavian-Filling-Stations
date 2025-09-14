@@ -21,6 +21,9 @@ public class UserDataJpa {
   private long id;
 
   @Column(nullable = false)
+  private String language;
+
+  @Column(nullable = false)
   private double radius;
 
   @Column(nullable = false)

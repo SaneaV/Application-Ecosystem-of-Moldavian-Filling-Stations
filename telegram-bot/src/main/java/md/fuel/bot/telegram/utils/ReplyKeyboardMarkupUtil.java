@@ -3,36 +3,59 @@ package md.fuel.bot.telegram.utils;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static lombok.AccessLevel.PRIVATE;
+import static md.fuel.bot.telegram.action.command.LanguageCommand.ENGLISH;
+import static md.fuel.bot.telegram.action.command.LanguageCommand.ROMANIAN;
+import static md.fuel.bot.telegram.action.command.LanguageCommand.RUSSIAN;
+import static md.fuel.bot.telegram.action.command.LanguageCommand.UKRAINIAN;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import md.fuel.bot.infrastructure.service.TranslatorService;
 import md.fuel.bot.telegram.action.command.AllFillingStationInRadiusCommand;
 import md.fuel.bot.telegram.action.command.BestFuelInRadiusCommand;
+import md.fuel.bot.telegram.action.command.ChangeLanguageCommand;
 import md.fuel.bot.telegram.action.command.NearestFillingStationCommand;
 import md.fuel.bot.telegram.action.command.SpecificFuelInRadiusCommand;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
+@Slf4j
 @NoArgsConstructor(access = PRIVATE)
 public class ReplyKeyboardMarkupUtil {
 
-  private static final List<String> MAIN_MENU_ITEMS = new ArrayList<>();
-  private static final List<String> FUEL_TYPE_MENU_ITEMS = new ArrayList<>();
+  public static String DEFAULT_LANGUAGE = "en";
 
-  static {
-    MAIN_MENU_ITEMS.addAll(asList(AllFillingStationInRadiusCommand.COMMAND, NearestFillingStationCommand.COMMAND,
-        SpecificFuelInRadiusCommand.COMMAND));
-    FUEL_TYPE_MENU_ITEMS.addAll(BestFuelInRadiusCommand.COMMAND);
+  public static ReplyKeyboardMarkup getMainMenuKeyboard(TranslatorService translatorService, String language) {
+    final String allFillingStationCommand = translatorService.translate(language, AllFillingStationInRadiusCommand.COMMAND);
+    final String nearestFillingStationCommand = translatorService.translate(language, NearestFillingStationCommand.COMMAND);
+    final String specificFuelStationCommand = translatorService.translate(language, SpecificFuelInRadiusCommand.COMMAND);
+    final String changeLanguageCommand = translatorService.translate(language, ChangeLanguageCommand.COMMAND);
+    return getReplyKeyboardMarkup(
+        asList(allFillingStationCommand, nearestFillingStationCommand, specificFuelStationCommand, changeLanguageCommand));
   }
 
-  public static ReplyKeyboardMarkup getMainMenuKeyboard() {
-    return getReplyKeyboardMarkup(MAIN_MENU_ITEMS);
+  public static ReplyKeyboardMarkup getFuelTypeKeyboard(TranslatorService translatorService, String language) {
+    final List<String> translatedFuelTypes = BestFuelInRadiusCommand.COMMAND.stream()
+        .map(fuelType -> {
+          try {
+            return translatorService.translate(language, fuelType);
+          } catch (Exception e) {
+            log.info("Fuel type not found for translation: {}", fuelType);
+          }
+          return null;
+        })
+        .toList();
+    return getReplyKeyboardMarkup(translatedFuelTypes);
   }
 
-  public static ReplyKeyboardMarkup getFuelTypeKeyboard() {
-    return getReplyKeyboardMarkup(FUEL_TYPE_MENU_ITEMS);
+  public static ReplyKeyboardMarkup getLanguageMenuKeyboard(TranslatorService translatorService) {
+    final String russian = translatorService.translate(DEFAULT_LANGUAGE, RUSSIAN);
+    final String romanian = translatorService.translate(DEFAULT_LANGUAGE, ROMANIAN);
+    final String english = translatorService.translate(DEFAULT_LANGUAGE, ENGLISH);
+    final String ukrainian = translatorService.translate(DEFAULT_LANGUAGE, UKRAINIAN);
+    return getReplyKeyboardMarkup(asList(russian, romanian, english, ukrainian));
   }
 
   private static ReplyKeyboardMarkup getReplyKeyboardMarkup(List<String> items) {

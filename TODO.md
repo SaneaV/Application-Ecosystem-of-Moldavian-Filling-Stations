@@ -38,6 +38,7 @@
 - [X] [TELEGRAM-LIB] Extract telegram bot logic to the separate module.
 - [X] [CORE] Create cache common lib.
 - [X] [CORE] Add Actuator.
+- [X] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 
 ## Features
 
@@ -47,7 +48,6 @@
 - [ ] [CORE] Create a Kafka-Statistics module to collect data about the cities from which the request is made (implement through
   aspects and Thymeleaf).
 - [ ] [API] Add auditable for controllers (save data in database).
-- [ ] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
 - [ ] [CORE] Add SonarQube.
 
 ## Food For Thought

@@ -13,7 +13,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import md.fuel.bot.domain.FillingStation;
-import md.fuel.bot.domain.FuelType;
 import md.fuel.bot.domain.Page;
 import md.fuel.bot.infrastructure.repository.FillingStationRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -86,19 +85,5 @@ public class FillingStationFacadeTest {
     verify(repository).getBestFuelPriceStation(anyDouble(), anyDouble(), anyDouble(), anyString());
     verify(repository).getUpdateTimestamp();
     FillingStation.timestamp = null;
-  }
-
-  @Test
-  @DisplayName("Should return list of fuel types")
-  void shouldReturnListOfFuelTypes() {
-    final List<String> expected = asList(PETROL, DIESEL, GAS);
-    final FuelType fuelType = new FuelType(expected);
-
-    when(repository.getSupportedFuelTypes()).thenReturn(fuelType);
-
-    final FuelType result = facade.getSupportedFuelTypes();
-
-    assertThat(result).isEqualTo(fuelType);
-    verify(repository).getSupportedFuelTypes();
   }
 }

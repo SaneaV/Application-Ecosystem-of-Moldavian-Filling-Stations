@@ -7,29 +7,38 @@ import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getFuelTypeKeyb
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.infrastructure.service.TranslatorService;
 import md.telegram.lib.action.Command;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SpecificFuelInRadiusCommand implements Command {
 
-  private final ChatInfoHolder chatInfoHolder;
+  public static final String COMMAND = "best-fuel-price.message";
+  private static final String MESSAGE = "select-fuel-type.message";
 
-  public static final String COMMAND = "Best fuel price";
-  private static final String MESSAGE = "Select the desired type of fuel.";
+  private final ChatInfoHolder chatInfoHolder;
+  private final UserDataFacade userDataFacade;
+  private final TranslatorService translatorService;
 
   @Override
   public List<? extends PartialBotApiMethod<?>> execute(Update update) {
     final long chatId = chatInfoHolder.getChatId();
     log.info("Display reply keyboard with available fuel types for user = {}", chatId);
 
-    final SendMessage message = sendMessage(chatId, MESSAGE, getFuelTypeKeyboard());
+    final String language = userDataFacade.getUserData(chatId).getLanguage();
+    final String messageText = translatorService.translate(language, MESSAGE);
+    final ReplyKeyboardMarkup fuelTypeKeyboard = getFuelTypeKeyboard(translatorService, language);
+
+    final SendMessage message = sendMessage(chatId, messageText, fuelTypeKeyboard);
     return singletonList(message);
   }
 

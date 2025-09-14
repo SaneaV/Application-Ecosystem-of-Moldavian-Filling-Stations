@@ -48,4 +48,12 @@ public class UserDataServiceImpl implements UserDataService {
     final UserData updatedUserData = mapper.update(userData, latitude, longitude);
     userDataAdapter.save(updatedUserData);
   }
+
+  @Override
+  public void save(long userId, String language) {
+    log.info("Update language for user = {}, language = {}", userId, language);
+    final UserData userData = userDataAdapter.getUserData(userId);
+    final UserData updatedUserData = mapper.update(userData, language);
+    userDataAdapter.save(updatedUserData);
+  }
 }

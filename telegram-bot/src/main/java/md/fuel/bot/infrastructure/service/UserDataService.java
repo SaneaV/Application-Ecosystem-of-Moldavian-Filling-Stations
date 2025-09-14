@@ -11,4 +11,6 @@ public interface UserDataService {
   void save(long userId, double radius);
 
   void save(long userId, double latitude, double longitude);
+
+  void save(long userId, String language);
 }

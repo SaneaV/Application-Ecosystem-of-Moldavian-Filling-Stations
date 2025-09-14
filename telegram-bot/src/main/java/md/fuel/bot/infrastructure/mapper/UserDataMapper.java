@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 public interface UserDataMapper {
 
   @Mapping(target = "id", source = "userId")
+  @Mapping(target = "language", ignore = true)
   @Mapping(target = "radius", ignore = true)
   @Mapping(target = "latitude", ignore = true)
   @Mapping(target = "longitude", ignore = true)
@@ -19,4 +20,7 @@ public interface UserDataMapper {
   @Mapping(target = "latitude", source = "latitude")
   @Mapping(target = "longitude", source = "longitude")
   UserData update(UserData userData, double latitude, double longitude);
+
+  @Mapping(target = "language", source = "language")
+  UserData update(UserData userData, String language);
 }

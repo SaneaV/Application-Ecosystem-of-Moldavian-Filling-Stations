@@ -12,6 +12,7 @@ import md.fuel.bot.domain.FillingStation;
 import md.fuel.bot.facade.FillingStationFacade;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.infrastructure.service.TranslatorService;
 import md.fuel.bot.telegram.dto.UserDataDto;
 import md.telegram.lib.action.Callback;
 import org.springframework.stereotype.Component;
@@ -34,6 +35,7 @@ public class NextFillingStationCallback implements Callback {
   private final UserDataFacade userDataFacade;
   private final ChatInfoHolder chatInfoHolder;
   private final CallbackHolder callbackHolder;
+  private final TranslatorService translatorService;
 
   @Override
   public List<? extends PartialBotApiMethod<?>> execute(CallbackQuery callbackQuery) {
@@ -42,6 +44,7 @@ public class NextFillingStationCallback implements Callback {
     log.info("Get all filling stations (next page) in radius for user = {} and offset = {}", userId, nextOffset);
 
     final UserDataDto userData = userDataFacade.getUserData(userId);
+    final String language = userData.getLanguage();
     final double latitude = userData.getLatitude();
     final double longitude = userData.getLongitude();
     final double radius = userData.getRadius();
@@ -55,14 +58,15 @@ public class NextFillingStationCallback implements Callback {
     if (ALL_FILLING_STATIONS_IN_RADIUS.getCommandId() == command) {
       fillingStation = fillingStationFacade.getAllFillingStations(latitude, longitude, radius, nextOffset);
       hasNext = fillingStationFacade.hasNext(latitude, longitude, radius, nextOffset);
-      messageText = toMessage(fillingStation);
+      messageText = toMessage(fillingStation, translatorService, language);
     } else {
       fillingStation = fillingStationFacade.getBestFuelPrice(latitude, longitude, radius, fuelType, nextOffset);
       hasNext = fillingStationFacade.hasNext(latitude, longitude, radius, nextOffset, fuelType);
-      messageText = toMessage(fillingStation, fuelType);
+      messageText = toMessage(fillingStation, fuelType, translatorService, language);
     }
 
-    final InlineKeyboardMarkup replyKeyboard = getInlineKeyboardForAllFillingStations(command, nextOffset, hasNext);
+    final InlineKeyboardMarkup replyKeyboard = getInlineKeyboardForAllFillingStations(command, nextOffset, hasNext,
+        translatorService, language);
 
     final EditMessageText editMessageText = editMessageText(chatInfoHolder.getChatId(), messageText,
         callbackHolder.getMessageId(), replyKeyboard);

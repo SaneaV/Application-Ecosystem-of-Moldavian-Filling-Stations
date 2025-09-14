@@ -2,35 +2,32 @@ package md.fuel.bot.telegram.action.command;
 
 import static java.util.Collections.singletonList;
 import static md.fuel.bot.telegram.utils.MessageUtil.sendMessage;
-import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
+import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getLanguageMenuKeyboard;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
+import md.fuel.bot.infrastructure.service.TranslatorService;
 import md.telegram.lib.action.Command;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class StartCommand implements Command {
 
-  private static final String COMMAND = "/start";
-  private static final String MESSAGE = """
-      Welcome!
-      To start working with bot, you can select any element from the menu.
-
-      If you want to change the search radius, just send it to me (in kilometres, e.g. 0.5 (500 metres), 1 (1000 metres)).
-
-      If you want to change your coordinates, just send your location.""";
+  private static final String COMMAND = "start.message";
+  private static final String MESSAGE = "Выберите язык / Selectați limba / Select language / Оберіть мову";
 
   private final UserDataFacade userDataFacade;
   private final ChatInfoHolder chatInfoHolder;
+  private final TranslatorService translatorService;
 
   @Override
   public List<? extends PartialBotApiMethod<?>> execute(Update update) {
@@ -38,7 +35,9 @@ public class StartCommand implements Command {
     log.info("Add new user with id = {}", userId);
     userDataFacade.addNewUser(userId);
 
-    final SendMessage message = sendMessage(chatInfoHolder.getChatId(), MESSAGE, getMainMenuKeyboard());
+    final ReplyKeyboardMarkup languageMenuKeyboard = getLanguageMenuKeyboard(translatorService);
+
+    final SendMessage message = sendMessage(chatInfoHolder.getChatId(), MESSAGE, languageMenuKeyboard);
     return singletonList(message);
   }
 
