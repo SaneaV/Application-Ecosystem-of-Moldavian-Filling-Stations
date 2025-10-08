@@ -16,13 +16,14 @@ public interface FillingStationFacade {
 
   List<FillingStationDto> getAllFillingStations(LimitFillingStationRequest request);
 
+  List<FillingStationDto> getAllFillingStations();
+
   FillingStationDto getNearestFillingStation(BaseFillingStationRequest request);
 
   List<FillingStationDto> getBestFuelPrice(LimitFillingStationRequest request, String fuelType);
 
   PageDto<FillingStationDto> getPageOfBestFuelPrices(LimitFillingStationRequest limitFillingStationRequest,
-      PageRequest pageRequest,
-      String fuelType);
+      PageRequest pageRequest, String fuelType);
 
   ZonedDateTime getLastUpdateTimestamp();
 

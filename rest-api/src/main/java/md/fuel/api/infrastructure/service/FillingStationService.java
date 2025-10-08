@@ -10,6 +10,8 @@ public interface FillingStationService {
 
   List<FillingStation> getAllFillingStations(LimitFillingStationCriteria criteria);
 
+  List<FillingStation> getAllFillingStations();
+
   FillingStation getNearestFillingStation(BaseFillingStationCriteria criteria);
 
   List<FillingStation> getBestFuelPrice(LimitFillingStationCriteria criteria, String fuelType);

@@ -10,11 +10,13 @@ import md.fuel.api.rest.request.BaseFillingStationRequest;
 import md.fuel.api.rest.request.LimitFillingStationRequest;
 import md.fuel.api.rest.request.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class FillingStationControllerImpl implements FillingStationController {
 
   private final FillingStationFacade fillingStationFacade;
@@ -22,6 +24,13 @@ public class FillingStationControllerImpl implements FillingStationController {
   @Override
   public ResponseEntity<List<FillingStationDto>> getAllFillingStations(LimitFillingStationRequest request) {
     final List<FillingStationDto> allFillingStations = fillingStationFacade.getAllFillingStations(request);
+
+    return ResponseEntity.ok().body(allFillingStations);
+  }
+
+  @Override
+  public ResponseEntity<List<FillingStationDto>> getAllFillingStations() {
+    final List<FillingStationDto> allFillingStations = fillingStationFacade.getAllFillingStations();
 
     return ResponseEntity.ok().body(allFillingStations);
   }

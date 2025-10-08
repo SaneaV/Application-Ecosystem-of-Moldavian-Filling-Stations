@@ -72,6 +72,12 @@ public class FillingStationFacadeImpl implements FillingStationFacade {
   }
 
   @Override
+  public List<FillingStationDto> getAllFillingStations() {
+    final List<FillingStation> allFillingStations = fillingStationService.getAllFillingStations();
+    return fillingStationDtoMapper.toDto(allFillingStations);
+  }
+
+  @Override
   public FillingStationDto getNearestFillingStation(BaseFillingStationRequest request) {
     log.info("Fetching data about nearest filling stations");
 

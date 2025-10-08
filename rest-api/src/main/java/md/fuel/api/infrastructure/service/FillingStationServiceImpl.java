@@ -81,6 +81,11 @@ public class FillingStationServiceImpl implements FillingStationService {
   }
 
   @Override
+  public List<FillingStation> getAllFillingStations() {
+    return anreApi.getFillingStationsInfo();
+  }
+
+  @Override
   public FillingStation getNearestFillingStation(BaseFillingStationCriteria criteria) {
     final double latitude = criteria.getLatitude();
     final double longitude = criteria.getLongitude();

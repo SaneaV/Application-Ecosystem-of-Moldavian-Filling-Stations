@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>АЗС Молдовы</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script
+            src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    ></script>
+
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/map-controls.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div id="sidebar">
+    <div class="lang-section">
+        <div class="lang-flags">
+            <img src="img/language/Russia.svg" class="lang-flag" data-lang="ru" width="28" height="28" alt="Русский">
+            <img src="img/language/United%20Kingdom.svg" class="lang-flag" data-lang="en" width="28" height="28" alt="English">
+            <img src="img/language/Moldova.svg" class="lang-flag" data-lang="ro" width="28" height="28" alt="Română">
+            <img src="img/language/Ukraine.svg" class="lang-flag" data-lang="ua" width="28" height="28" alt="Українська">
+        </div>
+    </div>
+
+    <div class="anre-prices" id="anrePrices">
+        <div>⛽ Бензин: —</div>
+        <div>🛢️ Дизель: —</div>
+    </div>
+
+    <!-- Кнопка открытия фильтра -->
+    <button id="openFilterModal" class="filter-btn">⚙️ Фильтрация</button>
+
+    <div id="cityFilterModal" class="modal">
+        <div class="modal-content">
+            <h3 id="filterTitle">Настройки фильтра</h3>
+
+            <div class="filter-group">
+                <label><b id="districtFilterTitle">Выберите регион</b></label>
+                <div id="districtDropdown" class="dropdown">
+                    <div id="districtDropdownSelected" class="dropdown-selected">Все районы</div>
+                    <div id="districtDropdownList" class="dropdown-list hidden"></div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label><b id="cityFilterTitle">Выберите города</b></label>
+                <div id="cityDropdown" class="dropdown">
+                    <div id="cityDropdownSelected" class="dropdown-selected">Все города</div>
+                    <div id="cityDropdownList" class="dropdown-list hidden"></div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label><b id="brandFilterTitle">Выберите АЗС</b></label>
+                <div id="brandDropdown" class="dropdown">
+                    <div id="brandDropdownSelected" class="dropdown-selected">Все бренды</div>
+                    <div id="brandDropdownList" class="dropdown-list hidden"></div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label><b id="fuelFilterTitle">Тип топлива</b></label>
+                <div id="fuelDropdown" class="dropdown">
+                    <div id="fuelDropdownSelected" class="dropdown-selected">Все типы</div>
+                    <div id="fuelDropdownList" class="dropdown-list hidden"></div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button id="applyCityFilter">Применить</button>
+                <button id="clearCityFilter">Очистить</button>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <div id="stationList"></div>
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

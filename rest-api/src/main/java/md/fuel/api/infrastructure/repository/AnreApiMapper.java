@@ -16,6 +16,8 @@ public interface AnreApiMapper {
   @Mapping(target = "petrol", source = "petrol", qualifiedByName = "mapZeroOrNullPrice")
   @Mapping(target = "diesel", source = "diesel", qualifiedByName = "mapZeroOrNullPrice")
   @Mapping(target = "gas", source = "gas", qualifiedByName = "mapZeroOrNullPrice")
+  @Mapping(target = "district", source = "lev2")
+  @Mapping(target = "city", source = "lev1")
   FillingStation toEntity(FillingStationApi fillingStationApi);
 
   FuelPrice toEntity(FuelPriceApi fuelPriceApi);

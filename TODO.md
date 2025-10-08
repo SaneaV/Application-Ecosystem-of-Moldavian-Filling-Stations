@@ -39,16 +39,16 @@
 - [X] [CORE] Create cache common lib.
 - [X] [CORE] Add Actuator.
 - [X] [TELEGRAM] Three languages for displaying text in Telegram bot (using Internationalization in Spring Boot).
+- [X] [WEB] Create WEB module for traditional filling stations with map, table, filtering and internalization
 
 ## Features
 
 - [ ] [CORE] Add Dockerfile and Docker-compose to build a project in container.
-- [ ] [API] Add Spring Security for REST API (using mock LDAP).
-- [ ] [EXTERNAL] Add custom JWT token library.
 - [ ] [CORE] Create a Kafka-Statistics module to collect data about the cities from which the request is made (implement through
   aspects and Thymeleaf).
 - [ ] [API] Add auditable for controllers (save data in database).
 - [ ] [CORE] Add SonarQube.
+- [ ] [WEB] Adopt electric station API
 
 ## Food For Thought
 

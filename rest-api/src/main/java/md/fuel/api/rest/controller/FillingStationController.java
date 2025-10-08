@@ -51,6 +51,24 @@ public interface FillingStationController extends SwaggerController {
   @GetMapping(value = "/filling-station")
   ResponseEntity<List<FillingStationDto>> getAllFillingStations(@Valid LimitFillingStationRequest request);
 
+  @Operation(summary = "Get all filling stations.", description = "Returns all filling stations")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "OK.", content = {
+          @Content(mediaType = "application/json",
+              array = @ArraySchema(schema = @Schema(implementation = FillingStationDto.class)))}),
+      @ApiResponse(responseCode = "404", description = "Not Found.",
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
+      @ApiResponse(responseCode = "400", description = "Bad Request.",
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))}),
+      @ApiResponse(responseCode = "500", description = "Internal Server Error.",
+          content = {@Content(mediaType = "application/json", schema = @Schema(title = "ErrorDescriptionResponse", oneOf = {
+              GatewayErrorDescription.class, RfcErrorDescription.class}))})
+  })
+  @GetMapping(value = "/all-filling-stations")
+  ResponseEntity<List<FillingStationDto>> getAllFillingStations();
+
   @Operation(summary = "Get page of all filling stations within a certain radius.", description = "Returns all filling stations "
       + "within a certain radius in page format.")
   @ApiResponses(value = {

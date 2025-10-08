@@ -1,0 +1,10 @@
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100%;
+        position: static;
+    }
+
+    #map {
+        left: 0;
+    }
+}

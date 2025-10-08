@@ -38,6 +38,8 @@ public class FillingStation implements Serializable {
   private final Double gas;
   private final double latitude;
   private final double longitude;
+  private final String district;
+  private final String city;
 
   public static Comparator<FillingStation> getComparator(SortingQuery sortingQuery, double latitude, double longitude) {
     final String sortOrderBy = sortingQuery.getSortOrderBy();

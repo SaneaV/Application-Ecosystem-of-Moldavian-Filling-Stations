@@ -1,0 +1,27 @@
+#sidebar {
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+    overflow: hidden;
+}
+
+#map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 380px;
+}
+
+#stationList {
+    flex: 1;
+    overflow-y: auto;
+    margin-top: 5px;
+}
+
+.dropdown-selected.updated {
+    background-color: #fff3cd;
+    transition: background-color 0.8s ease;
+}

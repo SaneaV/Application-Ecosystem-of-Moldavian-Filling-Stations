@@ -25,4 +25,8 @@ public class FillingStationDto {
   private final double latitude;
   @Schema(description = "Filling station longitude.", example = "28.0", requiredMode = REQUIRED)
   private final double longitude;
+  @Schema(description = "Filling station district.", example = "Basarabeasca", requiredMode = REQUIRED)
+  private final String district;
+  @Schema(description = "Filling station city.", example = "Iserlia", requiredMode = REQUIRED)
+  private final String city;
 }
