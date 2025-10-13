@@ -176,7 +176,7 @@ After that, a convenient GUI screen will appear with a presentation of all bugs,
 
 # Important Notes
 
-- The Telegram bot can intercept (from rest-api service) in XML format and send errors to the user.
+- The Telegram bot can intercept (from fueling-station-rest-api service) in XML format and send errors to the user.
 - The default sorting of filling stations in the full list and the search for the best fuel occurs by distance
 (the nearest filling station is always the first in the result)
 

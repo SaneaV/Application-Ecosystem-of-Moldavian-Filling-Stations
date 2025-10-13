@@ -2,7 +2,7 @@
 
 This web service provides the possibility to get different data about filling stations in Moldova in REST-API format.
 
-- [REST API Contracts](#rest-api-contracts)
+- [REST API Contracts](#fueling-station-rest-api-contracts)
 - [Project Architecture](#project-architecture)
 - [Environment Variables](#environment-variables)
 - [Test](#test)
@@ -13,9 +13,9 @@ This web service provides the possibility to get different data about filling st
     - [Checkstyle](#checkstyle)
     - [SpotBugs](#spotbugs)
 
-# REST API Contracts
+# FUELING STATION REST API Contracts
 
-Swagger is used to create REST API contracts.
+Swagger is used to create FUELING STATION REST API contracts.
 
 In runtime swagger contracts can be obtained from the [Swagger UI](http://localhost:8080/swagger-ui/index.html)
 

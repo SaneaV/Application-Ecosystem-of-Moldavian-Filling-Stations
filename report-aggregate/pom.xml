@@ -28,7 +28,7 @@
     </dependency>
     <dependency>
       <groupId>md.fuel.api</groupId>
-      <artifactId>rest-api</artifactId>
+      <artifactId>fueling-station-rest-api</artifactId>
       <version>1.0.0</version>
       <type>war</type>
     </dependency>

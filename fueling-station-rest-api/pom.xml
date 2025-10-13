@@ -9,10 +9,10 @@
   </parent>
 
   <groupId>md.fuel.api</groupId>
-  <artifactId>rest-api</artifactId>
+  <artifactId>fueling-station-rest-api</artifactId>
   <packaging>war</packaging>
 
-  <name>rest-api</name>
+  <name>fueling-station-rest-api</name>
   <url>http://maven.apache.org</url>
 
   <properties>

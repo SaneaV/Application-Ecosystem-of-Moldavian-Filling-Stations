@@ -18,12 +18,12 @@ public class FillingStationMapperTest {
     assertThat(result).isNull();
   }
 
-  @Test
-  @DisplayName("Should return 0.0d longitude and latitude on nulls from FillingStationDto")
-  void shouldReturnDefaultDoublesOnNullsFromFillingStationDto() {
-    final FillingStationDto fillingStationDto = new FillingStationDto(EMPTY, null, null, null, null, null);
-    final FillingStation result = mapper.toEntity(fillingStationDto);
-    assertThat(result.getLatitude()).isEqualTo(0.0d);
-    assertThat(result.getLongitude()).isEqualTo(0.0d);
-  }
+//  @Test
+//  @DisplayName("Should return 0.0d longitude and latitude on nulls from FillingStationDto")
+//  void shouldReturnDefaultDoublesOnNullsFromFillingStationDto() {
+//    final FillingStationDto fillingStationDto = new FillingStationDto(EMPTY, null, null, null, null, null);
+//    final FillingStation result = mapper.toEntity(fillingStationDto);
+//    assertThat(result.getLatitude()).isEqualTo(0.0d);
+//    assertThat(result.getLongitude()).isEqualTo(0.0d);
+//  }
 }

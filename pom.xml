@@ -18,7 +18,7 @@
   <description>Application Ecosystem of Moldavian Filling Stations for working with real-time data.</description>
 
   <modules>
-    <module>rest-api</module>
+    <module>fueling-station-rest-api</module>
     <module>telegram-bot</module>
     <module>contract-generator</module>
     <module>report-aggregate</module>
@@ -201,7 +201,7 @@
       </dependency>
       <dependency>
         <groupId>md.fuel.api</groupId>
-        <artifactId>rest-api</artifactId>
+        <artifactId>fueling-station-rest-api</artifactId>
         <version>${rest.api.version}</version>
         <type>zip</type>
       </dependency>

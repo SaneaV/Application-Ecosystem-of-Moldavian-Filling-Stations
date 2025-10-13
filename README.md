@@ -19,7 +19,7 @@ To identify the best fuel price, and filling station location was used: [ANRE-AP
 - [Contract-Generator](/contract-generator) - is a library used in the bundle between Rest-API and Telegram-Bot; Java classes are
   generated using Swagger OpenAPI generator.
 - [Report-Aggregate](/report-aggregate) - is a module that allows to aggregate Jacoco test coverage report data.
-- [REST-API](/rest-api) - is a web service offering a set of REST APIs for working with filling stations in Moldova.
+- [FUELING-STATIION-REST-API](/fueling-station-rest-api) - is a web service offering a set of REST APIs for working with filling stations in Moldova.
 - [Telegram-Bot](/telegram-bot) - is a bot that uses Telegram messenger for comfortable search of information about locations and
   prices of Moldovan filling stations.
 - [Telegram-Bot-Lib](/telegram-bot-lib) - A library that includes basic components and configurations for running a Telegram bot.
