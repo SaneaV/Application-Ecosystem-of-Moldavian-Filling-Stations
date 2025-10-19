@@ -1,0 +1,13 @@
+plugshare-api:
+  base-url: ${app.electric-station.plughare.base-url}
+  authorization: ${app.electric-station.plugshare.authorization}
+  default-latitude: 47.0
+  default-longitude: 28.35
+  span-lat: 3.2
+  span-lng: 3.8
+  count: 500
+  accept: application/json
+  accept-language: en-US
+  cache-control: no-cache
+  pragma: no-cache
+  user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36

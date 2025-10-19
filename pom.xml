@@ -18,6 +18,7 @@
   <description>Application Ecosystem of Moldavian Filling Stations for working with real-time data.</description>
 
   <modules>
+    <module>electric-station-rest-api</module>
     <module>fueling-station-rest-api</module>
     <module>telegram-bot</module>
     <module>contract-generator</module>

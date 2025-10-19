@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 telegram-bot/src/main/resources/application-h2.properties
+electric-station-rest-api/src/main/resources/application-h2.properties
 telegram-bot/src/main/resources/application-postgresql.properties
 
 ### IntelliJ IDEA ###

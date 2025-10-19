@@ -1,0 +1,4 @@
+client-configuration:
+  retry-count: 3
+  time-duration: 5000
+  retryable: 404, 429
