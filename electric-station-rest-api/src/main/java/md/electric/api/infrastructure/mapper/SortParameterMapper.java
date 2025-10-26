@@ -1,12 +1,12 @@
-package md.fuel.api.infrastructure.mapper;
+package md.electric.api.infrastructure.mapper;
 
 import static lombok.AccessLevel.PRIVATE;
-import static md.fuel.api.domain.criteria.SortOrder.ASC;
-import static md.fuel.api.domain.criteria.SortOrder.DESC;
+import static md.electric.api.domain.criteria.SortOrder.ASC;
+import static md.electric.api.domain.criteria.SortOrder.DESC;
 
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import md.fuel.api.domain.criteria.SortingQuery;
+import md.electric.api.domain.criteria.SortingQuery;
 
 @Slf4j
 @NoArgsConstructor(access = PRIVATE)

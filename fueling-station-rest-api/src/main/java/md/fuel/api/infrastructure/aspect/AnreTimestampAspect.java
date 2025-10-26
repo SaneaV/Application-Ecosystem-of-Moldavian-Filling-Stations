@@ -16,7 +16,7 @@ public class AnreTimestampAspect {
   private static final String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm";
   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
-  @After("execution(* md.fuel.api.infrastructure.repository.AnreApiImpl.getFillingStationsInfo())")
+  @After("execution(* md.fuel.api.infrastructure.client.AnreApiImpl.getFillingStationsInfo())")
   public void setAnreTimestamp() {
     final String timestamp = FORMATTER.format(LocalDateTime.now());
 

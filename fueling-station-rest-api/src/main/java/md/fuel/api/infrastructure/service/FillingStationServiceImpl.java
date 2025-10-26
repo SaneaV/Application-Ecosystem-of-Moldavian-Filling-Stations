@@ -24,8 +24,8 @@ import md.fuel.api.domain.criteria.BaseFillingStationCriteria;
 import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
 import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
-import md.fuel.api.infrastructure.repository.AnreApi;
-import md.fuel.api.rest.request.SortingQuery;
+import md.fuel.api.infrastructure.client.AnreApi;
+import md.fuel.api.domain.criteria.SortingQuery;
 import org.springframework.stereotype.Service;
 
 @Slf4j

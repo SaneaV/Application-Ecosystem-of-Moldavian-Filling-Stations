@@ -1,8 +1,8 @@
 //package md.fuel.api.infrastructure.service;
 //
 //import static java.util.Arrays.asList;
-//import static md.fuel.api.rest.request.SortOrder.ASC;
-//import static md.fuel.api.rest.request.SortOrder.DESC;
+//import static md.fuel.api.domain.criteria.SortOrder.ASC;
+//import static md.fuel.api.domain.criteria.SortOrder.DESC;
 //import static org.assertj.core.api.Assertions.assertThat;
 //import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 //import static org.assertj.core.api.InstanceOfAssertFactories.LOCAL_DATE;
@@ -23,8 +23,8 @@
 //import md.fuel.api.infrastructure.exception.model.EntityNotFoundException;
 //import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
 //import md.fuel.api.infrastructure.repository.AnreApi;
-//import md.fuel.api.rest.request.SortOrder;
-//import md.fuel.api.rest.request.SortingQuery;
+//import md.fuel.api.domain.criteria.SortOrder;
+//import md.fuel.api.domain.criteria.SortingQuery;
 //import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.params.ParameterizedTest;

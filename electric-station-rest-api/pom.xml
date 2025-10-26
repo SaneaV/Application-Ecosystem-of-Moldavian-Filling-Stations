@@ -13,7 +13,6 @@
   <artifactId>electric-station-rest-api</artifactId>
   <packaging>war</packaging>
 
-  <name>Electric Station REST API</name>
   <description>REST API for electric charging stations in Moldova</description>
 
   <properties>

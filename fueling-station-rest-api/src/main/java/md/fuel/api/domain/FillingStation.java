@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import md.fuel.api.infrastructure.exception.model.InvalidRequestException;
-import md.fuel.api.rest.request.SortingQuery;
+import md.fuel.api.domain.criteria.SortingQuery;
 
 @Slf4j
 @Getter

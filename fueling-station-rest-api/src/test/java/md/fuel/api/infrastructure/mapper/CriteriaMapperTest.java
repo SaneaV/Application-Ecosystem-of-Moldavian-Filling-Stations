@@ -1,8 +1,8 @@
 package md.fuel.api.infrastructure.mapper;
 
 import static java.util.Arrays.asList;
-import static md.fuel.api.rest.request.SortOrder.ASC;
-import static md.fuel.api.rest.request.SortOrder.DESC;
+import static md.fuel.api.domain.criteria.SortOrder.ASC;
+import static md.fuel.api.domain.criteria.SortOrder.DESC;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
 import md.fuel.api.rest.request.BaseFillingStationRequest;
 import md.fuel.api.rest.request.LimitFillingStationRequest;
 import md.fuel.api.rest.request.PageRequest;
-import md.fuel.api.rest.request.SortingQuery;
+import md.fuel.api.domain.criteria.SortingQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

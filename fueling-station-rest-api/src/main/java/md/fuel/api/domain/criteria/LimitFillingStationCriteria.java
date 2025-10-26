@@ -2,7 +2,6 @@ package md.fuel.api.domain.criteria;
 
 import java.util.List;
 import lombok.Getter;
-import md.fuel.api.rest.request.SortingQuery;
 
 @Getter
 public class LimitFillingStationCriteria extends BaseFillingStationCriteria {

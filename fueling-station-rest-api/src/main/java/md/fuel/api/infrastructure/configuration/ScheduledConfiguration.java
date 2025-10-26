@@ -2,7 +2,7 @@ package md.fuel.api.infrastructure.configuration;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import md.fuel.api.infrastructure.repository.AnreApi;
+import md.fuel.api.infrastructure.client.AnreApi;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.annotation.Configuration;

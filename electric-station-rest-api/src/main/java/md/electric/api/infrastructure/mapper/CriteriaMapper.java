@@ -1,15 +1,13 @@
-package md.fuel.api.infrastructure.mapper;
+package md.electric.api.infrastructure.mapper;
 
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collections;
 import java.util.List;
-import md.fuel.api.domain.criteria.BaseFillingStationCriteria;
-import md.fuel.api.domain.criteria.LimitFillingStationCriteria;
-import md.fuel.api.rest.request.BaseFillingStationRequest;
-import md.fuel.api.rest.request.LimitFillingStationRequest;
-import md.fuel.api.rest.request.PageRequest;
-import md.fuel.api.domain.criteria.SortingQuery;
+import md.electric.api.domain.criteria.ElectricStationCriteria;
+import md.electric.api.domain.criteria.SortingQuery;
+import md.electric.api.rest.request.ElectricStationRequest;
+import md.electric.api.rest.request.PageRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -17,17 +15,15 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface CriteriaMapper {
 
-  BaseFillingStationCriteria toEntity(BaseFillingStationRequest request);
-
   @Mapping(target = "sorting", source = "sorting", qualifiedByName = "toSortingQueryList")
   @Mapping(target = "pageLimit", ignore = true)
   @Mapping(target = "pageOffset", ignore = true)
-  LimitFillingStationCriteria toEntity(LimitFillingStationRequest request);
+  ElectricStationCriteria toEntity(ElectricStationRequest request);
 
-  @Mapping(target = "sorting", source = "limitFillingStationRequest.sorting", qualifiedByName = "toSortingQueryList")
+  @Mapping(target = "sorting", source = "request.sorting", qualifiedByName = "toSortingQueryList")
   @Mapping(target = "pageLimit", source = "pageRequest.limit")
   @Mapping(target = "pageOffset", source = "pageRequest.offset")
-  LimitFillingStationCriteria toEntity(LimitFillingStationRequest limitFillingStationRequest, PageRequest pageRequest);
+  ElectricStationCriteria toEntity(ElectricStationRequest request, PageRequest pageRequest);
 
   @Named("toSortingQueryList")
   default List<SortingQuery> toSortingQueryList(List<String> sorting) {
