@@ -46,5 +46,5 @@ export function loadLastUpdate() {
             document.getElementById("lastUpdate").innerText =
                 `${lastUpdateLabels[currentLang]}: ${formatted}`;
         })
-        .catch(err => console.error("Ошибка запроса даты:", err));
+        .catch(err => {});
 }

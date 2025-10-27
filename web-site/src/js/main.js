@@ -1,55 +1,155 @@
 import { loadStations, generateMarkerMap, updateAllMarkerPopups, markerMap, setHighlightCallback } from './stations.js';
 import { loadAnrePrices, loadLastUpdate } from './anre.js';
 import { setupLanguageSwitcher } from './language.js';
+import { setupStationTypeToggle, getCurrentStationType } from './stationType.js';
 import { map } from './map.js';
 import { addResetControl } from './controls.js';
 import { debounce } from './config.js';
+import { loadElectricStations, generateElectricMarkerMap, updateAllElectricMarkerPopups, setElectricHighlightCallback } from './electricStations.js';
+import { getCurrentMarkerMap, setCurrentMarkerMap } from './markerState.js';
+import { openGoogleMapsRoute } from './utils.js';
 import {
     setupCityFilter,
     updateSidebar,
     updateFilterLabels,
     updateMapMarkers,
-    highlightStationInSidebar
+    highlightStationInSidebar,
+    updateFuelMarkerMapRef
 } from './sidebar/index.js';
 
 import {
+    setupElectricFilter,
+    updateElectricFilterLabels,
+    updateElectricMarkerMapRef
+} from './sidebar/filterElectric.js';
+
+import {
+    updateElectricSidebar,
+    updateElectricMapMarkers,
+    highlightElectricStationInSidebar
+} from './sidebar/renderElectric.js';
+
+import {
     loadFiltersFromStorage,
-    saveFiltersToStorage
+    saveFiltersToStorage,
+    loadElectricFiltersFromStorage,
+    saveElectricFiltersToStorage
 } from './sidebar/state.js';
 
-function refreshUI() {
-    generateMarkerMap();          // Создаём маркеры (нужно при первой загрузке!)
-    updateMapMarkers(markerMap);
-    updateSidebar(markerMap);
-    loadAnrePrices();
-    loadLastUpdate();
-    updateFilterLabels();
+function toggleFilterVisibility(stationType) {
+    const fuelFilterButton = document.getElementById('fuelFilterButton');
+    const electricFilterButton = document.getElementById('electricFilterButton');
+
+    if (stationType === 'electric') {
+        if (fuelFilterButton) fuelFilterButton.style.display = 'none';
+        if (electricFilterButton) electricFilterButton.style.display = 'block';
+    } else {
+        if (fuelFilterButton) fuelFilterButton.style.display = 'block';
+        if (electricFilterButton) electricFilterButton.style.display = 'none';
+    }
 }
 
-// 🔁 Инициализация при загрузке
+function refreshUI(markers = null, stationType = 'fuel') {
+    toggleFilterVisibility(stationType);
+
+    let currentMarkers = markers;
+
+    if (!currentMarkers || currentMarkers.length === 0) {
+        if (stationType === 'electric') {
+            currentMarkers = generateElectricMarkerMap();
+        } else {
+            currentMarkers = generateMarkerMap();
+        }
+    }
+
+    if (currentMarkers && currentMarkers.length > 0) {
+        setCurrentMarkerMap(currentMarkers);
+
+        if (stationType === 'electric') {
+            updateElectricMapMarkers(currentMarkers);
+            updateElectricSidebar(currentMarkers);
+            updateElectricMarkerMapRef(currentMarkers);
+        } else {
+            updateMapMarkers(currentMarkers);
+            updateSidebar(currentMarkers);
+            updateFuelMarkerMapRef(currentMarkers);
+        }
+    }
+
+    loadAnrePrices();
+    loadLastUpdate();
+
+    if (stationType === 'electric') {
+        updateElectricFilterLabels();
+    } else {
+        updateFilterLabels();
+    }
+}
+
 loadStations(() => {
-    loadFiltersFromStorage();     // ← восстановление фильтров
-
-    // 🆕 Регистрируем callback для подсветки станций
+    loadFiltersFromStorage();
     setHighlightCallback(highlightStationInSidebar);
-
-    refreshUI();                  // ← обновляем UI
-    setupCityFilter(markerMap);   // ← инициализируем фильтр один раз
+    refreshUI(null, 'fuel');
+    const initialMarkerMap = getCurrentMarkerMap();
+    if (initialMarkerMap) {
+        setupCityFilter(initialMarkerMap);
+    }
 });
 
-// 🌐 Смена языка БЕЗ пересоздания маркеров
+setupStationTypeToggle(async (type) => {
+    try {
+        if (type === 'electric') {
+            loadElectricFiltersFromStorage();
+            await loadElectricStations();
+            setElectricHighlightCallback(highlightElectricStationInSidebar);
+            const electricMarkerMap = generateElectricMarkerMap();
+            if (Array.isArray(electricMarkerMap)) {
+                refreshUI(electricMarkerMap, 'electric');
+                setupElectricFilter(electricMarkerMap);
+            }
+        } else {
+            loadFiltersFromStorage();
+            await new Promise(resolve => loadStations(resolve));
+            setHighlightCallback(highlightStationInSidebar);
+            const fuelMarkerMap = generateMarkerMap();
+            refreshUI(fuelMarkerMap, 'fuel');
+            setupCityFilter(fuelMarkerMap);
+        }
+    } catch (error) {}
+});
+
 setupLanguageSwitcher(() => {
-    updateAllMarkerPopups();     // 🆕 Только обновляем попапы, не пересоздаем маркеры
-    updateFilterLabels();        // ← обновляем текст фильтров
-    updateSidebar(markerMap);    // ← пересчитываем сайдбар
-    loadAnrePrices();            // ← обновляем цены (для валюты)
-    loadLastUpdate();            // ← обновляем дату
-    saveFiltersToStorage();      // ← сохраняем текущее состояние
+    const stationType = getCurrentStationType();
+
+    if (stationType === 'electric') {
+        updateAllElectricMarkerPopups(getCurrentMarkerMap());
+        updateElectricFilterLabels();
+        updateElectricSidebar(getCurrentMarkerMap());
+        saveElectricFiltersToStorage();
+    } else {
+        updateAllMarkerPopups();
+        updateFilterLabels();
+        updateSidebar(getCurrentMarkerMap());
+        saveFiltersToStorage();
+    }
+
+    loadAnrePrices();
+    loadLastUpdate();
 });
 
-// 🗺️ Обновление сайдбара при движении карты с debounce
-const debouncedUpdateSidebar = debounce(() => updateSidebar(markerMap), 300);
+window.openRouteFromPopup = function(lat, lng, name) {
+    openGoogleMapsRoute(lat, lng, name);
+};
+
+const debouncedUpdateSidebar = debounce(() => {
+    const stationType = getCurrentStationType();
+    if (stationType === 'electric') {
+        updateElectricSidebar(getCurrentMarkerMap());
+    } else {
+        updateSidebar(getCurrentMarkerMap());
+    }
+}, 300);
+
 map.on("moveend", debouncedUpdateSidebar);
 
-// 🧭 Кастомные элементы управления
 addResetControl();

@@ -8,22 +8,25 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
-    <link
-            rel="stylesheet"
-            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
-    <script
-            src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    ></script>
 
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/layout.css">
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/map-controls.css">
+    <link rel="stylesheet" href="css/electric-stations.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
 <div id="sidebar">
+    <div class="station-type-toggle">
+        <button class="toggle-btn station-type-btn active" data-type="fuel">
+            <span class="toggle-icon">⛽</span>
+        </button>
+        <button class="toggle-btn station-type-btn" data-type="electric">
+            <span class="toggle-icon">⚡</span>
+        </button>
+    </div>
+
     <div class="lang-section">
         <div class="lang-flags">
             <img src="img/language/Russia.svg" class="lang-flag" data-lang="ru" width="28" height="28" alt="Русский">
@@ -33,13 +36,22 @@
         </div>
     </div>
 
-    <div class="anre-prices" id="anrePrices">
+    <div class="anre-prices" id="anrePrices" data-station-type="fuel">
         <div>⛽ Бензин: —</div>
         <div>🛢️ Дизель: —</div>
     </div>
 
-    <!-- Кнопка открытия фильтра -->
-    <button id="openFilterModal" class="filter-btn">⚙️ Фильтрация</button>
+    <div class="filter-toggle" id="fuelFilterButton">
+        <button id="openFilterModal" class="toggle-btn">
+            <span class="toggle-icon">⚙️</span>
+        </button>
+    </div>
+
+    <div class="filter-toggle" id="electricFilterButton" style="display: none;">
+        <button id="openElectricFilterModal" class="toggle-btn">
+            <span class="toggle-icon">⚡⚙️</span>
+        </button>
+    </div>
 
     <div id="cityFilterModal" class="modal">
         <div class="modal-content">
@@ -84,6 +96,41 @@
         </div>
     </div>
 
+    <div id="electricFilterModal" class="modal">
+        <div class="modal-content">
+            <h3 id="electricFilterTitle">Настройки фильтра</h3>
+
+            <div class="filter-group">
+                <label><b id="electricDistrictFilterTitle">Выберите регион</b></label>
+                <div id="electricDistrictDropdown" class="dropdown">
+                    <div id="electricDistrictDropdownSelected" class="dropdown-selected">Все районы</div>
+                    <div id="electricDistrictDropdownList" class="dropdown-list hidden"></div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label><b id="electricCityFilterTitle">Выберите города</b></label>
+                <div id="electricCityDropdown" class="dropdown">
+                    <div id="electricCityDropdownSelected" class="dropdown-selected">Все города</div>
+                    <div id="electricCityDropdownList" class="dropdown-list hidden"></div>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <label><b id="connectorFilterTitle">Тип коннектора</b></label>
+                <div id="connectorDropdown" class="dropdown">
+                    <div id="connectorDropdownSelected" class="dropdown-selected">Все типы</div>
+                    <div id="connectorDropdownList" class="dropdown-list hidden"></div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button id="applyElectricFilter">Применить</button>
+                <button id="clearElectricFilter">Очистить</button>
+            </div>
+        </div>
+    </div>
+
     <hr>
 
     <div id="stationList"></div>
@@ -97,3 +144,4 @@
 <script type="module" src="js/main.js"></script>
 </body>
 </html>
+

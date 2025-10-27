@@ -3,8 +3,14 @@ export const selectedDistricts = new Set();
 export const selectedBrands = new Set();
 export const selectedFuelTypes = new Set();
 
+export const selectedElectricCities = new Set();
+export const selectedElectricDistricts = new Set();
+export const selectedConnectorTypes = new Set();
+
 let expandedCity = null;
 let expandedDistrict = null;
+let expandedElectricCity = null;
+let expandedElectricDistrict = null;
 
 export function setExpandedCity(cityName) {
     expandedCity = cityName;
@@ -22,13 +28,28 @@ export function getExpandedDistrict() {
     return expandedDistrict;
 }
 
+export function setExpandedElectricCity(cityName) {
+    expandedElectricCity = cityName;
+}
+
+export function getExpandedElectricCity() {
+    return expandedElectricCity;
+}
+
+export function setExpandedElectricDistrict(districtName) {
+    expandedElectricDistrict = districtName;
+}
+
+export function getExpandedElectricDistrict() {
+    return expandedElectricDistrict;
+}
+
 export function saveFiltersToStorage() {
     const filters = {
         cities: Array.from(selectedCities),
         districts: Array.from(selectedDistricts),
         brands: Array.from(selectedBrands),
         fuels: Array.from(selectedFuelTypes)
-        // 🔧 НЕ сохраняем expandedCity и expandedDistrict - всегда начинаем со свёрнутыми вкладками
     };
     localStorage.setItem("userFilters", JSON.stringify(filters));
 }
@@ -50,12 +71,49 @@ export function loadFiltersFromStorage() {
         filters.brands?.forEach(b => selectedBrands.add(b));
         filters.fuels?.forEach(f => selectedFuelTypes.add(f));
 
-        // 🔧 НЕ восстанавливаем раскрытые вкладки - всегда начинаем со свёрнутыми
         expandedCity = null;
         expandedDistrict = null;
-    } catch (e) {
-        console.warn("Ошибка загрузки фильтров из localStorage:", e);
+    } catch (e) {}
+}
+
+export function saveElectricFiltersToStorage() {
+    const filters = {
+        cities: Array.from(selectedElectricCities),
+        districts: Array.from(selectedElectricDistricts),
+        connectors: Array.from(selectedConnectorTypes)
+    };
+    localStorage.setItem("electricFilters", JSON.stringify(filters));
+}
+
+
+export function clearAllElectricFilters() {
+    selectedElectricCities.clear();
+    selectedElectricDistricts.clear();
+    selectedConnectorTypes.clear();
+    expandedElectricCity = null;
+    expandedElectricDistrict = null;
+    localStorage.removeItem("electricFilters");
+}
+export function loadElectricFiltersFromStorage() {
+    const raw = localStorage.getItem("electricFilters");
+    if (!raw) {
+        return;
     }
+
+    try {
+        const filters = JSON.parse(raw);
+
+        selectedElectricCities.clear();
+        selectedElectricDistricts.clear();
+        selectedConnectorTypes.clear();
+
+        filters.cities?.forEach(c => selectedElectricCities.add(c));
+        filters.districts?.forEach(d => selectedElectricDistricts.add(d));
+        filters.connectors?.forEach(conn => selectedConnectorTypes.add(conn));
+
+        expandedElectricCity = null;
+        expandedElectricDistrict = null;
+    } catch (e) {}
 }
 
 export function clearAllFilters() {
@@ -67,3 +125,4 @@ export function clearAllFilters() {
     expandedDistrict = null;
     localStorage.removeItem("userFilters");
 }
+

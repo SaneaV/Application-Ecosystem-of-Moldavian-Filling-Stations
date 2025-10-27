@@ -11,27 +11,45 @@ export const logos = {
 
 export function getIconForStation(name) {
     const key = Object.keys(logos).find(k => name.toUpperCase().includes(k));
-    const file = key ? logos[key] : "peco_default.png";
-    return L.icon({
-        iconUrl: "img/stations/" + file,
-        iconSize: [50, 50],
-        className: "station-icon"
-    });
+    if (key) {
+        return L.icon({ iconUrl: `img/stations/${logos[key]}`, iconSize: [32, 32] });
+    }
+    return L.icon({ iconUrl: "img/stations/peco_default.png", iconSize: [32, 32] });
 }
 
 export function formatPrice(type, value) {
-    const anreValue = anreData?.[type];
-    if (anreValue == null || value == null) return `${value} ${currencyLabels[currentLang]}`;
+    if (!value) return "—";
 
-    const diff = value - anreValue;
-    const percentRaw = (diff / anreValue) * 100;
-    const percent = Math.abs(percentRaw.toFixed(2));
+    const priceText = `${value} ${currencyLabels[currentLang]}`;
 
-    if (diff < 0) {
-        return `<span style="color:green">${value} ${currencyLabels[currentLang]} (-${percent}%)</span>`;
-    } else if (diff > 0) {
-        return `<span style="color:red">${value} ${currencyLabels[currentLang]} (+${percent}%)</span>`;
+    if (!anreData || typeof anreData !== 'object') {
+        return priceText;
+    }
+
+    const anrePrice = anreData[type];
+
+    if (!anrePrice) {
+        return priceText;
+    }
+
+    const numValue = Number(value);
+    const numAnrePrice = Number(anrePrice);
+
+    if (numValue === numAnrePrice) {
+        return priceText;
+    } else if (numValue < numAnrePrice) {
+        const diff = numAnrePrice - numValue;
+        const percentage = ((diff / numAnrePrice) * 100).toFixed(1);
+        return `<span style="color: green;">${priceText} (-${percentage}%)</span>`;
     } else {
-        return `${value} ${currencyLabels[currentLang]}`;
+        const diff = numValue - numAnrePrice;
+        const percentage = ((diff / numAnrePrice) * 100).toFixed(1);
+        return `<span style="color: red;">${priceText} (+${percentage}%)</span>`;
     }
 }
+
+export function openGoogleMapsRoute(latitude, longitude, stationName) {
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}&destination_place_id=${encodeURIComponent(stationName)}`;
+    window.open(url, '_blank');
+}
+

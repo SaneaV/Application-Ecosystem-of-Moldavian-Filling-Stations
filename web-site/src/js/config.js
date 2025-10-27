@@ -1,9 +1,11 @@
 export const API_BASE = "http://localhost:8080";
+export const ELECTRIC_API_BASE = "http://localhost:8082";
 
 export const API_ENDPOINTS = {
     STATIONS: `${API_BASE}/all-filling-stations`,
     PRICE: `${API_BASE}/price`,
-    LAST_UPDATE: `${API_BASE}/filling-station/last-update`
+    LAST_UPDATE: `${API_BASE}/filling-station/last-update`,
+    ELECTRIC_STATIONS: `${ELECTRIC_API_BASE}/electric-stations`
 };
 
 export const MAP_CONFIG = {
@@ -12,9 +14,8 @@ export const MAP_CONFIG = {
     MAX_ZOOM: 20
 };
 
-export const DEBOUNCE_DELAY = 300; // ms
+export const DEBOUNCE_DELAY = 300;
 
-// Утилита debounce
 export function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {

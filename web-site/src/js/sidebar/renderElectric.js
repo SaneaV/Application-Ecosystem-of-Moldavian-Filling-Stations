@@ -1,48 +1,48 @@
 import { map, markersCluster } from '../map.js';
-import { fuelLabels, currentLang, uiLabels } from '../language.js';
-import { logos, formatPrice, openGoogleMapsRoute } from '../utils.js';
+import { currentLang, connectorLabels, uiLabels } from '../language.js';
 import { getEl } from './dom.js';
+import { openGoogleMapsRoute } from '../utils.js';
 import {
-    selectedCities,
-    selectedBrands,
-    selectedFuelTypes,
-    selectedDistricts,
-    getExpandedCity,
-    setExpandedCity,
-    getExpandedDistrict,
-    setExpandedDistrict
+    selectedElectricCities,
+    selectedElectricDistricts,
+    selectedConnectorTypes,
+    getExpandedElectricCity,
+    setExpandedElectricCity,
+    getExpandedElectricDistrict,
+    setExpandedElectricDistrict
 } from './state.js';
 import { initialView } from '../map.js';
-import { currentStationType } from '../stationType.js';
 
-let markerMap = [];
+let electricMarkerMap = [];
 
-function getFilteredStations(markerMap) {
+function getFilteredElectricStations(markerMap) {
     if (!Array.isArray(markerMap)) {
         return [];
     }
-    return markerMap.filter(({ station }) => {
+
+    const filtered = markerMap.filter(({ station }) => {
         if (!station) return false;
-        const okDistrict = selectedDistricts.size === 0 || selectedDistricts.has(station.district);
-        const okCity = selectedCities.size === 0 || selectedCities.has(station.city);
-        const okBrand = selectedBrands.size === 0 || selectedBrands.has(station.name);
-        const okFuel = selectedFuelTypes.size === 0 ||
-            Array.from(selectedFuelTypes).some(type => station[type] != null);
-        return okDistrict && okCity && okBrand && okFuel;
+        const okDistrict = selectedElectricDistricts.size === 0 || selectedElectricDistricts.has(station.district);
+        const okCity = selectedElectricCities.size === 0 || selectedElectricCities.has(station.city);
+        const okConnector = selectedConnectorTypes.size === 0 ||
+            (station.connector_types && station.connector_types.some(type => selectedConnectorTypes.has(type)));
+        return okDistrict && okCity && okConnector;
     });
+
+    return filtered;
 }
 
-export function updateSidebar(markerMapParam) {
+export function updateElectricSidebar(markerMapParam) {
     if (!Array.isArray(markerMapParam)) {
         return;
     }
-    markerMap = markerMapParam;
+    electricMarkerMap = markerMapParam;
     const container = getEl("stationList");
     container.innerHTML = "";
 
     const districts = {};
 
-    const filteredStations = getFilteredStations(markerMap);
+    const filteredStations = getFilteredElectricStations(electricMarkerMap);
 
     filteredStations.forEach(({ station, marker }) => {
         const district = station.district || "Неизвестно";
@@ -69,13 +69,13 @@ export function updateSidebar(markerMapParam) {
 
         const districtContainer = document.createElement("div");
         districtContainer.className = "district-cities";
-        districtContainer.style.display = getExpandedDistrict() === districtName ? "block" : "none";
+        districtContainer.style.display = getExpandedElectricDistrict() === districtName ? "block" : "none";
         container.appendChild(districtContainer);
 
         districtHeader.addEventListener("click", () => {
-            const newExpandedDistrict = getExpandedDistrict() === districtName ? null : districtName;
-            setExpandedDistrict(newExpandedDistrict);
-            updateSidebar(markerMap);
+            const newExpandedDistrict = getExpandedElectricDistrict() === districtName ? null : districtName;
+            setExpandedElectricDistrict(newExpandedDistrict);
+            updateElectricSidebar(electricMarkerMap);
 
             if (newExpandedDistrict) {
                 const districtStations = filteredStations.filter(({station}) => station.district === districtName);
@@ -99,36 +99,29 @@ export function updateSidebar(markerMapParam) {
 
             const listDiv = document.createElement("div");
             listDiv.className = "city-stations";
-            listDiv.style.display = getExpandedCity() === cityName ? "block" : "none";
+            listDiv.style.display = getExpandedElectricCity() === cityName ? "block" : "none";
             listDiv.style.marginLeft = "15px";
             districtContainer.appendChild(listDiv);
 
             cityStations.forEach(({ station, marker }) => {
-                let priceInfo = '';
+                const connectorInfo = station.connector_types && station.connector_types.length > 0
+                    ? station.connector_types.map(type => connectorLabels[type]?.[currentLang] || type).join(", ")
+                    : "—";
 
-                if (currentStationType === 'fuel') {
-                    priceInfo = [
-                        station.petrol ? `⛽ ${fuelLabels.petrol[currentLang]}: ${formatPrice("petrol", station.petrol)}` : null,
-                        station.diesel ? `🛢️ ${fuelLabels.diesel[currentLang]}: ${formatPrice("diesel", station.diesel)}` : null,
-                        station.gas ? `🔥 ${fuelLabels.gas[currentLang]}: ${formatPrice("gas", station.gas)}` : null
-                    ].filter(Boolean).join("<br>");
-                } else if (currentStationType === 'electric') {
-                    priceInfo = [
-                        station.power ? `⚡ ${station.power} kW` : null,
-                        station.connectorType ? `🔌 ${station.connectorType}` : null
-                    ].filter(Boolean).join("<br>");
-                }
-
-                const key = Object.keys(logos).find(k => station.name.toUpperCase().includes(k));
-                const logo = key ? logos[key] : "peco_default.png";
+                const stationInfo = [
+                    station.power ? `⚡ ${station.power} kW` : null,
+                    `🔌 ${connectorInfo}`,
+                    station.brand ? `🏢 ${station.brand}` : null
+                ].filter(Boolean).join("<br>");
 
                 const item = document.createElement("div");
-                item.className = "station-item";
+                item.className = "station-item electric";
                 item.dataset.stationId = `${station.latitude}-${station.longitude}`;
                 item.innerHTML = `
-                    <img src="img/stations/${logo}" alt="${station.name}" />
+                    <div class="electric-icon">⚡</div>
                     <div class="station-info">
-                        <b>${station.name}</b><br>${priceInfo}
+                        <b>${station.name || 'Электростанция'}</b><br>
+                        ${stationInfo}
                     </div>
                     <button class="route-btn" title="${uiLabels.buildRoute[currentLang]}">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -140,7 +133,7 @@ export function updateSidebar(markerMapParam) {
                 const routeBtn = item.querySelector('.route-btn');
                 routeBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    openGoogleMapsRoute(station.latitude, station.longitude, station.name);
+                    openGoogleMapsRoute(station.latitude, station.longitude, station.name || 'Электростанция');
                 });
 
                 item.addEventListener("click", () => {
@@ -163,9 +156,9 @@ export function updateSidebar(markerMapParam) {
             cityHeader.addEventListener("click", (e) => {
                 e.stopPropagation();
 
-                const newExpanded = getExpandedCity() === cityName ? null : cityName;
-                setExpandedCity(newExpanded);
-                updateSidebar(markerMap);
+                const newExpanded = getExpandedElectricCity() === cityName ? null : cityName;
+                setExpandedElectricCity(newExpanded);
+                updateElectricSidebar(electricMarkerMap);
 
                 if (newExpanded) {
                     const cityBounds = L.latLngBounds(cityStations.map(f => f.marker.getLatLng()));
@@ -180,13 +173,14 @@ export function updateSidebar(markerMapParam) {
     });
 }
 
-export function updateMapMarkers(markerMapParam) {
+export function updateElectricMapMarkers(markerMapParam) {
     if (!Array.isArray(markerMapParam)) {
         return;
     }
+
     markersCluster.clearLayers();
 
-    const filteredStations = getFilteredStations(markerMapParam);
+    const filteredStations = getFilteredElectricStations(markerMapParam);
 
     filteredStations.forEach(({ marker }) => {
         if (marker) {
@@ -195,17 +189,17 @@ export function updateMapMarkers(markerMapParam) {
     });
 }
 
-export function highlightStationInSidebar(station, markerMapParam) {
-    const activeMarkerMap = markerMapParam || markerMap;
+export function highlightElectricStationInSidebar(station, markerMapParam) {
+    const activeMarkerMap = markerMapParam || electricMarkerMap;
 
     const stationId = `${station.latitude}-${station.longitude}`;
     const districtName = station.district || "Неизвестно";
     const cityName = station.city || "Неизвестно";
 
-    setExpandedDistrict(districtName);
-    setExpandedCity(cityName);
+    setExpandedElectricDistrict(districtName);
+    setExpandedElectricCity(cityName);
 
-    updateSidebar(activeMarkerMap);
+    updateElectricSidebar(activeMarkerMap);
 
     setTimeout(() => {
         const stationElement = document.querySelector(`[data-station-id="${stationId}"]`);

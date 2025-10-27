@@ -16,8 +16,19 @@ import {currentLang, fuelLabels, uiLabels} from '../language.js';
 
 let markerMapRef = null;
 let handlersAttached = false;
+let isInitialized = false;
+
+export function updateFuelMarkerMapRef(markerMap) {
+    markerMapRef = markerMap;
+}
 
 export function setupCityFilter(markerMap) {
+    if (isInitialized) {
+        markerMapRef = markerMap;
+        return;
+    }
+
+    isInitialized = true;
     markerMapRef = markerMap;
 
     const modal = getEl("cityFilterModal");
@@ -37,14 +48,12 @@ export function setupCityFilter(markerMap) {
     const fuelList = getEl("fuelDropdownList");
     const fuelLabel = getEl("fuelDropdownSelected");
 
-    // 🆕 Получить все уникальные районы и города из данных
     function getAllDistrictsAndCities() {
         const districts = [...new Set(markerMapRef.map(({station}) => station.district || "Неизвестно"))].sort();
         const cities = [...new Set(markerMapRef.map(({station}) => station.city || "Неизвестно"))].sort();
         return { districts, cities };
     }
 
-    // 🆕 Получить города, которые есть в выбранных районах
     function getCitiesInSelectedDistricts() {
         if (selectedDistricts.size === 0) {
             return [...new Set(markerMapRef.map(({station}) => station.city || "Неизвестно"))].sort();
@@ -57,24 +66,20 @@ export function setupCityFilter(markerMap) {
         return [...new Set(filteredStations.map(({station}) => station.city || "Неизвестно"))].sort();
     }
 
-    // 🆕 Получить район для города (автоматическое связывание)
     function getDistrictForCity(cityName) {
         const station = markerMapRef.find(({station}) => station.city === cityName);
         return station ? station.station.district : null;
     }
 
-    // 🆕 Получить бренды и топливо на основе выбранных районов/городов
     function getAvailableBrandsAndFuels() {
         let filteredStations = markerMapRef;
 
-        // Фильтруем по районам
         if (selectedDistricts.size > 0) {
             filteredStations = filteredStations.filter(({station}) =>
                 selectedDistricts.has(station.district)
             );
         }
 
-        // Фильтруем по городам
         if (selectedCities.size > 0) {
             filteredStations = filteredStations.filter(({station}) =>
                 selectedCities.has(station.city)
@@ -91,22 +96,18 @@ export function setupCityFilter(markerMap) {
         return {brands, fuels};
     }
 
-    // 🆕 Функция немедленного применения фильтров
     function applyFiltersImmediately() {
         saveFiltersToStorage();
         updateSidebar(markerMapRef);
         updateMapMarkers(markerMapRef);
     }
 
-    // 🔥 Обработчик изменения района
     const handleDistrictChange = () => {
         selectedDistricts.clear();
         districtList.querySelectorAll("input:checked").forEach(i => selectedDistricts.add(i.value));
 
-        // Получаем города, доступные в выбранных районах
         const availableCities = getCitiesInSelectedDistricts();
 
-        // Убираем выбранные города, которых нет в доступных районах
         const citiesToRemove = [];
         selectedCities.forEach(city => {
             if (!availableCities.includes(city)) {
@@ -115,14 +116,12 @@ export function setupCityFilter(markerMap) {
         });
         citiesToRemove.forEach(city => selectedCities.delete(city));
 
-        // Обновляем дропдауны
         const {brands, fuels} = getAvailableBrandsAndFuels();
 
         populateDropdown(cityList, selectedCities, cityLabel, uiLabels.allCities[currentLang], availableCities);
         populateDropdown(brandList, selectedBrands, brandLabel, uiLabels.allBrands[currentLang], brands);
         populateDropdown(fuelList, selectedFuelTypes, fuelLabel, uiLabels.allFuelTypes[currentLang], fuels, type => fuelLabels[type][currentLang]);
 
-        // Убираем бренды и топливо, которых больше нет
         selectedBrands.forEach(brand => {
             if (!brands.includes(brand)) selectedBrands.delete(brand);
         });
@@ -130,16 +129,13 @@ export function setupCityFilter(markerMap) {
             if (!fuels.includes(fuel)) selectedFuelTypes.delete(fuel);
         });
 
-        // 🆕 Применяем фильтры сразу
         applyFiltersImmediately();
     };
 
-    // 🔥 Обработчик изменения города
     const handleCityChange = () => {
         selectedCities.clear();
         cityList.querySelectorAll("input:checked").forEach(i => selectedCities.add(i.value));
 
-        // 🆕 Автоматически добавляем районы для выбранных городов
         selectedCities.forEach(cityName => {
             const district = getDistrictForCity(cityName);
             if (district) {
@@ -154,7 +150,6 @@ export function setupCityFilter(markerMap) {
         populateDropdown(brandList, selectedBrands, brandLabel, uiLabels.allBrands[currentLang], brands);
         populateDropdown(fuelList, selectedFuelTypes, fuelLabel, uiLabels.allFuelTypes[currentLang], fuels, type => fuelLabels[type][currentLang]);
 
-        // Убираем бренды и топливо, которых больше нет
         selectedBrands.forEach(brand => {
             if (!brands.includes(brand)) selectedBrands.delete(brand);
         });
@@ -162,25 +157,20 @@ export function setupCityFilter(markerMap) {
             if (!fuels.includes(fuel)) selectedFuelTypes.delete(fuel);
         });
 
-        // 🆕 Применяем фильтры сразу
         applyFiltersImmediately();
     };
 
-    // 🔥 Обработчик изменения топлива
     const handleFuelChange = () => {
         selectedFuelTypes.clear();
         fuelList.querySelectorAll("input:checked").forEach(i => selectedFuelTypes.add(i.value));
 
-        // 🆕 Применяем фильтры сразу
         applyFiltersImmediately();
     };
 
-    // 🔥 Обработчик изменения бренда
     const handleBrandChange = () => {
         selectedBrands.clear();
         brandList.querySelectorAll("input:checked").forEach(i => selectedBrands.add(i.value));
 
-        // 🆕 Применяем фильтры сразу
         applyFiltersImmediately();
     };
 
@@ -206,7 +196,6 @@ export function setupCityFilter(markerMap) {
         populateDropdown(brandList, selectedBrands, brandLabel, uiLabels.allBrands[currentLang], brands);
         populateDropdown(fuelList, selectedFuelTypes, fuelLabel, uiLabels.allFuelTypes[currentLang], fuels, type => fuelLabels[type][currentLang]);
 
-        // 🆕 Добавляем обработчики только один раз
         if (!handlersAttached) {
             districtList.addEventListener("change", handleDistrictChange);
             cityList.addEventListener("change", handleCityChange);
@@ -219,7 +208,6 @@ export function setupCityFilter(markerMap) {
     openBtn.addEventListener("click", openModal);
 
     applyBtn.addEventListener("click", () => {
-        // Фильтры уже применены в реальном времени, просто закрываем окно
         modal.style.display = "none";
     });
 
@@ -248,26 +236,37 @@ export function setupCityFilter(markerMap) {
     ];
 
     dropdownPairs.forEach(({label, list}) => {
-        label.addEventListener("click", (e) => {
+        const clickHandler = (e) => {
             e.stopPropagation();
             const isOpen = !list.classList.contains("hidden");
-            closeAllDropdowns();
+
+            dropdownPairs.forEach(({list: otherList}) => {
+                otherList.classList.add("hidden");
+            });
+
             if (!isOpen) list.classList.remove("hidden");
-        });
+        };
+        label.addEventListener("click", clickHandler);
     });
 
-    window.addEventListener("click", (e) => {
+    const windowClickHandler = (e) => {
         const clickedDropdown = e.target.closest(".dropdown");
         const clickedModal = e.target.closest("#cityFilterModal");
 
         if (!clickedDropdown && clickedModal) {
-            closeAllDropdowns();
+            dropdownPairs.forEach(({list}) => {
+                list.classList.add("hidden");
+            });
         }
 
         if (e.target === modal) {
             modal.style.display = "none";
         }
-    });
+    };
+
+    if (!handlersAttached) {
+        window.addEventListener("click", windowClickHandler);
+    }
 }
 
 export function updateFilterLabels() {
@@ -280,3 +279,4 @@ export function updateFilterLabels() {
     getEl("clearCityFilter").innerText = uiLabels.clear[currentLang];
     getEl("openFilterModal").innerText = `⚙️ ${uiLabels.filterButton[currentLang]}`;
 }
+

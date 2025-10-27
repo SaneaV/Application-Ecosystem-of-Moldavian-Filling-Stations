@@ -1,11 +1,11 @@
-import { formatPrice, getIconForStation } from './utils.js';
-import { currentLang, fuelLabels } from './language.js';
+import { formatPrice, getIconForStation, openGoogleMapsRoute } from './utils.js';
+import { currentLang, fuelLabels, uiLabels } from './language.js';
 import { API_ENDPOINTS } from './config.js';
+import { currentStationType } from './stationType.js';
 
 export let stationsData = [];
 export let markerMap = [];
 
-// 🔧 Переменная для хранения функции подсветки (устанавливается извне)
 let highlightCallback = null;
 
 export function setHighlightCallback(callback) {
@@ -24,11 +24,17 @@ export function loadStations(refreshUI) {
             stationsData = data;
             refreshUI();
         })
-        .catch(err => console.error("Ошибка запроса:", err));
+        .catch(err => {
+            refreshUI();
+        });
 }
 
 export function generateMarkerMap() {
-    markerMap = [];
+    if (!stationsData || stationsData.length === 0) {
+        return [];
+    }
+
+    const newMarkerMap = [];
 
     stationsData.forEach(station => {
         if (!station.petrol && !station.diesel && !station.gas) return;
@@ -37,38 +43,61 @@ export function generateMarkerMap() {
             icon: getIconForStation(station.name)
         });
 
-        // Устанавливаем popup при создании
         updateMarkerPopup(station, marker);
 
-        markerMap.push({ station, marker });
+        newMarkerMap.push({ station, marker });
     });
 
-    // 🆕 Добавляем обработчики кликов ПОСЛЕ создания всех маркеров
-    markerMap.forEach(({ station, marker }) => {
+    newMarkerMap.forEach(({ station, marker }) => {
         marker.on('click', () => {
-            console.log('Marker clicked:', station.name);
             if (highlightCallback) {
-                highlightCallback(station, markerMap);
+                highlightCallback(station, newMarkerMap);
             }
         });
     });
+
+    markerMap = newMarkerMap;
+    return newMarkerMap;
 }
 
-// Обновление попапа без пересоздания маркера
 function updateMarkerPopup(station, marker) {
-    const fuels = [
-        station.petrol ? `⛽ ${fuelLabels.petrol[currentLang]}: ${formatPrice("petrol", station.petrol)}` : null,
-        station.diesel ? `🛢️ ${fuelLabels.diesel[currentLang]}: ${formatPrice("diesel", station.diesel)}` : null,
-        station.gas ? `🔥 ${fuelLabels.gas[currentLang]}: ${formatPrice("gas", station.gas)}` : null
-    ].filter(Boolean).join("<br>");
+    let content = '';
 
-    const popupHtml = `<b>${station.name}</b><br>${fuels}`;
-    marker.bindPopup(popupHtml);
+    if (currentStationType === 'fuel') {
+        const fuels = [
+            station.petrol ? `⛽ ${fuelLabels.petrol[currentLang]}: ${formatPrice("petrol", station.petrol)}` : null,
+            station.diesel ? `🛢️ ${fuelLabels.diesel[currentLang]}: ${formatPrice("diesel", station.diesel)}` : null,
+            station.gas ? `🔥 ${fuelLabels.gas[currentLang]}: ${formatPrice("gas", station.gas)}` : null
+        ].filter(Boolean).join("<br>");
+        content = `
+            <div class="popup-content">
+                <b>${station.name}</b><br>${fuels}<br>
+                <button class="popup-route-btn" onclick="window.openRouteFromPopup(${station.latitude}, ${station.longitude}, '${station.name.replace(/'/g, "\\'")}')">
+                    📍 ${uiLabels.buildRoute[currentLang]}
+                </button>
+            </div>
+        `;
+    } else if (currentStationType === 'electric') {
+        const info = [
+            station.power ? `⚡ ${station.power} kW` : null,
+            station.connectorType ? `🔌 ${station.connectorType}` : null
+        ].filter(Boolean).join("<br>");
+        content = `
+            <div class="popup-content">
+                <b>${station.name}</b><br>${info}<br>
+                <button class="popup-route-btn" onclick="window.openRouteFromPopup(${station.latitude}, ${station.longitude}, '${station.name.replace(/'/g, "\\'")}')">
+                    📍 ${uiLabels.buildRoute[currentLang]}
+                </button>
+            </div>
+        `;
+    }
+
+    marker.bindPopup(content);
 }
 
-// 🆕 Обновление только текста попапов (для смены языка)
 export function updateAllMarkerPopups() {
     markerMap.forEach(({ station, marker }) => {
         updateMarkerPopup(station, marker);
     });
 }
+
