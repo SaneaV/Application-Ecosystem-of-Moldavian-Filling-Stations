@@ -5,7 +5,8 @@ export const API_ENDPOINTS = {
     STATIONS: `${API_BASE}/all-filling-stations`,
     PRICE: `${API_BASE}/price`,
     LAST_UPDATE: `${API_BASE}/filling-station/last-update`,
-    ELECTRIC_STATIONS: `${ELECTRIC_API_BASE}/electric-stations`
+    ELECTRIC_STATIONS: `${ELECTRIC_API_BASE}/electric-stations`,
+    ELECTRIC_LAST_UPDATE: `${ELECTRIC_API_BASE}/electric-stations/last-update`
 };
 
 export const MAP_CONFIG = {

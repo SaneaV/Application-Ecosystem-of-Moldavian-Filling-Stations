@@ -1,11 +1,11 @@
-import { loadStations, generateMarkerMap, updateAllMarkerPopups, markerMap, setHighlightCallback } from './stations.js';
+import { loadStations, generateMarkerMap, updateAllMarkerPopups, setHighlightCallback } from './stations.js';
 import { loadAnrePrices, loadLastUpdate } from './anre.js';
 import { setupLanguageSwitcher } from './language.js';
 import { setupStationTypeToggle, getCurrentStationType } from './stationType.js';
 import { map } from './map.js';
 import { addResetControl } from './controls.js';
 import { debounce } from './config.js';
-import { loadElectricStations, generateElectricMarkerMap, updateAllElectricMarkerPopups, setElectricHighlightCallback } from './electricStations.js';
+import { loadElectricStations, generateElectricMarkerMap, updateAllElectricMarkerPopups, setElectricHighlightCallback, loadElectricLastUpdate } from './electricStations.js';
 import { getCurrentMarkerMap, setCurrentMarkerMap } from './markerState.js';
 import { openGoogleMapsRoute } from './utils.js';
 import {
@@ -15,7 +15,7 @@ import {
     updateMapMarkers,
     highlightStationInSidebar,
     updateFuelMarkerMapRef
-} from './sidebar/index.js';
+} from './sidebar';
 
 import {
     setupElectricFilter,
@@ -76,8 +76,12 @@ function refreshUI(markers = null, stationType = 'fuel') {
         }
     }
 
-    loadAnrePrices();
-    loadLastUpdate();
+    if (stationType === 'electric') {
+        loadElectricLastUpdate();
+    } else {
+        loadAnrePrices();
+        loadLastUpdate();
+    }
 
     if (stationType === 'electric') {
         updateElectricFilterLabels();
@@ -126,15 +130,15 @@ setupLanguageSwitcher(() => {
         updateElectricFilterLabels();
         updateElectricSidebar(getCurrentMarkerMap());
         saveElectricFiltersToStorage();
+        loadElectricLastUpdate();
     } else {
         updateAllMarkerPopups();
         updateFilterLabels();
         updateSidebar(getCurrentMarkerMap());
         saveFiltersToStorage();
+        loadAnrePrices();
+        loadLastUpdate();
     }
-
-    loadAnrePrices();
-    loadLastUpdate();
 });
 
 window.openRouteFromPopup = function(lat, lng, name) {

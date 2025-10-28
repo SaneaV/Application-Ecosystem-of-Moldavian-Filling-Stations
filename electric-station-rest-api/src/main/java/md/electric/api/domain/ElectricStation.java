@@ -22,6 +22,7 @@ import md.electric.api.infrastructure.exception.model.InvalidRequestException;
 public class ElectricStation implements Serializable {
 
   private static final Map<String, Comparator<ElectricStation>> COMPARATORS;
+  public static String TIMESTAMP;
 
   private final String name;
   private Location location;

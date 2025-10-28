@@ -1,5 +1,6 @@
 package md.electric.api.facade;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import md.electric.api.rest.dto.ElectricStationDto;
 import md.electric.api.rest.dto.PageDto;
@@ -11,4 +12,6 @@ public interface ElectricStationFacade {
   List<ElectricStationDto> getElectricStations();
 
   PageDto<ElectricStationDto> getElectricStations(ElectricStationRequest request, PageRequest pageRequest);
+
+  ZonedDateTime getLastUpdatedDateTime();
 }

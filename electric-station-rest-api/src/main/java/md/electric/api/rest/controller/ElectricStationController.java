@@ -1,6 +1,7 @@
 package md.electric.api.rest.controller;
 
 import jakarta.validation.Valid;
+import java.time.ZonedDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import md.electric.api.facade.ElectricStationFacade;
@@ -34,5 +35,11 @@ public class ElectricStationController {
     final PageDto<ElectricStationDto> fillingStationDtoPageDto = facade.getElectricStations(request, pageRequest);
 
     return ResponseEntity.ok().body(fillingStationDtoPageDto);
+  }
+
+  @GetMapping("/electric-stations/last-update")
+  public ResponseEntity<ZonedDateTime> getLastUpdate() {
+    final ZonedDateTime lastUpdate = facade.getLastUpdatedDateTime();
+    return ResponseEntity.ok().body(lastUpdate);
   }
 }

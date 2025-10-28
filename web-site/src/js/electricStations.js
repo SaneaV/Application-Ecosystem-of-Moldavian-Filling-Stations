@@ -1,6 +1,5 @@
 import {API_ENDPOINTS} from './config.js';
-import {currentLang, connectorLabels, uiLabels} from './language.js';
-import {openGoogleMapsRoute} from './utils.js';
+import {currentLang, connectorLabels, uiLabels, lastUpdateLabels} from './language.js';
 
 let electricStations = [];
 export let electricMarkerMap = [];
@@ -99,5 +98,26 @@ export function updateAllElectricMarkerPopups(markerMap) {
     markerMap.forEach(({ station, marker }) => {
         updateElectricStationPopup(station, marker);
     });
+}
+
+export function loadElectricLastUpdate() {
+    fetch(API_ENDPOINTS.ELECTRIC_LAST_UPDATE)
+        .then(res => res.json())
+        .then(dateStr => {
+            const date = new Date(dateStr);
+            const localeMap = {
+                ru: "ru-RU",
+                ro: "ro-RO",
+                en: "en-US",
+                ua: "uk-UA"
+            };
+            const formatted = date.toLocaleString(
+                localeMap[currentLang] || "en-US",
+                { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }
+            );
+            document.getElementById("lastUpdate").innerText =
+                `${lastUpdateLabels[currentLang]}: ${formatted}`;
+        })
+        .catch(() => {});
 }
 
