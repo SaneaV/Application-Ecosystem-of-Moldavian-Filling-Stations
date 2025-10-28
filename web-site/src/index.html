@@ -18,6 +18,15 @@
 </head>
 <body>
 <div id="sidebar">
+    <div class="lang-section">
+        <div class="lang-flags">
+            <img src="img/language/Russia.svg" class="lang-flag" data-lang="ru" width="24" height="24" alt="Русский">
+            <img src="img/language/United%20Kingdom.svg" class="lang-flag" data-lang="en" width="24" height="24" alt="English">
+            <img src="img/language/Moldova.svg" class="lang-flag" data-lang="ro" width="24" height="24" alt="Română">
+            <img src="img/language/Ukraine.svg" class="lang-flag" data-lang="ua" width="24" height="24" alt="Українська">
+        </div>
+    </div>
+
     <div class="station-type-toggle">
         <button class="toggle-btn station-type-btn active" data-type="fuel">
             <span class="toggle-icon">⛽</span>
@@ -27,31 +36,12 @@
         </button>
     </div>
 
-    <div class="lang-section">
-        <div class="lang-flags">
-            <img src="img/language/Russia.svg" class="lang-flag" data-lang="ru" width="28" height="28" alt="Русский">
-            <img src="img/language/United%20Kingdom.svg" class="lang-flag" data-lang="en" width="28" height="28" alt="English">
-            <img src="img/language/Moldova.svg" class="lang-flag" data-lang="ro" width="28" height="28" alt="Română">
-            <img src="img/language/Ukraine.svg" class="lang-flag" data-lang="ua" width="28" height="28" alt="Українська">
-        </div>
-    </div>
-
     <div class="anre-prices" id="anrePrices" data-station-type="fuel">
+        <div class="anre-prices-title">Средние цены ANRE</div>
         <div>⛽ Бензин: —</div>
         <div>🛢️ Дизель: —</div>
     </div>
 
-    <div class="filter-toggle" id="fuelFilterButton">
-        <button id="openFilterModal" class="toggle-btn">
-            <span class="toggle-icon">⚙️</span>
-        </button>
-    </div>
-
-    <div class="filter-toggle" id="electricFilterButton" style="display: none;">
-        <button id="openElectricFilterModal" class="toggle-btn">
-            <span class="toggle-icon">⚡⚙️</span>
-        </button>
-    </div>
 
     <div id="cityFilterModal" class="modal">
         <div class="modal-content">
@@ -61,7 +51,10 @@
                 <label><b id="districtFilterTitle">Выберите регион</b></label>
                 <div id="districtDropdown" class="dropdown">
                     <div id="districtDropdownSelected" class="dropdown-selected">Все районы</div>
-                    <div id="districtDropdownList" class="dropdown-list hidden"></div>
+                    <div id="districtDropdownList" class="dropdown-list hidden">
+                        <input type="text" class="dropdown-search" placeholder="Поиск..." />
+                        <div class="dropdown-items"></div>
+                    </div>
                 </div>
             </div>
 
@@ -69,7 +62,10 @@
                 <label><b id="cityFilterTitle">Выберите города</b></label>
                 <div id="cityDropdown" class="dropdown">
                     <div id="cityDropdownSelected" class="dropdown-selected">Все города</div>
-                    <div id="cityDropdownList" class="dropdown-list hidden"></div>
+                    <div id="cityDropdownList" class="dropdown-list hidden">
+                        <input type="text" class="dropdown-search" placeholder="Поиск..." />
+                        <div class="dropdown-items"></div>
+                    </div>
                 </div>
             </div>
 
@@ -77,7 +73,10 @@
                 <label><b id="brandFilterTitle">Выберите АЗС</b></label>
                 <div id="brandDropdown" class="dropdown">
                     <div id="brandDropdownSelected" class="dropdown-selected">Все бренды</div>
-                    <div id="brandDropdownList" class="dropdown-list hidden"></div>
+                    <div id="brandDropdownList" class="dropdown-list hidden">
+                        <input type="text" class="dropdown-search" placeholder="Поиск..." />
+                        <div class="dropdown-items"></div>
+                    </div>
                 </div>
             </div>
 
@@ -85,7 +84,10 @@
                 <label><b id="fuelFilterTitle">Тип топлива</b></label>
                 <div id="fuelDropdown" class="dropdown">
                     <div id="fuelDropdownSelected" class="dropdown-selected">Все типы</div>
-                    <div id="fuelDropdownList" class="dropdown-list hidden"></div>
+                    <div id="fuelDropdownList" class="dropdown-list hidden">
+                        <input type="text" class="dropdown-search" placeholder="Поиск..." />
+                        <div class="dropdown-items"></div>
+                    </div>
                 </div>
             </div>
 
@@ -104,7 +106,10 @@
                 <label><b id="electricDistrictFilterTitle">Выберите регион</b></label>
                 <div id="electricDistrictDropdown" class="dropdown">
                     <div id="electricDistrictDropdownSelected" class="dropdown-selected">Все районы</div>
-                    <div id="electricDistrictDropdownList" class="dropdown-list hidden"></div>
+                    <div id="electricDistrictDropdownList" class="dropdown-list hidden">
+                        <input type="text" class="dropdown-search" placeholder="Поиск..." />
+                        <div class="dropdown-items"></div>
+                    </div>
                 </div>
             </div>
 
@@ -112,7 +117,10 @@
                 <label><b id="electricCityFilterTitle">Выберите города</b></label>
                 <div id="electricCityDropdown" class="dropdown">
                     <div id="electricCityDropdownSelected" class="dropdown-selected">Все города</div>
-                    <div id="electricCityDropdownList" class="dropdown-list hidden"></div>
+                    <div id="electricCityDropdownList" class="dropdown-list hidden">
+                        <input type="text" class="dropdown-search" placeholder="Поиск..." />
+                        <div class="dropdown-items"></div>
+                    </div>
                 </div>
             </div>
 
@@ -120,7 +128,10 @@
                 <label><b id="connectorFilterTitle">Тип коннектора</b></label>
                 <div id="connectorDropdown" class="dropdown">
                     <div id="connectorDropdownSelected" class="dropdown-selected">Все типы</div>
-                    <div id="connectorDropdownList" class="dropdown-list hidden"></div>
+                    <div id="connectorDropdownList" class="dropdown-list hidden">
+                        <input type="text" class="dropdown-search" placeholder="Поиск..." />
+                        <div class="dropdown-items"></div>
+                    </div>
                 </div>
             </div>
 
@@ -141,7 +152,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
 
-<script type="module" src="js/main.js"></script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
 

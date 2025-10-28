@@ -1,4 +1,3 @@
-/* ====== Верхняя панель управления карты ====== */
 .map-top-controls {
     position: absolute;
     top: 5px;
@@ -10,102 +9,42 @@
     z-index: 1000;
 }
 
-/* Время обновления */
 .last-update {
     font-size: 12px;
-    color: #555;
-    background: #f9f9f9;
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-}
-
-/* Кнопка сброса вида */
-.reset-view-btn {
-    background: white;
-    border: 2px solid #ccc;
-    border-radius: 6px;
-    padding: 6px 10px;
-    cursor: pointer;
-    font-size: 18px;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.4);
-    transition: background 0.2s ease;
-}
-
-.reset-view-btn:hover {
-    background: #f0f0f0;
-}
-
-/* ====== Панели переключателей ====== */
-.station-type-toggle,
-.filter-toggle {
-    background: white;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-/* ---- Кнопка фильтра ---- */
-.filter-toggle {
-    padding: 5px;
-    min-width: 80px; /* чтобы не сжималась, если текст короткий */
-    height: auto;
-}
-
-.filter-toggle .toggle-btn {
-    width: 100%;
-    border: 1px solid #ddd;
-    font-size: 13px;
-    border-radius: 4px;
-    background: white;
-    padding: 6px 12px;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: background 0.15s ease, box-shadow 0.15s ease;
-}
-
-/* Кнопки внутри переключателей */
-.toggle-btn {
-    background: none;
-    border: 1px solid #ddd;
-    padding: 6px 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border-radius: 4px;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.filter-toggle .toggle-btn {
-    width: 100%;
-    height: 100%;
+    color: var(--color-text);
+    background: var(--color-bg);
+    padding: 8px 12px;
+    border-radius: var(--radius-medium);
     border: none;
-    font-size: 1.2em;
-    border-radius: 6px;
+    box-shadow: var(--shadow-medium);
+    font-weight: 500;
+    letter-spacing: 0.3px;
 }
 
-/* Эффект наведения */
-.filter-toggle .toggle-btn:hover {
-    background: #f5f5f5;
+.map-control-btn {
+    background: var(--color-bg);
+    border: none;
+    border-radius: var(--radius-medium);
+    padding: 0;
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: var(--shadow-medium);
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    line-height: 1;
 }
 
-/* Ховеры и активные состояния */
-.toggle-btn:hover {
-    background: #f5f5f5;
+.map-control-btn:hover {
+    background: var(--color-bg-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Скрытые старые фильтры */
-.filter-btn {
-    display: none;
-}
-
-/* Эффект нажатия */
-.filter-toggle .toggle-btn:active {
-    background: #e0e0e0; /* чуть темнее при клике */
-    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.15);
+.map-control-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-medium);
 }

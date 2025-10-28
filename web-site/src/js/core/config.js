@@ -12,7 +12,8 @@ export const API_ENDPOINTS = {
 export const MAP_CONFIG = {
     TILE_URL: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
     ATTRIBUTION: '&copy; OpenStreetMap contributors &copy; <a href="https://www.carto.com/">CARTO</a>',
-    MAX_ZOOM: 20
+    MAX_ZOOM: 20,
+    INITIAL_VIEW: { center: [47.0105, 28.8638], zoom: 8 }
 };
 
 export const DEBOUNCE_DELAY = 300;
@@ -28,3 +29,4 @@ export function debounce(func, wait) {
         timeout = setTimeout(later, wait);
     };
 }
+

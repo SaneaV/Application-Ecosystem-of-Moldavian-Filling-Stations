@@ -1,60 +1,39 @@
-import { map, markersCluster } from '../map.js';
-import { currentLang, connectorLabels, uiLabels } from '../language.js';
-import { getEl } from './dom.js';
-import { openGoogleMapsRoute } from '../utils.js';
-import {
-    selectedElectricCities,
-    selectedElectricDistricts,
-    selectedConnectorTypes,
-    getExpandedElectricCity,
-    setExpandedElectricCity,
-    getExpandedElectricDistrict,
-    setExpandedElectricDistrict
-} from './state.js';
-import { initialView } from '../map.js';
+import { map, markersCluster, initialView } from '../../core/map.js';
+import { currentLang, connectorLabels, uiLabels } from '../../core/language.js';
+import { getElement } from '../../shared/dom.js';
+import { openGoogleMapsRoute } from '../../shared/utils.js';
+import { electricFilters } from '../../core/state.js';
 
-let electricMarkerMap = [];
+function getFilteredStations(markerMap) {
+    if (!Array.isArray(markerMap)) return [];
 
-function getFilteredElectricStations(markerMap) {
-    if (!Array.isArray(markerMap)) {
-        return [];
-    }
-
-    const filtered = markerMap.filter(({ station }) => {
+    return markerMap.filter(({ station }) => {
         if (!station) return false;
-        const okDistrict = selectedElectricDistricts.size === 0 || selectedElectricDistricts.has(station.district);
-        const okCity = selectedElectricCities.size === 0 || selectedElectricCities.has(station.city);
-        const okConnector = selectedConnectorTypes.size === 0 ||
-            (station.connector_types && station.connector_types.some(type => selectedConnectorTypes.has(type)));
+        const okDistrict = electricFilters.districts.size === 0 || electricFilters.districts.has(station.district);
+        const okCity = electricFilters.cities.size === 0 || electricFilters.cities.has(station.city);
+        const okConnector = electricFilters.connectorTypes.size === 0 ||
+            (station.connector_types && station.connector_types.some(type => electricFilters.connectorTypes.has(type)));
         return okDistrict && okCity && okConnector;
     });
-
-    return filtered;
 }
 
-export function updateElectricSidebar(markerMapParam) {
-    if (!Array.isArray(markerMapParam)) {
-        return;
-    }
-    electricMarkerMap = markerMapParam;
-    const container = getEl("stationList");
+export function renderElectricSidebar(markerMap) {
+    if (!Array.isArray(markerMap)) return;
+
+    const container = getElement("stationList");
+    if (!container) return;
+
     container.innerHTML = "";
 
     const districts = {};
-
-    const filteredStations = getFilteredElectricStations(electricMarkerMap);
+    const filteredStations = getFilteredStations(markerMap);
 
     filteredStations.forEach(({ station, marker }) => {
         const district = station.district || "Неизвестно";
         const city = station.city || "Неизвестно";
 
-        if (!districts[district]) {
-            districts[district] = {};
-        }
-
-        if (!districts[district][city]) {
-            districts[district][city] = [];
-        }
+        if (!districts[district]) districts[district] = {};
+        if (!districts[district][city]) districts[district][city] = [];
 
         districts[district][city].push({ station, marker });
     });
@@ -64,20 +43,22 @@ export function updateElectricSidebar(markerMapParam) {
 
         const districtHeader = document.createElement("div");
         districtHeader.className = "district-header";
+        if (electricFilters.expandedDistrict === districtName) {
+            districtHeader.classList.add("expanded");
+        }
         districtHeader.innerHTML = `<b>${districtName}</b>`;
         container.appendChild(districtHeader);
 
         const districtContainer = document.createElement("div");
         districtContainer.className = "district-cities";
-        districtContainer.style.display = getExpandedElectricDistrict() === districtName ? "block" : "none";
+        districtContainer.style.display = electricFilters.expandedDistrict === districtName ? "block" : "none";
         container.appendChild(districtContainer);
 
         districtHeader.addEventListener("click", () => {
-            const newExpandedDistrict = getExpandedElectricDistrict() === districtName ? null : districtName;
-            setExpandedElectricDistrict(newExpandedDistrict);
-            updateElectricSidebar(electricMarkerMap);
+            electricFilters.expandedDistrict = electricFilters.expandedDistrict === districtName ? null : districtName;
+            renderElectricSidebar(markerMap);
 
-            if (newExpandedDistrict) {
+            if (electricFilters.expandedDistrict) {
                 const districtStations = filteredStations.filter(({station}) => station.district === districtName);
                 const bounds = L.latLngBounds(districtStations.map(f => f.marker.getLatLng()));
                 map.flyToBounds(bounds, { animate: true, duration: 1.2, padding: [40, 40] });
@@ -88,18 +69,20 @@ export function updateElectricSidebar(markerMapParam) {
 
         Object.keys(cities).sort().forEach(cityName => {
             const cityStations = cities[cityName];
-
             if (!cityStations.length) return;
 
             const cityHeader = document.createElement("div");
             cityHeader.className = "city-header";
+            if (electricFilters.expandedCity === cityName) {
+                cityHeader.classList.add("expanded");
+            }
             cityHeader.style.marginLeft = "15px";
             cityHeader.innerHTML = `<b>${cityName}</b>`;
             districtContainer.appendChild(cityHeader);
 
             const listDiv = document.createElement("div");
             listDiv.className = "city-stations";
-            listDiv.style.display = getExpandedElectricCity() === cityName ? "block" : "none";
+            listDiv.style.display = electricFilters.expandedCity === cityName ? "block" : "none";
             listDiv.style.marginLeft = "15px";
             districtContainer.appendChild(listDiv);
 
@@ -156,11 +139,10 @@ export function updateElectricSidebar(markerMapParam) {
             cityHeader.addEventListener("click", (e) => {
                 e.stopPropagation();
 
-                const newExpanded = getExpandedElectricCity() === cityName ? null : cityName;
-                setExpandedElectricCity(newExpanded);
-                updateElectricSidebar(electricMarkerMap);
+                electricFilters.expandedCity = electricFilters.expandedCity === cityName ? null : cityName;
+                renderElectricSidebar(markerMap);
 
-                if (newExpanded) {
+                if (electricFilters.expandedCity) {
                     const cityBounds = L.latLngBounds(cityStations.map(f => f.marker.getLatLng()));
                     map.flyToBounds(cityBounds, { animate: true, duration: 1.2, padding: [40, 40] });
                 } else {
@@ -173,37 +155,30 @@ export function updateElectricSidebar(markerMapParam) {
     });
 }
 
-export function updateElectricMapMarkers(markerMapParam) {
-    if (!Array.isArray(markerMapParam)) {
-        return;
-    }
+export function updateElectricMapMarkers(markerMap) {
+    if (!Array.isArray(markerMap)) return;
 
     markersCluster.clearLayers();
-
-    const filteredStations = getFilteredElectricStations(markerMapParam);
+    const filteredStations = getFilteredStations(markerMap);
 
     filteredStations.forEach(({ marker }) => {
-        if (marker) {
-            markersCluster.addLayer(marker);
-        }
+        if (marker) markersCluster.addLayer(marker);
     });
 }
 
-export function highlightElectricStationInSidebar(station, markerMapParam) {
-    const activeMarkerMap = markerMapParam || electricMarkerMap;
-
+export function highlightElectricStation(station, markerMap) {
     const stationId = `${station.latitude}-${station.longitude}`;
     const districtName = station.district || "Неизвестно";
     const cityName = station.city || "Неизвестно";
 
-    setExpandedElectricDistrict(districtName);
-    setExpandedElectricCity(cityName);
+    electricFilters.expandedDistrict = districtName;
+    electricFilters.expandedCity = cityName;
 
-    updateElectricSidebar(activeMarkerMap);
+    renderElectricSidebar(markerMap);
 
     setTimeout(() => {
         const stationElement = document.querySelector(`[data-station-id="${stationId}"]`);
-        const sidebarContainer = getEl("stationList");
+        const sidebarContainer = getElement("stationList");
 
         if (stationElement && sidebarContainer) {
             const offsetTop = stationElement.offsetTop - sidebarContainer.offsetTop;
@@ -213,10 +188,7 @@ export function highlightElectricStationInSidebar(station, markerMapParam) {
             });
 
             stationElement.classList.add('station-highlight');
-
-            setTimeout(() => {
-                stationElement.classList.remove('station-highlight');
-            }, 1000);
+            setTimeout(() => stationElement.classList.remove('station-highlight'), 1000);
         }
     }, 150);
 }

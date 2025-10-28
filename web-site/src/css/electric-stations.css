@@ -1,7 +1,6 @@
-/* Electric station marker styling */
 .electric-station-marker {
     font-size: 24px;
-    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
     border-radius: 50%;
     width: 32px;
     height: 32px;
@@ -11,6 +10,11 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
+.electric-station-marker:hover {
+    transform: scale(1.1);
+    transition: transform var(--transition-normal);
+}
+
 .station-popup.electric {
     min-width: 200px;
     text-align: center;
@@ -18,49 +22,40 @@
 
 .station-popup.electric h3 {
     margin: 0 0 8px;
-    color: #2E7D32;
+    color: var(--color-primary-dark);
     text-align: center;
+    letter-spacing: 0.3px;
 }
 
 .station-popup.electric p {
     margin: 4px 0;
     font-size: 14px;
+    letter-spacing: 0.2px;
 }
 
 .station-popup.electric .power {
-    color: #4CAF50;
+    color: var(--color-primary);
     font-weight: bold;
 }
 
 .station-popup.electric .connector {
-    color: #1976D2;
+    color: var(--color-secondary);
 }
 
 .station-popup.electric .brand {
-    color: #616161;
+    color: var(--color-text-muted);
     font-style: italic;
 }
 
-.popup-content {
-    min-width: 180px;
-    text-align: center;
-}
-
-.popup-content b {
-    display: block;
-    text-align: center;
-    font-size: 15px;
-    margin-bottom: 8px;
-}
 
 .popup-route-btn {
-    background: #f0f0f0;
+    background: var(--color-primary);
     border: none;
-    border-radius: 6px;
-    padding: 6px 12px;
-    color: #333;
+    border-radius: var(--radius-medium);
+    padding: 8px 12px;
+    color: white;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 500;
     margin-top: 8px;
     width: 100%;
@@ -68,18 +63,20 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    transition: all 0.2s ease;
+    transition: all var(--transition-fast);
+    letter-spacing: 0.3px;
+    box-shadow: var(--shadow-medium);
 }
 
 .popup-route-btn:hover {
-    background: rgba(255, 255, 255, 0.8);
-    transform: scale(1.02);
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
 .popup-route-btn:active {
-    background: #e0e0e0;
-    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.15);
-    transform: scale(0.98);
+    transform: translateY(0);
+    box-shadow: var(--shadow-medium);
 }
 
 .popup-route-btn svg {
@@ -87,24 +84,18 @@
     height: 14px;
 }
 
-/* Hover effect */
-.electric-station-marker:hover {
-    transform: scale(1.1);
-    transition: transform 0.2s ease;
-}
-
 .station-item.electric {
     display: flex;
     align-items: center;
     padding: 10px;
-    border-left: 3px solid #4CAF50;
+    border-left: 3px solid var(--color-primary);
     gap: 8px;
 }
 
 .station-item.electric .electric-icon {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -124,11 +115,11 @@
 
 .station-item.electric:hover {
     background: #E8F5E9;
-    border-left-color: #2E7D32;
+    border-left-color: var(--color-primary-dark);
 }
 
 .station-item.electric b {
-    color: #2E7D32;
+    color: var(--color-primary-dark);
 }
 
 #connectorFilterGroup .dropdown-list label {

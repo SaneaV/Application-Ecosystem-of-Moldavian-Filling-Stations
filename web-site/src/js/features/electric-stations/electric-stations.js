@@ -1,45 +1,38 @@
-import {API_ENDPOINTS} from './config.js';
-import {currentLang, connectorLabels, uiLabels, lastUpdateLabels} from './language.js';
+ import { API_ENDPOINTS } from '../../core/config.js';
+import { currentLang, connectorLabels, uiLabels, lastUpdateLabels } from '../../core/language.js';
+import { formatDateTime } from '../../shared/utils.js';
+import { getElement } from '../../shared/dom.js';
 
 let electricStations = [];
-export let electricMarkerMap = [];
-
 let highlightCallback = null;
 
-export function setElectricHighlightCallback(callback) {
+export function setHighlightCallback(callback) {
     highlightCallback = callback;
 }
 
-export async function loadElectricStations() {
-    try {
-        const response = await fetch(API_ENDPOINTS.ELECTRIC_STATIONS);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        electricStations = await response.json();
-        return electricStations;
-    } catch (error) {
-        return [];
-    }
+export function loadElectricStations() {
+    return fetch(API_ENDPOINTS.ELECTRIC_STATIONS)
+        .then(res => res.json())
+        .then(data => {
+            electricStations = data;
+            return electricStations;
+        })
+        .catch(() => {
+            return [];
+        });
 }
 
-export function getElectricStations() {
-    return electricStations;
-}
-
-export function generateElectricMarkerMap() {
+export function generateElectricMarkers() {
     const markers = [];
-    let skippedCount = 0;
 
     electricStations.forEach(station => {
-        if (!station.latitude || !station.longitude) {
-            skippedCount++;
-            return;
-        }
+        if (!station.latitude || !station.longitude) return;
 
         const marker = L.marker([station.latitude, station.longitude], {
-            icon: createElectricStationIcon()
+            icon: createElectricIcon()
         });
 
-        marker.bindPopup(() => createElectricStationPopup(station));
+        marker.bindPopup(() => createElectricPopup(station));
         markers.push({ marker, station });
     });
 
@@ -51,11 +44,10 @@ export function generateElectricMarkerMap() {
         });
     });
 
-    electricMarkerMap = markers;
     return markers;
 }
 
-function createElectricStationIcon() {
+function createElectricIcon() {
     return L.divIcon({
         className: 'electric-station-marker',
         html: '⚡',
@@ -65,7 +57,7 @@ function createElectricStationIcon() {
     });
 }
 
-function createElectricStationPopup(station) {
+function createElectricPopup(station) {
     const container = document.createElement('div');
     container.className = 'station-popup electric';
 
@@ -82,41 +74,29 @@ function createElectricStationPopup(station) {
         <p class="connector">🔌 ${connectorInfo}</p>
         ${station.brand ? `<p class="brand">🏢 ${station.brand}</p>` : ''}
         <button class="popup-route-btn" onclick="window.openRouteFromPopup(${station.latitude}, ${station.longitude}, '${stationName}')">
-            📍 ${uiLabels.buildRoute[currentLang]}
+            ${uiLabels.buildRoute[currentLang]}
         </button>
     `;
 
     return container;
 }
 
-export function updateElectricStationPopup(station, marker) {
-    marker.bindPopup(() => createElectricStationPopup(station));
-}
-
-export function updateAllElectricMarkerPopups(markerMap) {
+export function updateElectricMarkerPopups(markerMap) {
     if (!Array.isArray(markerMap)) return;
     markerMap.forEach(({ station, marker }) => {
-        updateElectricStationPopup(station, marker);
+        marker.bindPopup(() => createElectricPopup(station));
     });
 }
 
 export function loadElectricLastUpdate() {
-    fetch(API_ENDPOINTS.ELECTRIC_LAST_UPDATE)
+    return fetch(API_ENDPOINTS.ELECTRIC_LAST_UPDATE)
         .then(res => res.json())
         .then(dateStr => {
-            const date = new Date(dateStr);
-            const localeMap = {
-                ru: "ru-RU",
-                ro: "ro-RO",
-                en: "en-US",
-                ua: "uk-UA"
-            };
-            const formatted = date.toLocaleString(
-                localeMap[currentLang] || "en-US",
-                { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" }
-            );
-            document.getElementById("lastUpdate").innerText =
-                `${lastUpdateLabels[currentLang]}: ${formatted}`;
+            const formatted = formatDateTime(dateStr, currentLang);
+            const lastUpdateEl = getElement("lastUpdate");
+            if (lastUpdateEl) {
+                lastUpdateEl.innerText = `${lastUpdateLabels[currentLang]}: ${formatted}`;
+            }
         })
         .catch(() => {});
 }
