@@ -1,5 +1,6 @@
 package md.fuel.bot.infrastructure.service;
 
+import md.fuel.bot.domain.StationType;
 import md.fuel.bot.domain.UserData;
 
 public interface UserDataService {
@@ -13,4 +14,6 @@ public interface UserDataService {
   void save(long userId, double latitude, double longitude);
 
   void save(long userId, String language);
+
+  void save(long userId, StationType stationType);
 }

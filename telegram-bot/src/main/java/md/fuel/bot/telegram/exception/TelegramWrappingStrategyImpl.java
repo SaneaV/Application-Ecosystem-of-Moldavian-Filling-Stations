@@ -2,12 +2,15 @@ package md.fuel.bot.telegram.exception;
 
 import static java.util.Objects.isNull;
 import static md.fuel.bot.telegram.exception.ErrorCode.ERROR_CODE_SPECIFY_LANGUAGE;
+import static md.fuel.bot.telegram.exception.ErrorCode.ERROR_CODE_SPECIFY_STATION_TYPE;
 import static md.fuel.bot.telegram.utils.MessageUtil.sendMessage;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getLanguageMenuKeyboard;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
+import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getStationTypeMenuKeyboard;
 
 import java.util.HashMap;
 import java.util.Map;
+import md.fuel.bot.domain.StationType;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.infrastructure.exception.model.ClientRequestException;
@@ -66,9 +69,16 @@ public class TelegramWrappingStrategyImpl implements TelegramWrappingStrategy {
   @Override
   public ResponseEntity<BotApiMethod<?>> handleEntityNotFoundException(EntityNotFoundException exception) {
     if (isNull(exception.getExceptionCode())) {
-      return prepareErrorMessage(exception.getMessage());
+      return prepareErrorMessageWithAppropriateKeyboard(exception.getMessage());
     } else {
-      final ReplyKeyboardMarkup replyKeyboardMarkup = ERROR_CODE_KEYBOARD.get(exception.getExceptionCode());
+      ReplyKeyboardMarkup replyKeyboardMarkup = ERROR_CODE_KEYBOARD.get(exception.getExceptionCode());
+
+      if (ERROR_CODE_SPECIFY_STATION_TYPE.equals(exception.getExceptionCode())) {
+        final long userId = chatInfoHolder.getUserId();
+        final String language = userDataFacade.getLanguage(userId);
+        replyKeyboardMarkup = getStationTypeMenuKeyboard(translatorService, language);
+      }
+
       return prepareErrorMessageWithKeyboard(exception.getMessage(), replyKeyboardMarkup);
     }
   }
@@ -106,6 +116,29 @@ public class TelegramWrappingStrategyImpl implements TelegramWrappingStrategy {
     final SendMessage errorMessage = sendMessage(chatInfoHolder.getChatId(), errorText, mainMenuKeyboard);
 
     return ResponseEntity.ok().body(errorMessage);
+  }
+
+  private ResponseEntity<BotApiMethod<?>> prepareErrorMessageWithAppropriateKeyboard(String errorText) {
+    final long userId = chatInfoHolder.getUserId();
+    final ReplyKeyboardMarkup keyboard = determineAppropriateKeyboard(userId);
+    final SendMessage errorMessage = sendMessage(chatInfoHolder.getChatId(), errorText, keyboard);
+
+    return ResponseEntity.ok().body(errorMessage);
+  }
+
+  private ReplyKeyboardMarkup determineAppropriateKeyboard(long userId) {
+    try {
+      final String language = userDataFacade.getLanguage(userId);
+      final StationType stationType = userDataFacade.getStationType(userId);
+
+      if (isNull(stationType)) {
+        return getStationTypeMenuKeyboard(translatorService, language);
+      }
+
+      return getMainMenuKeyboard(translatorService, language);
+    } catch (Exception e) {
+      return getLanguageMenuKeyboard(translatorService);
+    }
   }
 
   private ResponseEntity<BotApiMethod<?>> prepareErrorMessageWithKeyboard(String errorText, ReplyKeyboardMarkup keyboardMarkup) {

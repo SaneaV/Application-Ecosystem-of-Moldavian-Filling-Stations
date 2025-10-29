@@ -16,6 +16,7 @@ public interface UserDataJpaMapper {
   @Mapping(target = "radius", source = "userData.radius")
   @Mapping(target = "latitude", source = "userData.latitude")
   @Mapping(target = "longitude", source = "userData.longitude")
+  @Mapping(target = "stationType", source = "userData.stationType")
   UserDataJpa update(UserDataJpa userDataJpa, UserData userData);
 
   UserDataJpa toJpa(UserData userData);
@@ -24,5 +25,6 @@ public interface UserDataJpaMapper {
   @Mapping(target = "language", constant = EMPTY)
   @Mapping(target = "latitude", ignore = true)
   @Mapping(target = "longitude", ignore = true)
+  @Mapping(target = "stationType", ignore = true)
   UserDataJpa toJpa(Long id);
 }

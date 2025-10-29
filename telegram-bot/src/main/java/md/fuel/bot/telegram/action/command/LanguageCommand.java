@@ -1,14 +1,17 @@
 package md.fuel.bot.telegram.action.command;
 
 import static java.util.Collections.singletonList;
+import static java.util.Objects.isNull;
 import static md.fuel.bot.telegram.utils.MessageUtil.sendMessage;
 import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getMainMenuKeyboard;
+import static md.fuel.bot.telegram.utils.ReplyKeyboardMarkupUtil.getStationTypeMenuKeyboard;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import md.fuel.bot.domain.StationType;
 import md.fuel.bot.facade.UserDataFacade;
 import md.fuel.bot.infrastructure.configuration.ChatInfoHolder;
 import md.fuel.bot.infrastructure.service.TranslatorService;
@@ -24,7 +27,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 @RequiredArgsConstructor
 public class LanguageCommand implements Command {
 
-  private static final String MESSAGE_CODE = "welcome.message";
+  private static final String SELECT_STATION_TYPE_MESSAGE = "select-station-type.message";
+  private static final String WELCOME_MESSAGE = "welcome.message";
 
   public static final String RUSSIAN = "language.russian.message";
   public static final String ROMANIAN = "language.romanian.message";
@@ -53,10 +57,23 @@ public class LanguageCommand implements Command {
     log.info("Update user language, userId: {}, language: {}", userId, languageTag);
 
     userDataFacade.updateLanguage(userId, languageTag);
-    final String messageText = translatorService.translate(languageTag, MESSAGE_CODE);
 
-    final ReplyKeyboardMarkup mainMenuKeyboard = getMainMenuKeyboard(translatorService, languageTag);
-    final SendMessage message = sendMessage(chatInfoHolder.getChatId(), messageText, mainMenuKeyboard);
+    final StationType stationType = userDataFacade.getStationType(userId);
+
+    final String messageText;
+    final ReplyKeyboardMarkup keyboard;
+
+    if (isNull(stationType)) {
+      log.info("User {} has not selected station type yet, showing station type menu", userId);
+      messageText = translatorService.translate(languageTag, SELECT_STATION_TYPE_MESSAGE);
+      keyboard = getStationTypeMenuKeyboard(translatorService, languageTag);
+    } else {
+      log.info("User {} already has station type {}, showing main menu", userId, stationType);
+      messageText = translatorService.translate(languageTag, WELCOME_MESSAGE);
+      keyboard = getMainMenuKeyboard(translatorService, languageTag);
+    }
+
+    final SendMessage message = sendMessage(chatInfoHolder.getChatId(), messageText, keyboard);
     return singletonList(message);
   }
 

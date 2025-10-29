@@ -4,6 +4,7 @@ import static java.util.Objects.isNull;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import md.fuel.bot.domain.StationType;
 import md.fuel.bot.domain.UserData;
 import md.fuel.bot.infrastructure.jpa.UserDataAdapter;
 import md.fuel.bot.infrastructure.mapper.UserDataMapper;
@@ -54,6 +55,14 @@ public class UserDataServiceImpl implements UserDataService {
     log.info("Update language for user = {}, language = {}", userId, language);
     final UserData userData = userDataAdapter.getUserData(userId);
     final UserData updatedUserData = mapper.update(userData, language);
+    userDataAdapter.save(updatedUserData);
+  }
+
+  @Override
+  public void save(long userId, StationType stationType) {
+    log.info("Update station type for user = {}, stationType = {}", userId, stationType);
+    final UserData userData = userDataAdapter.getUserData(userId);
+    final UserData updatedUserData = mapper.update(userData, stationType);
     userDataAdapter.save(updatedUserData);
   }
 }

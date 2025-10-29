@@ -14,4 +14,5 @@ public class UserData {
   private double radius;
   private double latitude;
   private double longitude;
+  private StationType stationType;
 }
